@@ -13,15 +13,15 @@ def extract_z_info(replay, player_class, quickanalyze):
     zplayer = zombieinfo(name=player_class.name, pid=player_class.pid, handle=player_class.toon_handle, role='Z')
 
     if quickanalyze:
-        quick_victory_determine(player_class, zplayer)
+        quick_victory_determine_z(player_class, zplayer)
     else:
-        detailed_victory_determine(player_class, zplayer)
+        detailed_victory_determine_z(player_class, zplayer)
         detailed_info_extraction_z(player_class, zplayer)
 
     return zplayer
 
 
-def quick_victory_determine(player, zplayer):
+def quick_victory_determine_z(player, zplayer):
     if player.result is None:
         zplayer.victory = None
     else:
@@ -31,7 +31,7 @@ def quick_victory_determine(player, zplayer):
             zplayer.victory = True
 
 
-def detailed_victory_determine(player, zplayer):
+def detailed_victory_determine_z(player, zplayer):
     if player.result == 'Loss':
         zplayer.victory = False
     elif player.result == 'Win':
@@ -51,6 +51,17 @@ def detailed_victory_determine(player, zplayer):
             zplayer.victory = True
         else:
             zplayer.victory = False
+
+
+def dropship_player_check(unit):
+    if () < unit.location < ():
+        return 1
+    elif () < unit.location < ():
+        return 2
+    elif () < unit.location < ():
+        return 3
+    else:
+        return False
 
 
 def detailed_info_extraction_z(player, zplayer):
