@@ -72,7 +72,8 @@ class zombieinfo(playerinfo):
         self.hangarcaptures = [False, False, False]                     # Alpha, Beta, Delta
         self.totalgasincome = 0
         self.totalgasspent = 0
-        self.alphasbuilt = 0
-        self.strainpurchases = []
-        self.upgradepurchases = []
+        self.alphasbuilt = [[0, 0] for _ in range(5)]                   # [Type][Tiers], Type = (Abom, Gene, Anub, Legion, Predator)
+        self.startingalpha = None
+        self.strainpurchases = [[0, 0, 0] for _ in range(4)]            # [Strain][Tiers], Strains = (Speed, Health, Damage, Volatile)
+        self.upgradepurchases = [[0, 0] for _ in range(4)]              # [Type][Tiers], Type = (Speed, Regen, Constructive, Virulent)
         self.structurebuilt = 0

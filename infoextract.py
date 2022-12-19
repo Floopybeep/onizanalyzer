@@ -56,8 +56,13 @@ def detailed_victory_determine(player, zplayer):
 def detailed_info_extraction_z(player, zplayer):
     print(1)
     # extract the following information
-        # 1. number of rooms captured
-        # 2. number of marines killed
-        # 3. gas income
-        # 4. gas spent
-        # 5.
+    # 1. roomcaptures
+    # 2. majorroomcaptures              (Power, Fuel, Containment, Security, Gates)
+    # 3. marinecaptures
+    # 4. totalgasincome
+    # 5. totalgasspent
+    # 6. alphasbuilt                    ([Type][Tiers], Type = (Abom, Gene, Anub, Legion, Predator))
+    # 7. starting alpha                 string
+    # 8. strain_purchases               ([Strain][Tiers], Strains = (Speed, Health, Damage, Volatile))
+    # 9. upgradepurchases               (# [Type][Tiers], Type = (Speed, Regen, Constructive, Virulent))
+    # 10. structurebuilt                count
