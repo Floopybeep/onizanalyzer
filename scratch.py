@@ -8,6 +8,7 @@ from os.path import isfile, join
 
 from playerclasses import *
 from bankextractor import extract_banks
+from infoextract import *
 
 quickanalyze = False
 
@@ -33,46 +34,9 @@ for replaypath in replaypaths:
 
     # Declare players according to their race(M/Z)
     for player in replay.humans:
-        # if player.play_race == 'Zerg':
-        #     playerlist.append(zombieinfo(name=player.name, pid=player.pid, handle=player.toon_handle, role='Z'))
-        #     # if not quickanalyze:
-        #     if player.result == 'Loss':
-        #         print("Z Loss")
-        #         for k in range(len(replay.active_units)):
-        #             try:
-        #                 if replay.active_units[k].id == 34078721:
-        #                     print("Alpha dropship location: ", replay.active_units[k].location)
-        #                 elif replay.active_units[k].id == 33554433:
-        #                     print("Beta dropship location: ", replay.active_units[k].location)
-        #                 elif replay.active_units[k].id == 33816577:
-        #                     print("Delta dropship location: ", replay.active_units[k].location)
-        #             except Exception:
-        #                 pass
-        #
-        #     elif player.result not in ['Win', 'Loss']:
-        #         print("Result is None")
-        #         try:
-        #             replay = sc2reader.load_replay(replaypath, load_level=3)
-        #         except Exception:
-        #             print("Replay corrupted, deleting replay: ", replaypath)
-        #             pass
-        #         for player in replay.players:
-        #             if player.play_race == 'Zerg' and player.pid != 8:
-        #                 for unit in player.killed_units:
-        #                     if unit.location == (30, 55): print("A hangar killed")
-        #                     elif unit.location == (150, 225): print("B hangar killed")
-        #                     elif unit.location == (204, 40): print("D hangar killed")
-        #
-        #                 for k in range(len(replay.active_units)):
-        #                     try:
-        #                         if replay.active_units[k].id == 34078721:
-        #                             print("Alpha dropship location: ", replay.active_units[k].location)
-        #                         elif replay.active_units[k].id == 33554433:
-        #                             print("Beta dropship location: ", replay.active_units[k].location)
-        #                         elif replay.active_units[k].id == 33816577:
-        #                             print("Delta dropship location: ", replay.active_units[k].location)
-        #                     except Exception:
-        #                         pass
+        if player.play_race == 'Zerg':
+            zplayer = extract_z_info(replay, player, quickanalyze)
+            playerlist.append(zplayer)
 
         if player.play_race == 'Terran' and player.result == 'Win':
             count = 0

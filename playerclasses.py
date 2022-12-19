@@ -44,7 +44,7 @@ class playerinfo():
         self.pid = pid
         self.handle = handle
         self.playerrole = role
-        self.victory = 0
+        self.victory = None
 
 
 class marineinfo(playerinfo):
@@ -68,8 +68,8 @@ class zombieinfo(playerinfo):
         super().__init__(name, pid, handle, role)
         self.marinecaptures = 0
         self.roomcaptures = 0
-        self.majorroomcaptures = []
-        self.hangarcaptures = []
+        self.majorroomcaptures = [False, False, False, False, False]    # Power, Fuel, Containment, Security, Gates
+        self.hangarcaptures = [False, False, False]                     # Alpha, Beta, Delta
         self.totalgasincome = 0
         self.totalgasspent = 0
         self.alphasbuilt = 0

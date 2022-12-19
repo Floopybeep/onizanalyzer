@@ -20,3 +20,6 @@ for path, subdirs, files in walk(folderpath):
 
 for replaypath in replaypaths:
     replay = sc2reader.load_replay(replaypath, load_level=2)
+
+    # Currently, main development is being done in scratch.py
+    # Once verified, code will be moved to main.py
