@@ -14,13 +14,16 @@ Can be used to find z structures (+ M heal/scout/mining droid)
 Can be used to find z alphas & cocoons & captures
 InfestedCocoon - marine captured cocoon
 
-MassiveCocoon - cocoon
-QueenCoop - Hive Queen
+MassiveCocoon           - cocoon
+QueenCoop               - Hive Queen
 
-Hunter - Hunter
-Dehaka - Predator
-
-
+Hunter                  - Hunter
+Dehaka                  - Predator
+Underseer               - Underseer
+Lurker                  - Legion
+InfestedAbomination     - Abom
+Anubalisk               - Anubalisk
+PrimalTownHallUprooted  - Geneweaver
 
         elif event.name == 'UnitBornEvent':
             if event.unit_type_name not in {'DigesterCreepSprayTargetUnit', 'DigesterCreepSprayUnit',
@@ -32,6 +35,18 @@ Dehaka - Predator
                                             'ZergDropPod', 'CreepPod', 'DevastatorLeaping'}:
                 if event.upkeep_pid != 10:
                     eventlist.append(event)
+
+
+- UnitTypeChangeEvent
+Used to find T2 alpha morphs
+
+Abomination - Abomination
+Anubalight - Anubalight
+Saboteur - Saboteur
+Genesplicer - GenesplicerUprooted
+Legionnaire - LegionnaireZombie
+
+
 
 
 - UpgradeCompleteEvent
@@ -97,20 +112,20 @@ ZOMBIE
         Drop Pods:          UnlockDropPods          - EvolveDropPods
         Const. Creep :      ConstructiveCreep       -
         Speed Creep :       CreepSpeed              -
-        Regen Creep :       RegenerativeCreep       -
+        Regen Creep :       RegenerativeCreep       - RegenerativeCreep
         Virulent Creep :    VirulentCreep           -
 
     Advanced Infestations
-        Power :
+        Power :             UnknownUpgrade
         FDC :               SiphonFuel (count = 0?)
         Contain :           AdvancedInfestationContainment
-        Security :
-        Gates :
+        Security :          AdvancedInfestationSecurity
+        Gates :             AdvancedInfestationGateControl
 
     Ultimate Infestations
         Hive Queen :        SpawnHiveQueen
         FDC Critical Mass:  CriticalMass
-        Power :
+        Power :             Blackout
         Security :
         Gates :
 
@@ -132,4 +147,11 @@ ZOMBIE
         Volatile            StrainVolatile      - PureStrainVolatile    - KaboomerStrain
         Speed               StrainSpeed         - PureStrainSpeed       - HunterlingStrain
         Health              StrainHealth        - PureStrainHealth      - TankStrain
-        Damage              StrainDamage        - PureStrainDamage      - DefilerSTrain
+        Damage              StrainDamage        - PureStrainDamage      - DefilerSTrain\
+
+    Virophage?
+        Alpha               BuildVirophageAlpha
+        Beta                BuildVirophageBeta
+        Delta               BuildVirophageDelta
+
+    Greater Nydus
