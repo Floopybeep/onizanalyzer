@@ -42,27 +42,28 @@ until ~580 frames, nothing important happens
 MARINES
     Grenades
         Frag Grenade :  FragGrenadeUnlocked             - SpecOpsFragGrenade
-        Flashbang :     FlashbangUnlocked
-        Flame :         IncendiaryGrenadeUnlocked
+        Flashbang :     FlashbangUnlocked               - SpecOpsFlashbang
+        Flame :         IncendiaryGrenadeUnlocked       - SpecOpsIncendiaryGrenade
         Force Field :   ForceFieldGrenadeUnlocked       - SpecOpsForcefieldGrenade
 
     Mining
         Expl. Droids :  ExplorationDroidUnlocked        - TESTEquippedExplorationDroidUnlocked
-        Nukes :         MiningChargeUnlocked
-        Sensors :       MotionSensorUnlocked
-        Mining Droid :                                  - AdvancedDroidEngines
+        Nukes :         MiningChargeUnlocked            - AdvancedMiningCharge
+        Sensors :       MotionSensorUnlocked            - AdvancedMotionSensor
+        Mining Droid :                                  - AdvancedDroidEngines                      - TurboDroidEngines
 
 
     Weapons
-        Flame: :        FlamethrowerUnlocked    - SpecOpsFlamethrower   - ThermiteFilamentsUnlocked     / CryoFreezeUnlocked        / LongRangeIncineratorsUnlocked
-        Shotgun :       ShotgunUnlocked         -
-        AR :                                      SpecOpsAssaultRifle   - AutoTargetingSystemUnlocked   / BayonetteUnlocked         / TitaniumBulletCasingsUnlocked
-        Plasma :        BeamRifleUnlocked       - SpecOpsPlasmaRifle    - CorrosivePlasmaUnlocked       / LongRangeScopeUnlocked    / ConcussivePlasmaUnlocked
-        Rocket :        UnknownUpgrade1
+        Flame: :        FlamethrowerUnlocked            - SpecOpsFlamethrower           - ThermiteFilamentsUnlocked     / CryoFreezeUnlocked        / LongRangeIncineratorsUnlocked
+        Shotgun :       ShotgunUnlocked                 - SpecOpsShotgun                - HighPrecisionBeamsUnlocked    / ConcussiveShotUnlocked    / DoubleBarrelUnlocked
+        AR :                                            - SpecOpsAssaultRifle           - AutoTargetingSystemUnlocked   / BayonetteUnlocked         / TitaniumBulletCasingsUnlocked
+        Plasma :        BeamRifleUnlocked               - SpecOpsPlasmaRifle            - CorrosivePlasmaUnlocked       / LongRangeScopeUnlocked    / ConcussivePlasmaUnlocked
+        Rocket :        HellfireRocketLauncherUnlocked  - SpecOpsHellfireRocketLauncher - RocketLauncherMod1Unlocked    / ShockwaveMissilesUnlocked / RocketLauncherMod3Unlocked
+        Arc :           ArcWelderUnlocked               - SpecOpsArcWelder              - ArcWelderMod1                 / ArcWelderMod2             / ArcWelderMod3
 
 
     Suits
-        Energy :        EnergySuitUnlocked      -
+        Energy :        EnergySuitUnlocked      - AdvancedEnergySuitUnlocked
         Accel :         CombatSuitUnlocked      - AdvancedCombatSuitUnlocked
         HEV :           HazmatSuitUnlocked      - AdvancedHazmatSuitUnlocked
         Shield :        ShieldSuitUnlocked      - AdvancedShieldSuitUnlocked
@@ -75,8 +76,8 @@ MARINES
 
     Buildings
         Turret :        AutoTurretUnlocked                      - HeavyTurretUnlocked   / SpecOpsTurretUnlocked     / FlameTurretUnlocked
-        Heal Droid :    BioMechanicalRepairDroneUnlocked
-        Psi :           PsiDisruptorUnlocked
+        Heal Droid :    BioMechanicalRepairDroneUnlocked        - SpecOpsBioMechanicalRepairDroneUnlocked   / RechargeDroneUnlocked / CombatAccelerationDroneUnlocked
+        Psi :           PsiDisruptorUnlocked                    - PsiDepressorUnlocked  / SpecOpsPsiDisruptorUnlocked
 
     Misc
         Shield :        CombatShieldUnlocked    / MedicShieldUnlocked
@@ -84,23 +85,34 @@ MARINES
         Visor :         AIAssistantUnlocked     / OpticalVisorUnlocked
 
     Experimentals
-        Superstim :     SuperStimpackUnlocked
+        Superstim :     SuperStimpackUnlocked       -
         Teleport :      TeleporterUnlocked          - SpecOpsTeleporterUnlocked
         Superheal :     SuperHealingDroneUnlocked   - SpecOpsSuperHealingDroneUnlocked
+        Cloak :         CloakingDeviceUnlocked      - SpecOpsCloakingDeviceUnlocked
+        Gas Converter :
+        ARES Tank :
 
 ZOMBIE
     Infestations
         Drop Pods:          UnlockDropPods          - EvolveDropPods
-        Const. Creep :      ConstructiveCreep
-        Speed Creep :       CreepSpeed
+        Const. Creep :      ConstructiveCreep       -
+        Speed Creep :       CreepSpeed              -
+        Regen Creep :       RegenerativeCreep       -
+        Virulent Creep :    VirulentCreep           -
 
     Advanced Infestations
         Power :
-        Siphon :            SiphonFuel (count = 0?)
+        FDC :               SiphonFuel (count = 0?)
         Contain :           AdvancedInfestationContainment
+        Security :
+        Gates :
 
     Ultimate Infestations
         Hive Queen :        SpawnHiveQueen
+        FDC Critical Mass:  CriticalMass
+        Power :
+        Security :
+        Gates :
 
     Major Room Infested
         Gate Control :      GateControlInfested
@@ -114,9 +126,10 @@ ZOMBIE
         3 :                 InfestationLevel5
         4 :                 InfestationLevel4
         5 :                 InfestationLevel5
+        6 :                 InfestationLevel6
 
     Strains (count = 0? Z upgrades show once for all players)
         Volatile            StrainVolatile      - PureStrainVolatile    - KaboomerStrain
-        Speed
+        Speed               StrainSpeed         - PureStrainSpeed       - HunterlingStrain
         Health              StrainHealth        - PureStrainHealth      - TankStrain
-        Damage
+        Damage              StrainDamage        - PureStrainDamage      - DefilerSTrain
