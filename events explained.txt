@@ -1,11 +1,7 @@
 Events & how to use them (from replay.events)
 
-- UnitDoneEvent
-Can be used to find z structures built? at least nydus and creep towers
+Useless: UnitDoneEvent
 
-        elif event.name == 'UnitDoneEvent':
-            if event.unit.name is not None:
-                eventlist.append(event)
 
 - UnitInitEvent
 Can be used to find z structures (+ M heal/scout/mining droid)
@@ -36,3 +32,91 @@ Dehaka - Predator
                                             'ZergDropPod', 'CreepPod', 'DevastatorLeaping'}:
                 if event.upkeep_pid != 10:
                     eventlist.append(event)
+
+
+- UpgradeCompleteEvent
+Can be used to find marine & z Upgrade purchases
+
+until ~580 frames, nothing important happens
+
+MARINES
+    Grenades
+        Frag Grenade :  FragGrenadeUnlocked             - SpecOpsFragGrenade
+        Flashbang :     FlashbangUnlocked
+        Flame :         IncendiaryGrenadeUnlocked
+        Force Field :   ForceFieldGrenadeUnlocked       - SpecOpsForcefieldGrenade
+
+    Mining
+        Expl. Droids :  ExplorationDroidUnlocked        - TESTEquippedExplorationDroidUnlocked
+        Nukes :         MiningChargeUnlocked
+        Sensors :       MotionSensorUnlocked
+        Mining Droid :                                  - AdvancedDroidEngines
+
+
+    Weapons
+        Flame: :        FlamethrowerUnlocked    - SpecOpsFlamethrower   - ThermiteFilamentsUnlocked     / CryoFreezeUnlocked        / LongRangeIncineratorsUnlocked
+        Shotgun :       ShotgunUnlocked         -
+        AR :                                      SpecOpsAssaultRifle   - AutoTargetingSystemUnlocked   / BayonetteUnlocked         / TitaniumBulletCasingsUnlocked
+        Plasma :        BeamRifleUnlocked       - SpecOpsPlasmaRifle    - CorrosivePlasmaUnlocked       / LongRangeScopeUnlocked    / ConcussivePlasmaUnlocked
+        Rocket :        UnknownUpgrade1
+
+
+    Suits
+        Energy :        EnergySuitUnlocked      -
+        Accel :         CombatSuitUnlocked      - AdvancedCombatSuitUnlocked
+        HEV :           HazmatSuitUnlocked      - AdvancedHazmatSuitUnlocked
+        Shield :        ShieldSuitUnlocked      - AdvancedShieldSuitUnlocked
+
+
+    Accessories
+        Stimpack :      StimpackUnlocked
+        Overload :      OverloadWeaponUnlocked
+        D. Matrix :     DefensiveMatrixUnlocked
+
+    Buildings
+        Turret :        AutoTurretUnlocked                      - HeavyTurretUnlocked   / SpecOpsTurretUnlocked     / FlameTurretUnlocked
+        Heal Droid :    BioMechanicalRepairDroneUnlocked
+        Psi :           PsiDisruptorUnlocked
+
+    Misc
+        Shield :        CombatShieldUnlocked    / MedicShieldUnlocked
+        Backpack :      EnergyPackUnlocked      / QuantumBackpackUnlocked
+        Visor :         AIAssistantUnlocked     / OpticalVisorUnlocked
+
+    Experimentals
+        Superstim :     SuperStimpackUnlocked
+        Teleport :      TeleporterUnlocked          - SpecOpsTeleporterUnlocked
+        Superheal :     SuperHealingDroneUnlocked   - SpecOpsSuperHealingDroneUnlocked
+
+ZOMBIE
+    Infestations
+        Drop Pods:          UnlockDropPods          - EvolveDropPods
+        Const. Creep :      ConstructiveCreep
+        Speed Creep :       CreepSpeed
+
+    Advanced Infestations
+        Power :
+        Siphon :            SiphonFuel (count = 0?)
+        Contain :           AdvancedInfestationContainment
+
+    Ultimate Infestations
+        Hive Queen :        SpawnHiveQueen
+
+    Major Room Infested
+        Gate Control :      GateControlInfested
+        Power :             PowerGeneratorInfested
+        FDC :               FuelDistributionInfested
+        Containment :       ContainmentInfested
+        Security :          SecurityMainframeInfested
+
+    Infestation Levels (event.second)
+        2 :                 InfestationLevel2
+        3 :                 InfestationLevel5
+        4 :                 InfestationLevel4
+        5 :                 InfestationLevel5
+
+    Strains (count = 0? Z upgrades show once for all players)
+        Volatile            StrainVolatile      - PureStrainVolatile    - KaboomerStrain
+        Speed
+        Health              StrainHealth        - PureStrainHealth      - TankStrain
+        Damage
