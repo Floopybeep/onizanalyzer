@@ -56,6 +56,7 @@ class marineinfo(playerinfo):
         self.captures = 0
         self.saves = 0
         self.alphakills = 0
+        self.cocoonkills = 0
         self.zstructurekills = 0
         self.mstructurebuilt = 0
         self.experimentalpurchased = 0

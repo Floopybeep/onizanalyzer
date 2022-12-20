@@ -1,0 +1,38 @@
+Events & how to use them (from replay.events)
+
+- UnitDoneEvent
+Can be used to find z structures built? at least nydus and creep towers
+
+        elif event.name == 'UnitDoneEvent':
+            if event.unit.name is not None:
+                eventlist.append(event)
+
+- UnitInitEvent
+Can be used to find z structures (+ M heal/scout/mining droid)
+
+        elif event.name == 'UnitInitEvent':
+            eventlist.append(event)
+            print(event.unit_type_name)
+
+- UnitBornEvent
+Can be used to find z alphas & cocoons & captures
+InfestedCocoon - marine captured cocoon
+
+MassiveCocoon - cocoon
+QueenCoop - Hive Queen
+
+Hunter - Hunter
+Dehaka - Predator
+
+
+
+        elif event.name == 'UnitBornEvent':
+            if event.unit_type_name not in {'DigesterCreepSprayTargetUnit', 'DigesterCreepSprayUnit',
+                                            'InfestedCivilian', 'InfestedExploder', 'Baneling', 'Kaboomer',
+                                            'InfestedExploderBurrowed', 'BanelingBurrowed', 'LocustMP3',
+                                            'InfestorTerran', 'DehakaMirrorImage', 'NovaAcidPuddle2',
+                                            'PrimalTownHallUprooted', 'Kaboomer2', 'InfestorTerranBurrowed',
+                                            'AcidPuddle', 'HotSRaptor', 'RoachCorpser',
+                                            'ZergDropPod', 'CreepPod', 'DevastatorLeaping'}:
+                if event.upkeep_pid != 10:
+                    eventlist.append(event)

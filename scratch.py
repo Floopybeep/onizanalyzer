@@ -12,7 +12,7 @@ from infoextract import *
 
 quickanalyze = False
 
-folderpath = "C:/Users/wooil/Documents/StarCraft II/Accounts/12861615/1-S2-1-5777751/Replays/Multiplayer/Oh No It's Zombies/"
+folderpath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays"
 savepath = "C:/Users/wooil/Downloads/analysis.txt"
 
 # The path for replays in the folder and subfolders are saved in replaypaths(list)
@@ -25,7 +25,7 @@ for path, subdirs, files in walk(folderpath):
 for replaypath in replaypaths:
     t0 = time.time()
     try:
-        replay = sc2reader.load_replay(replaypath, load_level=3)
+        replay = sc2reader.load_replay(replaypath, load_level=4)
     except Exception:
         print("Replay corrupted, deleting replay: ", replaypath)
         pass
@@ -54,5 +54,7 @@ for replaypath in replaypaths:
     t1 = time.time()
     timetaken = t1 - t0
     print("Time taken for replay analysis: ", timetaken)
+
+    # Possibly analyze replay win here, if player.victory == None?
 
     # print(1)

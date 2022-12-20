@@ -62,7 +62,40 @@ What's in the Replay object?
 - teams (list)
 '''
 
+'''
+Output file format
+1. text file summary for each game
+game ID - to prevent re-analysis of game (00000001 - eight-digit format, one for each?) (maybe make unique identifier?)
 
-import sc2reader
+2. Players
+ProDem       Zerg    16
+ToxicPanda   Terran  12 ....
 
-# replay = sc2reader.load_replay(path, load_level=4)
+3. Zombie/Human Victory
+
+4. Detailed Information (Tabular Format)
+4-1. Human Info
+Players     UID         Kills       Saves       Deaths      Gas Earned      Gas Spent       Weapon Used     Experimental
+Alany       S1-1-...    
+
+4-2. Zombie Info
+Player      UID         Captures    Self-Breaks     Alphas Created      Strains Purchased       Ultimate Infestation
+
+
+
+4-1.
+Player Name, UID, Kills, Saves, Deaths, Gas Earned, Gas Spent, Weapon Used, Experimental, Score, Alphas Killed, Diverts,
+Number of Psis Placed, Weapon Modification Purchased, Nukes Placed, Suit Purchased, Total Upgrades
+
+4-2.
+Player Name, UID, Captures, Self-Breaks, Alphas Created, Strains Purchased, Ultimate Infestation, Major Rooms Infested,
+Number of Rooms Infested, Hangars Captured, Upgrades Purchased, Advanced Infestations
+'''
+# possible candidate for unique identifier:
+#   game length
+#   players in game
+#   zombie chosen
+#   date - surefire method if all replays are from the same player
+#   first five chatevents
+
+#   Maybe just use filehash? It's available in lv=2 ('d8eb9f9e9e0482a01ab4e8b397a572dc29d38d5a6a8e7e282b9027ff9165056e')
