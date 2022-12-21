@@ -13,4 +13,3 @@ quickanalysis = False
 
 for replaypath in replaypaths:
     mainprocess(replaypath, quickanalysis)
-    print(1)

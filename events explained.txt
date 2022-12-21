@@ -5,10 +5,13 @@ Useless: UnitDoneEvent
 
 - UnitInitEvent
 Can be used to find z structures (+ M heal/scout/mining droid)
+'ToxicNest' possibly key to # of rooms infested?
 
         if event.name == 'UnitInitEvent':
-            eventlist.append(event)
-            print(event.unit_type_name)
+            if event.unit_type_name not in {'MiningDroid', 'AutoTurret', 'SensorTower', 'PsiIndoctrinator',
+                                            'NukePack', 'HealingDrone'}:
+                eventlist.append(event)
+                namelist.append(event.unit_type_name)
 
 Just remember to check event.upkeep_pid and event.unit_type_name!
 

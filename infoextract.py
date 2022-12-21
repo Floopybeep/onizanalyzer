@@ -59,6 +59,7 @@ def extract_eventinfo(replay, humandict, zombieplayer):
     for key in humandict:
         humanlist.append(humandict[key].pid)
     humanset = set(humanlist)
+    z_id = zombieplayer.pid
 
     for event in replay.events:
         if event.name == 'UpgradeCompleteEvent':
@@ -68,7 +69,9 @@ def extract_eventinfo(replay, humandict, zombieplayer):
         elif event.name == 'UnitBornEvent':
             UnitBornEventCheck(event, zombieplayer)
         elif event.name == 'UnitInitEvent':
-            UnitInitEventCheck(event, humandict, humanset, zombieplayer)
+            UnitInitEventCheck(event, humandict, zombieplayer)
+        elif event.name == 'PlayerStatsEvent':
+            PlayerStatsEventCheck(event, zombieplayer, z_id)
 
 
     # extract the following information
@@ -109,13 +112,18 @@ def UnitBornEventCheck(event, zombieplayer):
             zombieplayer.startingalpha = t1alphatonamedict[name]
 
 
-def UnitInitEventCheck(event, humandict, humanset, zombieplayer):
+def UnitInitEventCheck(event, humandict, zombieplayer):
     name = event.unit_type_name
 
     if name == 'ExplorationDroid':
         humandict[event.control_pid].explorationdroidsmade += 1
     elif name in zstructuredict:
         zombieplayer.structure_create(name)
-        zombieplayer.structuresbuilt += 1
+        zombieplayer.structurebuilt += 1
     elif name == 'GreaterNydusWorm':
         zombieplayer.greaternydustimings.append(event.second)
+
+def PlayerStatsEventCheck(event, zombieplayer, z_id):
+    if event.pid == z_id:
+        zombieplayer.totalgasspent = event.resources_used_current
+        zombieplayer.totalgasincome = event.resources_used_current + event.vespene_current

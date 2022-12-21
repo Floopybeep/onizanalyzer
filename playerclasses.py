@@ -221,8 +221,8 @@ class zombieinfo(playerinfo):
         self.cocoonsmade = 0                        # done
         self.droppodsused = 0                       # done
         self.roomcaptures = 0
-        self.totalgasincome = 0
-        self.totalgasspent = 0
+        self.totalgasincome = 0                     # done
+        self.totalgasspent = 0                      # done
         self.structurebuilt = 0                     # done
         self.siphons = 0                            # done
 
