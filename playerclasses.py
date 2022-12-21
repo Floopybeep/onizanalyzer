@@ -87,7 +87,7 @@ experimentallist = ['Cloaking Device', 'Gas Converter', 'Super Stimpack',
 structurecountset = {'TurretBuildCounter', 'RepairDroneBuildCounter', 'PsiDisruptorBuildCounter'}
 
 ########################################### Zerg Dicts & Sets ###################################################
-
+# UpgradeCompleteEvent dicts
 majorroomdict = {'PowerGeneratorInfested': 0, 'FuelDistributionInfested': 1, 'ContainmentInfested': 2,
                  'SecurityMainframeInfested': 3, 'GateControlInfested': 4}
 
@@ -108,6 +108,20 @@ infestationleveldict = {'InfestationLevel2': 0, 'InfestationLevel3': 1, 'Infesta
 ultimateinfestationdict = {'SpawnHiveQueen': 'Hive Queen', 'CriticalMass': 'Critical Mass',
                            'BlackOut': 'Power Drain', 'NydusNetwork': 'Nydus Network'}
 
+# UnitTypeChangeEvent dicts
+t2alphadict = {'Abomination': 0, 'GenesplicerUprooted': 1, 'Anubalight': 2, 'LegionnaireZombie': 3,
+               'Predator2': 4, 'Saboteur': 5}
+
+# UnitBornEvent dicts
+t1alphadict = {'InfestedAbomination': 0, 'PrimalTownHallUprooted': 1, 'Anubalisk': 2, 'Lurker': 3,
+               'Hunter': 4, 'Underseer': 5}
+
+t1alphatonamedict = {'InfestedAbomination': 'Abberation', 'PrimalTownHallUprooted': 'Geneweaver',
+                     'Anubalisk': 'Anubalisk', 'Lurker': 'Legion', 'Hunter': 'Hunter', 'Underseer': 'Underseer'}
+
+# UnitInitEvent dicts
+zstructuredict = {'PrimalSunkenColony': 0, 'LocustNest': 1, 'NydusCanalCreeper': 2, 'LesserNydusWorm': 3,
+                  'AutomatedExtractor': 4}
 
 class playerinfo():
     def __init__(self, name=None, pid=None, handle=None, role=None, victory=None):
@@ -137,6 +151,7 @@ class marineinfo(playerinfo):
         self.alphakills = 0
         self.cocoonkills = 0
         self.zstructurekills = 0
+        self.explorationdroidsmade = 0
         self.turretsbuilt = 0               # done
         self.repairdronesebuilt = 0         # done
         self.psisbuilt = 0                  # done
@@ -196,16 +211,19 @@ class zombieinfo(playerinfo):
         self.infestationleveltimes = [None for _ in range(5)]           # time of inf levels
 
         self.hangarcaptures = [False for _ in range(3)]                 # Alpha, Beta, Delta
-        self.alphasbuilt = [[0, 0] for _ in range(5)]                   # (Abom, Gene, Anub, Legion, Predator)(num)
+        self.alphasbuilt = [[0, 0] for _ in range(6)]                   # (Abom, Gene, Anub, Legion, Predator)(num)
+        self.structurebuiltist = [0 for _ in range(5)]                  # Sunken, Broodling, Creep, LNydus, Extractor
+        self.greaternydustimings = []
 
-        self.startingalpha = None
+        self.startingalpha = None                   # done
         self.ultimateinfestation = None             # done
         self.marinecaptures = 0                     # done
-        self.cocoonsmade = 0
+        self.cocoonsmade = 0                        # done
+        self.droppodsused = 0                       # done
         self.roomcaptures = 0
         self.totalgasincome = 0
         self.totalgasspent = 0
-        self.structurebuilt = 0
+        self.structurebuilt = 0                     # done
         self.siphons = 0                            # done
 
     def majorroom_capture(self, name):
@@ -225,4 +243,14 @@ class zombieinfo(playerinfo):
 
     def ultimateinfestation_chosen(self, name):
         self.ultimateinfestation = ultimateinfestationdict[name]
+
+    # UnitTypeChangeEvent
+    def t2alpha_create(self, name):
+        self.alphasbuilt[t2alphadict[name]][1] += 1
+
+    def t1alpha_create(self, name):
+        self.alphasbuilt[t1alphadict[name]][0] += 1
+
+    def structure_create(self, name):
+        self.structurebuiltist[zstructuredict[name]] += 1
 

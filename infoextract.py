@@ -63,30 +63,18 @@ def extract_eventinfo(replay, humandict, zombieplayer):
     for event in replay.events:
         if event.name == 'UpgradeCompleteEvent':
             UpgradeCompleteEventCheck(event, humandict, humanset, zombieplayer)
+        elif event.name == 'UnitTypeChangeEvent':
+            UnitTypeChangeEventCheck(event, zombieplayer)
+        elif event.name == 'UnitBornEvent':
+            UnitBornEventCheck(event, zombieplayer)
+        elif event.name == 'UnitInitEvent':
+            UnitInitEventCheck(event, humandict, humanset, zombieplayer)
 
 
     # extract the following information
     # 1. roomcaptures
     # 4. totalgasincome
     # 5. totalgasspent
-    # 6. alphasbuilt                    ([Type][Tiers], Type = (Abom, Gene, Anub, Legion, Predator))
-    # 7. starting alpha                 string
-    # 10. structurebuilt                count
-
-def event_blacklist_check(event):
-    UnitBornEventblacklist = {'InfestedCivilianBurrowed'}
-    UpgradeCompleteEventblacklist = {'RefineryRoomInfestedExcavationZone', 'RefineryRoomInfestedManufacturingSector',
-                                'RefineryRoomInfestedProcessingFacilities', 'RefineryRoomInfestedScienceLabs',
-                                'VirophageroominfestedAlpha', 'VirophageroominfestedBeta', 'VirophageroominfestedDelta'}
-
-    if event.frame == 0:
-        return False
-    if event.name == 'UnitBornEvent' and event.unit_type_name in UnitBornEventblacklist:
-        return False
-    elif event.name == 'UpgradeCompleteEvent' and event.upgrade_type_name in UpgradeCompleteEventblacklist:
-        return False
-
-    return True
 
 
 def UpgradeCompleteEventCheck(event, humandict, humanset, zombieplayer):
@@ -94,3 +82,40 @@ def UpgradeCompleteEventCheck(event, humandict, humanset, zombieplayer):
     z_id = zombieplayer.pid
     humanUCEcheck(event, name, humandict, humanset, zombieplayer)
     zombieUCEcheck(event, name, zombieplayer, z_id)
+
+
+def UnitTypeChangeEventCheck(event, zombieplayer):
+    name = event.unit_type_name
+    cocoonids = set()
+
+    if name == 'MassiveCocoon':
+        zombieplayer.cocoonsmade += 1
+        cocoonids.add(event.unit_id_index)
+    elif name in t2alphadict and event.unit_id_index in cocoonids:
+        zombieplayer.t2alpha_create(name)
+        cocoonids.discard(event.unit_id_index)
+
+
+def UnitBornEventCheck(event, zombieplayer):
+    name = event.unit_type_name
+
+    if name == 'ZergDropPod':
+        zombieplayer.droppodsused += 1
+    elif name == 'MassiveCocoon':
+        zombieplayer.cocoonsmade += 1
+    elif name in t1alphadict:
+        zombieplayer.t1alpha_create(name)
+        if zombieplayer.startingalpha is None:
+            zombieplayer.startingalpha = t1alphatonamedict[name]
+
+
+def UnitInitEventCheck(event, humandict, humanset, zombieplayer):
+    name = event.unit_type_name
+
+    if name == 'ExplorationDroid':
+        humandict[event.control_pid].explorationdroidsmade += 1
+    elif name in zstructuredict:
+        zombieplayer.structure_create(name)
+        zombieplayer.structuresbuilt += 1
+    elif name == 'GreaterNydusWorm':
+        zombieplayer.greaternydustimings.append(event.second)

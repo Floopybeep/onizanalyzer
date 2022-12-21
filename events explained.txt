@@ -6,9 +6,22 @@ Useless: UnitDoneEvent
 - UnitInitEvent
 Can be used to find z structures (+ M heal/scout/mining droid)
 
-        elif event.name == 'UnitInitEvent':
+        if event.name == 'UnitInitEvent':
             eventlist.append(event)
             print(event.unit_type_name)
+
+Just remember to check event.upkeep_pid and event.unit_type_name!
+
+    Creep Tower -   NydusCanalCreeper
+    Greater Nydus - GreaterNydusWorm
+    Lesser Nydus -  LesserNydusWorm
+    Sunken -        PrimalSunkenColony
+    SwarmlingNest - LocustNest
+    Extractor -     AutomatedExtractor
+
+
+
+
 
 - UnitBornEvent
 Can be used to find z alphas & cocoons & captures
@@ -18,41 +31,50 @@ MassiveCocoon           - cocoon
 QueenCoop               - Hive Queen
 
 Hunter                  - Hunter
-Dehaka                  - Predator
 Underseer               - Underseer
 Lurker                  - Legion
 InfestedAbomination     - Abom
 Anubalisk               - Anubalisk
 PrimalTownHallUprooted  - Geneweaver
 
-        elif event.name == 'UnitBornEvent':
-            if event.unit_type_name not in {'DigesterCreepSprayTargetUnit', 'DigesterCreepSprayUnit',
-        #                                     'InfestedCivilian', 'InfestedExploder', 'Baneling', 'Kaboomer',
-        #                                     'InfestedExploderBurrowed', 'BanelingBurrowed', 'LocustMP3',
-        #                                     'InfestorTerran', 'DehakaMirrorImage', 'NovaAcidPuddle2',
-        #                                     'Kaboomer2', 'InfestorTerranBurrowed',
-        #                                     'AcidPuddle', 'HotSRaptor', 'RoachCorpser',
-        #                                     'ZergDropPod', 'CreepPod', 'DevastatorLeaping', 'FlyingZombie2',
-        #                                     'Mutalisk', 'Devourer2', 'KerriganInfestBroodling'}:
+        if event.name == 'UnitBornEvent':
+            if event.unit_type_name not in {'DigesterCreepSprayTargetUnit', 'DigesterCreepSprayUnit', 'NovaAcidPuddle2',
+                                            'InfestedCivilian', 'LocustMP3',
+                                            'InfestorTerran', 'InfestorTerranBurrowed',
+                                            'DehakaMirrorImage', 'DehakaMirrorImageBurrowed',
+                                            'InfestedExploder', 'Baneling', 'Kaboomer',
+                                            'InfestedExploderBurrowed', 'BanelingBurrowed', 'Kaboomer2', 'AcidPuddle',
+                                            'Zergling', 'HotSRaptor', 'HotSRaptorBurrowed', 'PureFastZombieLeaping',
+                                            'RoachCorpser', 'RoachCorpserBurrowed', 'RoachVile',
+                                            'ZergDropPod', 'CreepPod', 'FlyingZombie2',
+                                            'Mutalisk', 'DevastatorLeaping', 'Devourer2', 'KerriganInfestBroodling',
+                                            'ForceField', 'WarPig'}:
                 if event.upkeep_pid != 10:
                     eventlist.append(event)
 
 
 - UnitTypeChangeEvent
-Used to find T2 alpha morphs
+Used to find T2 alpha morphs and Turret/Healdrone/Psi morphs (KelMorianGrenadeTurret/MannedTurret/FlamingBetty)
 
 Abomination - Abomination
 Anubalight - Anubalight
 Saboteur - Saboteur
 Genesplicer - GenesplicerUprooted
 Legionnaire - LegionnaireZombie
+Predator - Predator2
 
-                elif event.name == 'UnitTypeChangeEvent':
-            if event.unit_type_name not in {'SpiderMine', 'SpiderMineBurrowed', 'InfestedCivilian', 'SentryGun',
-                                            'SpecOpsSentryGun', 'SentryGunUnderground', 'SpecOpsSentryGun2',
-                                            'InfestedTerranCampaignBurrowed', 'LabTurretUp', 'AutoTurret2',
-                                            'InfestedExploder', 'Baneling', 'Kaboomer', 'ToxicNestBurrowed'}:
-                eventlist.append(event)
+            if event.name == 'UnitTypeChangeEvent':
+                if event.unit_type_name not in {'SpiderMine', 'SpiderMineBurrowed', 'Dehaka',
+                                                'SentryGun', 'SpecOpsSentryGun', 'SentryGunUnderground', 'SpecOpsSentryGun2',
+                                                'LabTurretUp', 'AutoTurret2',
+                                                'InfestedTerranCampaignBurrowed', 'ToxicNestBurrowed',
+                                                'InfestedExploder', 'Baneling', 'BanelingBurrowed', 'Kaboomer',
+                                                'InfestedCivilian', 'InfestedCivilianBurrowed',
+                                                'LocustMP', 'FlyingZombie', 'FlyingZombie2',
+                                                'RoachCorpser', 'RoachCorpserBurrowed', 'RoachVile', 'DefilerMP',
+                                                'InfestorTerran', 'DehakaMirrorImage', 'DehakaMirrorImageBurrowed',
+                                                'Zergling', 'HotSRaptor', 'Hunterling'}
+                    eventlist.append(event)
 
 
 
@@ -114,6 +136,9 @@ MARINES
         Gas Converter :
         ARES Tank :
 
+    Building Counters
+        TurretBuildCounter / RepairDroneBuildCounter / PsiDisruptorBuildCounter	
+
 ZOMBIE
     Infestations
         Drop Pods:          UnlockDropPods          - EvolveDropPods
@@ -133,7 +158,7 @@ ZOMBIE
         Hive Queen :        SpawnHiveQueen
         FDC Critical Mass:  CriticalMass
         Power :             Blackout
-        Security :
+        Security :           NydusNetwork
         Gates :
 
     Major Room Infested
@@ -154,7 +179,7 @@ ZOMBIE
         Volatile            StrainVolatile      - PureStrainVolatile    - KaboomerStrain
         Speed               StrainSpeed         - PureStrainSpeed       - HunterlingStrain
         Health              StrainHealth        - PureStrainHealth      - TankStrain
-        Damage              StrainDamage        - PureStrainDamage      - DefilerSTrain\
+        Damage              StrainDamage        - PureStrainDamage      - DefilerStrain
 
     Virophage?
         Alpha               BuildVirophageAlpha
