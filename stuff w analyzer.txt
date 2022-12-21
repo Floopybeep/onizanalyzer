@@ -8,14 +8,10 @@ Algorithm Plan
 
 
 To-Do
-1. order humanupgradecomplete.py -      humanUCEcheck by descending order of frequency of use
-2. optimize humanupgradecomplete.py -   would implementing a set of all names used help in optimization?
-                                        maybe check if command is in the set before start checking the if statements?
-                                        better yet, make a blacklist of things NOT to check for!
+
 3. implement multiprocess
 4. implement UI
 
-5. zombie hangarcaptures -              Also check for dropship unitchange event
 6. update playerclasses.py -            experimental dict, ultimate infestation set
 
 7. add to mainprocess.py -              Check for leavers! if there are 2 or more zergs, then there is a leaver!

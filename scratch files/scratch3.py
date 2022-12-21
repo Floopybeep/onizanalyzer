@@ -7,15 +7,13 @@ replay = sc2reader.load_replay(path, load_level=3)
 
 eventlist = []
 namedict = {}
+eventset = set()
 
 
 for event in replay.events:
-    if event.name == 'UnitDiedEvent':
-        if event.frame > 573 and event.unit.name not in {'Marine', 'Marauder', 'DigesterCreepSprayUnit',
-                                                        'HERC', 'Reaper', 'Ghost'}:
-            if event.killer_pid is None and event.location != (255, 255):
-                eventlist.append(event)
-        # namedict.update({event.pid:event})
-print(1)
-print(2)
+    if event.name == 'UpgradeCompleteEvent':
+        if event.upgrade_type_name not in eventset:
+            eventset.add(event.upgrade_type_name)
+print(eventset)
+
 

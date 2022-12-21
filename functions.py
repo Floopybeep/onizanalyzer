@@ -29,4 +29,3 @@ def winloss_to_victory(result):
         return False
     else:
         return None
-

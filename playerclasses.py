@@ -1,42 +1,3 @@
-'''
-#######################################################################
-Information needed (per game)
-- Player name
-- Player handle (1-S2-1-3591394)
-- Player role (M/Z)
-- Player Victory/Loss (1/0)
-
-For Marines...
-- Weapon used (+mods?)
-- Kills
-- Score
-- Captures
-- Marine Saves
-- Alpha kills
-- Z Structure kills
-- Structures built (turrets, heal droids, psis)
-- Experimental purchased (should include N/A)
-- Total gas income (total & mined)
-- Total gas spent
-
-For Zombie...
-- Marine Captures
-- Important Rooms Captured
-- Hangars Killed
-- # of rooms captured
-- Total Gas income (if info is available)
-- Total Gas spent
-- Alphas built
-- Strains purchased
-- Upgrades purchased
-- # of Pod upgrades
-- Structures built
-
-#######################################################################
-Information needed (per player) - just look at their latest bank files
-#######################################################################
-'''
-
 weapondict = {'FlamethrowerUnlocked': 10, 'ShotgunUnlocked': 11, 'AssaultRifleUnlocked': 12,
               'BeamRifleUnlocked': 13, 'HellfireRocketLauncherUnlocked': 14, 'ArcWelderUnlocked': 15,
               'SpecOpsFlamethrower': 20, 'SpecOpsShotgun': 21, 'SpecOpsAssaultRifle': 22,
@@ -123,6 +84,7 @@ t1alphatonamedict = {'InfestedAbomination': 'Abberation', 'PrimalTownHallUproote
 zstructuredict = {'PrimalSunkenColony': 0, 'LocustNest': 1, 'NydusCanalCreeper': 2, 'LesserNydusWorm': 3,
                   'AutomatedExtractor': 4}
 
+
 class playerinfo():
     def __init__(self, name=None, pid=None, handle=None, role=None, victory=None):
         self.playername = name
@@ -151,7 +113,7 @@ class marineinfo(playerinfo):
         self.alphakills = 0
         self.cocoonkills = 0
         self.zstructurekills = 0
-        self.explorationdroidsmade = 0
+        self.explorationdroidsmade = 0      # done
         self.turretsbuilt = 0               # done
         self.repairdronesebuilt = 0         # done
         self.psisbuilt = 0                  # done

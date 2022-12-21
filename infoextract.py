@@ -13,34 +13,27 @@ def extract_playerinfo(replay):                                         # input:
         if human.pid > 8: pass
 
         victory = winloss_to_victory(human.result)
+
         if human.play_race == 'Terran':
             humandict[human.pid] = marineinfo(name=human.name, pid=human.pid, handle=human.toon_handle, role='Human', victory=victory)
         elif human.play_race == 'Zerg':
             zombieplayer = zombieinfo(name=human.name, pid=human.pid, handle=human.toon_handle, role='Zombie', victory=victory)
+            z_player_hangar_kill_check(human.killed_units, zombieplayer)
+
+    if victory is None:
+        for human in replay.humans:
+            if human.pid > 8: pass
+            if human.play_race == 'Terran':
+                for unit in human.active_units:
+                    if dropship_player_check(unit):
+                        humandict[human.pid].victory = True
+                        zombieplayer.victory = False
+                if human.victory is None:
+                    humandict[human.pid].victory = False
+        if zombieplayer.victory is None:
+            zombieplayer.victory = True
 
     return humandict, zombieplayer
-
-
-def detailed_victory_determine_z(player, zplayer):
-    if player.result == 'Loss':
-        zplayer.victory = False
-    elif player.result == 'Win':
-        zplayer.victory = True
-
-    else:
-        for unit in player.killed_units:
-            # Alpha, Beta, Delta hangar
-            if unit.location == (30, 55):                                   # add check for player in drop-ship later
-                zplayer.hangarcaptures[0] = True
-            elif unit.location == (150, 225):
-                zplayer.hangarcaptures[1] = True
-            elif unit.location == (204, 40):
-                zplayer.hangarcaptures[2] = True
-
-        if False not in zplayer.hangarcaptures:
-            zplayer.victory = True
-        else:
-            zplayer.victory = False
 
 
 def dropship_player_check(unit):
@@ -51,7 +44,18 @@ def dropship_player_check(unit):
     elif 236 <= unit.location[0] <= 256 and 212 <= unit.location[1] <= 255:
         return 3
     else:
-        return False
+        return 0
+
+
+def z_player_hangar_kill_check(units, zombieplayer):
+    for unit in units:
+        # Alpha, Beta, Delta hangar
+        if unit.location == (30, 55):
+            zombieplayer.hangarcaptures[0] = True
+        elif unit.location == (150, 225):
+            zombieplayer.hangarcaptures[1] = True
+        elif unit.location == (204, 40):
+            zombieplayer.hangarcaptures[2] = True
 
 
 def extract_eventinfo(replay, humandict, zombieplayer):

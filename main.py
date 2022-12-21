@@ -11,5 +11,6 @@ replaypaths, replaycount = replay_file_parser(folderpath)     # replaypaths: lis
 
 quickanalysis = False
 
+
 for replaypath in replaypaths:
     mainprocess(replaypath, quickanalysis)
