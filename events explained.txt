@@ -27,12 +27,13 @@ PrimalTownHallUprooted  - Geneweaver
 
         elif event.name == 'UnitBornEvent':
             if event.unit_type_name not in {'DigesterCreepSprayTargetUnit', 'DigesterCreepSprayUnit',
-                                            'InfestedCivilian', 'InfestedExploder', 'Baneling', 'Kaboomer',
-                                            'InfestedExploderBurrowed', 'BanelingBurrowed', 'LocustMP3',
-                                            'InfestorTerran', 'DehakaMirrorImage', 'NovaAcidPuddle2',
-                                            'PrimalTownHallUprooted', 'Kaboomer2', 'InfestorTerranBurrowed',
-                                            'AcidPuddle', 'HotSRaptor', 'RoachCorpser',
-                                            'ZergDropPod', 'CreepPod', 'DevastatorLeaping'}:
+        #                                     'InfestedCivilian', 'InfestedExploder', 'Baneling', 'Kaboomer',
+        #                                     'InfestedExploderBurrowed', 'BanelingBurrowed', 'LocustMP3',
+        #                                     'InfestorTerran', 'DehakaMirrorImage', 'NovaAcidPuddle2',
+        #                                     'Kaboomer2', 'InfestorTerranBurrowed',
+        #                                     'AcidPuddle', 'HotSRaptor', 'RoachCorpser',
+        #                                     'ZergDropPod', 'CreepPod', 'DevastatorLeaping', 'FlyingZombie2',
+        #                                     'Mutalisk', 'Devourer2', 'KerriganInfestBroodling'}:
                 if event.upkeep_pid != 10:
                     eventlist.append(event)
 
@@ -46,6 +47,12 @@ Saboteur - Saboteur
 Genesplicer - GenesplicerUprooted
 Legionnaire - LegionnaireZombie
 
+                elif event.name == 'UnitTypeChangeEvent':
+            if event.unit_type_name not in {'SpiderMine', 'SpiderMineBurrowed', 'InfestedCivilian', 'SentryGun',
+                                            'SpecOpsSentryGun', 'SentryGunUnderground', 'SpecOpsSentryGun2',
+                                            'InfestedTerranCampaignBurrowed', 'LabTurretUp', 'AutoTurret2',
+                                            'InfestedExploder', 'Baneling', 'Kaboomer', 'ToxicNestBurrowed'}:
+                eventlist.append(event)
 
 
 
@@ -155,3 +162,11 @@ ZOMBIE
         Delta               BuildVirophageDelta
 
     Greater Nydus
+
+
+     # if event.name == 'UpgradeCompleteEvent':
+        #     if event.upgrade_type_name not in {'LongRangeScope', 'FragGrenadeUnlocked', 'ExplorationDroidUnlocked',
+        #                                        'TESTEquippedExplorationDroidUnlocked', 'MiningChargeUnlocked',
+        #                                        'MotionSensorUnlocked', }:
+        #         # if event.pid == 2:
+        #         eventlist.append(event)

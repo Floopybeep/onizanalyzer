@@ -1,25 +1,16 @@
-import s2protocol
 import sc2reader
-from s2protocol import versions
-import mpyq
-from os import listdir, walk
-from os.path import isfile, join
 
 from playerclasses import *
 from bankextractor import extract_banks
+from functions import *
+from mainprocess import mainprocess
 
-folderpath = "C:/Users/wooil/Documents/StarCraft II/Accounts/12861615/1-S2-1-5777751/Replays/Multiplayer/Oh No It's Zombies/"
+folderpath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays"
 savepath = "C:/Users/wooil/Downloads/analysis.txt"
+replaypaths, replaycount = replay_file_parser(folderpath)     # replaypaths: list of replay paths / replaycount : number of replays
 
-# The path for replays in the folder and subfolders are saved in replaypaths(list)
-replaypaths = []
-
-for path, subdirs, files in walk(folderpath):
-    for name in files:
-        if isfile(join(path, name)): replaypaths.append(join(path, name))
+quickanalysis = False
 
 for replaypath in replaypaths:
-    replay = sc2reader.load_replay(replaypath, load_level=2)
-
-    # Currently, main development is being done in scratch.py
-    # Once verified, code will be moved to main.py
+    mainprocess(replaypath, quickanalysis)
+    print(1)

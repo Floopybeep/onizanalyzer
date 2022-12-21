@@ -2,38 +2,23 @@ import sc2reader
 
 from bankextractor import S2Replay
 from playerclasses import *
+from functions import *
+from humanupgradecomplete import humanUCEcheck
 
 
-def extract_playerinfo(path):
-    replay = S2Replay(path)
+def extract_playerinfo(replay):                                         # input: replay / output: list of h/z objects
+    humandict, zombieplayer = {}, None
 
+    for human in replay.humans:
+        if human.pid > 8: pass
 
-def extract_z_info(replay, player_object, quickanalyze):
-    # create playerclass for zombie player
-    zplayer = zombieinfo(name=player_object.name, pid=player_object.pid, handle=player_object.toon_handle, role='Z')
+        victory = winloss_to_victory(human.result)
+        if human.play_race == 'Terran':
+            humandict[human.pid] = marineinfo(name=human.name, pid=human.pid, handle=human.toon_handle, role='Human', victory=victory)
+        elif human.play_race == 'Zerg':
+            zombieplayer = zombieinfo(name=human.name, pid=human.pid, handle=human.toon_handle, role='Zombie', victory=victory)
 
-    if quickanalyze:
-        quick_victory_determine_z(player_object, zplayer)
-        quick_info_extraction_z(player_object, zplayer, replay)
-    else:
-        detailed_victory_determine_z(player_object, zplayer)
-        detailed_info_extraction_z(player_object, zplayer, replay)
-
-    return zplayer
-
-
-def quick_victory_determine_z(player, zplayer):
-    if player.result is None:
-        zplayer.victory = None
-    else:
-        if player.result == 'Loss':
-            zplayer.victory = False
-        else:
-            zplayer.victory = True
-
-
-def quick_info_extraction_z(player, zplayer, replay):
-    print(1)
+    return humandict, zombieplayer
 
 
 def detailed_victory_determine_z(player, zplayer):
@@ -69,14 +54,24 @@ def dropship_player_check(unit):
         return False
 
 
-def detailed_info_extraction_z(player, zplayer, replay):
+def extract_eventinfo(replay, humandict, zombieplayer):
+    print(1)
     for event in replay.events:
-        if event_blacklist_check(event) is True:
+        if event == 'UpgradeCompleteEvent':
+            UpgradeCompleteEventCheck(event, humandict, zombieplayer)
 
 
-
-            print(1)
-
+    # extract the following information
+    # 1. roomcaptures
+    # 2. majorroomcaptures              (Power, Fuel, Containment, Security, Gates)
+    # 3. marinecaptures
+    # 4. totalgasincome
+    # 5. totalgasspent
+    # 6. alphasbuilt                    ([Type][Tiers], Type = (Abom, Gene, Anub, Legion, Predator))
+    # 7. starting alpha                 string
+    # 8. strain_purchases               ([Strain][Tiers], Strains = (Speed, Health, Damage, Volatile))
+    # 9. upgradepurchases               (# [Type][Tiers], Type = (Speed, Regen, Constructive, Virulent))
+    # 10. structurebuilt                count
 
 def event_blacklist_check(event):
     UnitBornEventblacklist = {'InfestedCivilianBurrowed'}
@@ -93,14 +88,7 @@ def event_blacklist_check(event):
 
     return True
 
-    # extract the following information
-    # 1. roomcaptures
-    # 2. majorroomcaptures              (Power, Fuel, Containment, Security, Gates)
-    # 3. marinecaptures
-    # 4. totalgasincome
-    # 5. totalgasspent
-    # 6. alphasbuilt                    ([Type][Tiers], Type = (Abom, Gene, Anub, Legion, Predator))
-    # 7. starting alpha                 string
-    # 8. strain_purchases               ([Strain][Tiers], Strains = (Speed, Health, Damage, Volatile))
-    # 9. upgradepurchases               (# [Type][Tiers], Type = (Speed, Regen, Constructive, Virulent))
-    # 10. structurebuilt                count
+
+def UpgradeCompleteEventCheck(event, humandict, zombieplayer):
+    name = event.upgrade_type
+    humanUCEcheck(event, name, humandict)

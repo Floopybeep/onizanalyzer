@@ -1,4 +1,7 @@
 Algorithm Plan
 
 1. determine the winner/loser of game
-2.
+2. Loop over the events
+    2.1. Add/modify H/Z player data using relevant event (complete one at a time)
+        2.1.1.
+    2.2.
