@@ -3,7 +3,7 @@ import sc2reader
 from bankextractor import S2Replay
 from playerclasses import *
 from functions import *
-from humanupgradecomplete import humanUCEcheck
+from humanupgradecomplete import *
 
 
 def extract_playerinfo(replay):                                         # input: replay / output: list of h/z objects
@@ -55,22 +55,22 @@ def dropship_player_check(unit):
 
 
 def extract_eventinfo(replay, humandict, zombieplayer):
-    print(1)
+    humanlist = []
+    for key in humandict:
+        humanlist.append(humandict[key].pid)
+    humanset = set(humanlist)
+
     for event in replay.events:
-        if event == 'UpgradeCompleteEvent':
-            UpgradeCompleteEventCheck(event, humandict, zombieplayer)
+        if event.name == 'UpgradeCompleteEvent':
+            UpgradeCompleteEventCheck(event, humandict, humanset, zombieplayer)
 
 
     # extract the following information
     # 1. roomcaptures
-    # 2. majorroomcaptures              (Power, Fuel, Containment, Security, Gates)
-    # 3. marinecaptures
     # 4. totalgasincome
     # 5. totalgasspent
     # 6. alphasbuilt                    ([Type][Tiers], Type = (Abom, Gene, Anub, Legion, Predator))
     # 7. starting alpha                 string
-    # 8. strain_purchases               ([Strain][Tiers], Strains = (Speed, Health, Damage, Volatile))
-    # 9. upgradepurchases               (# [Type][Tiers], Type = (Speed, Regen, Constructive, Virulent))
     # 10. structurebuilt                count
 
 def event_blacklist_check(event):
@@ -89,6 +89,8 @@ def event_blacklist_check(event):
     return True
 
 
-def UpgradeCompleteEventCheck(event, humandict, zombieplayer):
-    name = event.upgrade_type
-    humanUCEcheck(event, name, humandict)
+def UpgradeCompleteEventCheck(event, humandict, humanset, zombieplayer):
+    name = event.upgrade_type_name
+    z_id = zombieplayer.pid
+    humanUCEcheck(event, name, humandict, humanset, zombieplayer)
+    zombieUCEcheck(event, name, zombieplayer, z_id)

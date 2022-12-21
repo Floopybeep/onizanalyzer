@@ -14,8 +14,5 @@ def mainprocess(replaypath, quickanalysis, format='text'):                  # ta
         print("Incomplete Lobby Detected!")
 
     extract_eventinfo(replay, humandict, zombieplayer)
-
-
-
-
+    print(1)
 

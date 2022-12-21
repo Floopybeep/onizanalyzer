@@ -5,3 +5,21 @@ Algorithm Plan
     2.1. Add/modify H/Z player data using relevant event (complete one at a time)
         2.1.1.
     2.2.
+
+
+To-Do
+1. order humanupgradecomplete.py -      humanUCEcheck by descending order of frequency of use
+2. optimize humanupgradecomplete.py -   would implementing a set of all names used help in optimization?
+                                        maybe check if command is in the set before start checking the if statements?
+                                        better yet, make a blacklist of things NOT to check for!
+3. implement multiprocess
+4. implement UI
+
+5. zombie hangarcaptures -              Also check for dropship unitchange event
+6. update playerclasses.py -            experimental dict, ultimate infestation set
+
+7. add to mainprocess.py -              Check for leavers! if there are 2 or more zergs, then there is a leaver!
+                                        Implement a player_check process, which picks up this anomaly
+                                        Could also edit the extract_playerinfo at infoextract.py
+
+99. Suggest Improvements                - measure time between DropshipsFueled and UltimateInfestationResearched (UpgradeCompleteEvent)

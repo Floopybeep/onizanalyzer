@@ -78,7 +78,7 @@ experimentaldict = {'CloakingDeviceUnlocked': 0, 'SpecOpsCloakingDeviceUnlocked'
                     'GASCOVNERTER': 10, 'SPECOPSGASCONVERTER': 11,
                     'SuperStimpackUnlocked': 20, 'SPECOPSSUPERSTIM': 21,
                     'TeleporterUnlocked': 30, 'SpecOpsTeleporterUnlocked': 31,
-                    'SuperHealingDroneUnlocked':40, 'SpecOpsSuperHealingDroneUnlocked': 41,
+                    'SuperHealingDroneUnlocked': 40, 'SpecOpsSuperHealingDroneUnlocked': 41,
                     'ARESTANK': 50, 'SPECOPSARESTANK': 51}
 
 experimentallist = ['Cloaking Device', 'Gas Converter', 'Super Stimpack',
@@ -86,9 +86,31 @@ experimentallist = ['Cloaking Device', 'Gas Converter', 'Super Stimpack',
 
 structurecountset = {'TurretBuildCounter', 'RepairDroneBuildCounter', 'PsiDisruptorBuildCounter'}
 
+########################################### Zerg Dicts & Sets ###################################################
+
+majorroomdict = {'PowerGeneratorInfested': 0, 'FuelDistributionInfested': 1, 'ContainmentInfested': 2,
+                 'SecurityMainframeInfested': 3, 'GateControlInfested': 4}
+
+strainsdict = {'StrainSpeed': 0, 'PureStrainSpeed': 1, 'HunterlingStrain': 2,
+               'StrainHealth': 10, 'PureStrainHealth': 11, 'TankStrain': 12,
+               'StrainDamage': 20, 'PureStrainDamage': 21, 'DefilerStrain': 22,
+               'StrainVolatile': 30, 'PureStrainVolatile': 31, 'KaboomerStrain': 32}
+
+zupgradesdict = {'CreepSpeed': 0, 'RegenerativeCreep': 1, 'ConstructiveCreep': 2, 'VirulentCreep': 3,
+                 'UnlockDropPods': 4, 'EvolveDropPods': 4}
+
+zadvancedinfestationsdict = {'UnknownUpgrade': 0, 'SiphonFuel': 1, 'AdvancedInfestationContainment': 2,
+                             'AdvancedInfestationSecurity': 3, 'AdvancedInfestationGateControl': 4}
+
+infestationleveldict = {'InfestationLevel2': 0, 'InfestationLevel3': 1, 'InfestationLevel4': 2,
+                         'InfestationLevel5': 3, 'InfestationLevel6': 4}
+
+ultimateinfestationdict = {'SpawnHiveQueen': 'Hive Queen', 'CriticalMass': 'Critical Mass',
+                           'BlackOut': 'Power Drain', 'NydusNetwork': 'Nydus Network'}
+
 
 class playerinfo():
-    def __init__(self, name, pid, handle, role, victory):
+    def __init__(self, name=None, pid=None, handle=None, role=None, victory=None):
         self.playername = name
         self.pid = pid
         self.handle = handle
@@ -100,7 +122,7 @@ class marineinfo(playerinfo):
     def __init__(self, name, pid, handle, role, victory):
         super().__init__(name, pid, handle, role, victory)
         self.weapons = [[0, False, False, False] for _ in range(6)]             # weapon lv, respective mod levels
-        self.grenades = [False for _ in range(4)]                                   # grenade lv for respective grenade
+        self.grenades = [False for _ in range(4)]                               # grenade lv for respective grenade
         self.minings = [False for _ in range(4)]
         self.accessories = [False for _ in range(3)]
         self.suits = [False for _ in range(4)]
@@ -110,28 +132,29 @@ class marineinfo(playerinfo):
 
         self.kills = 0
         self.score = 0
-        self.captures = 0
+        self.captures = 0                   # done
         self.saves = 0
         self.alphakills = 0
         self.cocoonkills = 0
         self.zstructurekills = 0
-        self.turretsbuilt = 0
-        self.repairdronesebuilt = 0
-        self.psisbuilt = 0
+        self.turretsbuilt = 0               # done
+        self.repairdronesebuilt = 0         # done
+        self.psisbuilt = 0                  # done
         self.totalgasincome = 0
         self.totalgasspent = 0
+        self.dropshipfueledtime = None      # done
 
     def add_weapon(self, weapon=False, mod=False):
         if weapon:
-            self.weapons[weapondict[weapon]%10][0] = weapondict[weapon]/10
+            self.weapons[weapondict[weapon]%10][0] = weapondict[weapon]//10
         elif mod:
-            self.weapons[weaponmoddict[mod]/10][weaponmoddict[mod]%10] = True
+            self.weapons[weaponmoddict[mod]//10][weaponmoddict[mod]%10] = True
 
     def add_grenade(self, grenade):
-        self.grenades[grenadedict[grenade]/10] = grenadedict[grenade]%10
+        self.grenades[grenadedict[grenade]//10] = grenadedict[grenade]%10
 
     def add_mining(self, mining):
-        self.minings[miningdict[mining]/10] = miningdict[mining]%10
+        self.minings[miningdict[mining]//10] = miningdict[mining]%10
 
     def add_accessories(self, accessory):
         if accessory == 'DefensiveMatrixUnlocked':  self.accessories[0] = True
@@ -139,10 +162,10 @@ class marineinfo(playerinfo):
         else:                                       self.accessories[2] = True
 
     def add_suit(self, suit):
-        self.suits[suitdict[suit]/10] = suitdict[suit]%10
+        self.suits[suitdict[suit]//10] = suitdict[suit]%10
 
     def add_structure(self, structure):
-        self.structures[structuredict[structure]/10][structuredict[structure]%10] = True
+        self.structures[structuredict[structure]//10][structuredict[structure]%10] = True
 
     def add_misc(self, misc):
         if misc == 'CombatShieldUnlocked':      self.miscs[0] = True
@@ -155,7 +178,7 @@ class marineinfo(playerinfo):
     def add_experimental(self, exp):
         result = ''
         if experimentaldict[exp]%10: result = 'Spec Ops '
-        self.experimental = ''.join([result, experimentallist[experimentaldict[exp]/10]])
+        self.experimental = ''.join([result, experimentallist[experimentaldict[exp]//10]])
 
     def add_structurecounter(self, name):
         if name == 'TurretBuildCounter':        self.turretsbuilt += 1
@@ -166,15 +189,40 @@ class marineinfo(playerinfo):
 class zombieinfo(playerinfo):
     def __init__(self, name, pid, handle, role, victory):
         super().__init__(name, pid, handle, role, victory)
-        self.marinecaptures = 0
+        self.majorroomcaptures = [False for _ in range(5)]              # Power, Fuel, Containment, Security, Gates
+        self.strainpurchases = [[0, 0, 0] for _ in range(4)]            # (Speed, Health, Damage, Volatile)(num)
+        self.upgradepurchases = [0 for _ in range(5)]                   # (Speed, Regen, Constructive, Virulent, Pods)lv
+        self.advancedinfestations = [False for _ in range(5)]           # Power, Fuel, Contain, Sec, Gates
+        self.infestationleveltimes = [None for _ in range(5)]           # time of inf levels
+
+        self.hangarcaptures = [False for _ in range(3)]                 # Alpha, Beta, Delta
+        self.alphasbuilt = [[0, 0] for _ in range(5)]                   # (Abom, Gene, Anub, Legion, Predator)(num)
+
+        self.startingalpha = None
+        self.ultimateinfestation = None             # done
+        self.marinecaptures = 0                     # done
+        self.cocoonsmade = 0
         self.roomcaptures = 0
-        self.majorroomcaptures = [False, False, False, False, False]    # Power, Fuel, Containment, Security, Gates
-        self.hangarcaptures = [False, False, False]                     # Alpha, Beta, Delta
         self.totalgasincome = 0
         self.totalgasspent = 0
-        self.alphasbuilt = [[0, 0] for _ in range(5)]                   # [Type][Tiers], Type = (Abom, Gene, Anub, Legion, Predator)
-        self.startingalpha = None
-        self.strainpurchases = [[0, 0, 0] for _ in range(4)]            # [Strain][Tiers], Strains = (Speed, Health, Damage, Volatile)
-        self.upgradepurchases = [[0, 0] for _ in range(4)]              # [Type][Tiers], Type = (Speed, Regen, Constructive, Virulent)
         self.structurebuilt = 0
-        self.siphons = 0
+        self.siphons = 0                            # done
+
+    def majorroom_capture(self, name):
+        self.majorroomcaptures[majorroomdict[name]] = True
+
+    def strain_purchase(self, name):
+        self.strainpurchases[strainsdict[name]//10][strainsdict[name]%10] += 1
+
+    def upgrade_purchase(self, name):
+        self.upgradepurchases[zupgradesdict[name]] += 1
+
+    def advancedinfestation_purchase(self, name):
+        self.advancedinfestations[zadvancedinfestationsdict[name]] = True
+
+    def infestationlevel_time(self, name, time):
+        self.infestationleveltimes[infestationleveldict[name]] = time
+
+    def ultimateinfestation_chosen(self, name):
+        self.ultimateinfestation = ultimateinfestationdict[name]
+
