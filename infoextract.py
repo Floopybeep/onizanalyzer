@@ -93,14 +93,13 @@ def UpgradeCompleteEventCheck(event, humandict, humanset, zombieplayer):
 
 def UnitTypeChangeEventCheck(event, zombieplayer):
     name = event.unit_type_name
-    cocoonids = set()
 
     if name == 'MassiveCocoon':
         zombieplayer.cocoonsmade += 1
-        cocoonids.add(event.unit_id_index)
-    elif name in t2alphadict and event.unit_id_index in cocoonids:
+        zombieplayer.cocoonids.add(event.unit_id_index)
+    elif name in t2alphadict and event.unit_id_index in zombieplayer.cocoonids:
         zombieplayer.t2alpha_create(name)
-        cocoonids.discard(event.unit_id_index)
+        zombieplayer.cocoonids.discard(event.unit_id_index)
 
 
 def UnitBornEventCheck(event, zombieplayer):

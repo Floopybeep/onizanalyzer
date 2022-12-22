@@ -181,6 +181,7 @@ class zombieinfo(playerinfo):
         self.ultimateinfestation = None             # done
         self.marinecaptures = 0                     # done
         self.cocoonsmade = 0                        # done
+        self.cocoonids = set()
         self.droppodsused = 0                       # done
         self.roomcaptures = 0
         self.totalgasincome = 0                     # done

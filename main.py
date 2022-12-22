@@ -4,6 +4,7 @@ from playerclasses import *
 from bankextractor import extract_banks
 from functions import *
 from mainprocess import mainprocess
+from guiprocess import *
 
 folderpath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays"
 savepath = "C:/Users/wooil/Downloads/analysis.txt"
