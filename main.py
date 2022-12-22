@@ -1,7 +1,6 @@
 from functions import *
 from guifunctions import NewClass
 
-import tkthread
 
 mainclass = mainfunctionclass()
 NC = NewClass(mainclass)

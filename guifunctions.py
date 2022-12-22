@@ -16,7 +16,8 @@ class NewClass:
         self.ui.add_frame("frame1")
 
         self.ui.add_canvas("canvas", 1440, 810)
-        self.ui.register_image("canvas", "C:/Users/USER/PycharmProjects/onizanalyzer/sc2 stock photos/557285.jpg")
+        # self.ui.register_image("canvas", "C:/Users/USER/PycharmProjects/onizanalyzer/sc2 stock photos/557285.jpg")
+        self.ui.register_image("canvas", "C:/Users/wooil/Downloads/410542.jpg")
 
         self.ui.add_button("startbutton", "canvas", 8, "Start")
         self.ui.add_button("closebutton", "canvas", 7, "Close")
@@ -136,8 +137,8 @@ class onizGUI:
         print("Button pressed!")
         mainclass_copy.replayfolderpath = self.entries["replayfolderpathentry"].get()
         mainclass_copy.textfolderpath = self.entries["textfolderpathentry"].get()
-        mainclass_copy.get_replays_from_folder
-        mainclass_copy.send_replays_to_self
+        mainclass_copy.get_replays_from_folder()
+        mainclass_copy.send_replays_to_self()
         print(mainclass_copy.quickcheck)
         print(mainclass_copy.replayfilepaths)
 

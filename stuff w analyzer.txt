@@ -8,7 +8,9 @@ Algorithm Plan
 
 
 To-Do
-
+1. viro
+2. rank
+3. lobby advantage                      might be different from based on rank calculations, due to preset adv
 3. implement multiprocess
 4. implement UI
 

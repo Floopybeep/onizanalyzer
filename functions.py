@@ -23,14 +23,6 @@ def quickanalysis_to_loadlevel(quickanalysis):
         return 3
 
 
-def winloss_to_victory(result):
-    if result == 'Win':
-        return True
-    elif result == 'Loss':
-        return False
-    else:
-        return None
-
 class mainfunctionclass:
     def __init__(self):
         self.replayfolderpath = ""
@@ -48,5 +40,5 @@ class mainfunctionclass:
             mainprocess(replaypath, self.quickanalysis)
 
     def send_replays_to_self(self):
-        if len(self.replayfilepaths) > 100:
+        if len(self.replayfilepaths) > 1:
             self.analyze_replays(self.replayfilepaths)

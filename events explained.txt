@@ -161,7 +161,7 @@ ZOMBIE
         Hive Queen :        SpawnHiveQueen
         FDC Critical Mass:  CriticalMass
         Power :             Blackout
-        Security :           NydusNetwork
+        Security :          NydusNetwork
         Gates :
 
     Major Room Infested

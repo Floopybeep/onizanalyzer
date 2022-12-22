@@ -2,8 +2,16 @@ import sc2reader
 
 from bankextractor import S2Replay
 from playerclasses import *
-from functions import *
 from humanupgradecomplete import *
+
+
+def winloss_to_victory(result):
+    if result == 'Win':
+        return True
+    elif result == 'Loss':
+        return False
+    else:
+        return None
 
 
 def extract_playerinfo(replay):                                         # input: replay / output: list of h/z objects
@@ -24,11 +32,11 @@ def extract_playerinfo(replay):                                         # input:
         for human in replay.humans:
             if human.pid > 8: pass
             if human.play_race == 'Terran':
-                for unit in human.active_units:
+                for unit in human.units:
                     if dropship_player_check(unit):
                         humandict[human.pid].victory = True
                         zombieplayer.victory = False
-                if human.victory is None:
+                if humandict[human.pid].victory is None:
                     humandict[human.pid].victory = False
         if zombieplayer.victory is None:
             zombieplayer.victory = True
