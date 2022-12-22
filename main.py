@@ -1,17 +1,9 @@
-import sc2reader
-
-from playerclasses import *
-from bankextractor import extract_banks
 from functions import *
-from mainprocess import mainprocess
-from guiprocess import *
+from guifunctions import NewClass
 
-folderpath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays"
-savepath = "C:/Users/wooil/Downloads/analysis.txt"
-replaypaths, replaycount = replay_file_parser(folderpath)     # replaypaths: list of replay paths / replaycount : number of replays
+import tkthread
 
-quickanalysis = False
+mainclass = mainfunctionclass()
+NC = NewClass(mainclass)
 
-
-for replaypath in replaypaths:
-    mainprocess(replaypath, quickanalysis)
+# Right now, GUI takes mainclass and makes mainclass_copy, but it does not execute for some reason

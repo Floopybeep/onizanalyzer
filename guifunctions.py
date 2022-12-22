@@ -1,16 +1,17 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import threading
+
 from tkinter import scrolledtext
 from tkinter import filedialog
 from PIL import Image, ImageTk
 
-
-
-
+global mainclass_copy
 
 class NewClass:
-    def __init__(self):
+    def __init__(self, mainclass):
+        global mainclass_copy
+        mainclass_copy = mainclass
         self.ui = onizGUI()
         self.ui.add_frame("frame1")
 
@@ -36,6 +37,7 @@ class NewClass:
         self.ui.register_ttk_entry("canvas", 800, 100, "textfolderpathentry")
         self.ui.register_function("repentrybutton", self.ui.select_replay_folder)
         self.ui.register_function("textentrybutton", self.ui.select_text_output_folder)
+        self.ui.register_function("startbutton", self.ui.press_start)
 
         self.ui.add_scrolltext_window("outputscroll", 40, 100)
         self.ui.register_scrolltext_window("canvas", 30, 30, "outputscroll")
@@ -112,16 +114,6 @@ class onizGUI:
     def register_ttk_entry(self, canvasname, x, y, entryname):
         self.canvases[canvasname].create_window(x, y, anchor=tk.NW, window=self.entries[entryname])
 
-    def select_replay_folder(self):
-        replayfolderpath = filedialog.askdirectory(title="Select the root directory for ONIZ replays")
-        self.entries["replayfolderpathentry"].delete(0, tk.END)
-        self.entries["replayfolderpathentry"].insert(0, replayfolderpath)
-
-    def select_text_output_folder(self):
-        textfolderpath = filedialog.askdirectory(title="Select the output directory for text files")
-        self.entries["textfolderpathentry"].delete(0, tk.END)
-        self.entries["textfolderpathentry"].insert(0, textfolderpath)
-
     def add_scrolltext_window(self, name, height, width):
         tmp = tk.scrolledtext.ScrolledText(master=self.window, height=height, width=width)
         self.scrolltexts[name] = tmp
@@ -139,5 +131,25 @@ class onizGUI:
     def register_labels(self, canvasname, x, y, name):
         self.canvases[canvasname].create_window(x, y, anchor=tk.NW, window=self.labels[name])
 
+    # Function Declarations
+    def press_start(self):
+        print("Button pressed!")
+        mainclass_copy.replayfolderpath = self.entries["replayfolderpathentry"].get()
+        mainclass_copy.textfolderpath = self.entries["textfolderpathentry"].get()
+        mainclass_copy.get_replays_from_folder
+        mainclass_copy.send_replays_to_self
+        print(mainclass_copy.quickcheck)
+        print(mainclass_copy.replayfilepaths)
 
-NC = NewClass()
+    def select_replay_folder(self):
+        replayfolderpath = filedialog.askdirectory(title="Select the root directory for ONIZ replays")
+        self.entries["replayfolderpathentry"].delete(0, tk.END)
+        self.entries["replayfolderpathentry"].insert(0, replayfolderpath)
+
+    def select_text_output_folder(self):
+        textfolderpath = filedialog.askdirectory(title="Select the output directory for text files")
+        self.entries["textfolderpathentry"].delete(0, tk.END)
+        self.entries["textfolderpathentry"].insert(0, textfolderpath)
+
+
+# https://hhj6212.github.io/programming/python/2021/04/18/python-multi.html

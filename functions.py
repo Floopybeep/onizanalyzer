@@ -1,5 +1,6 @@
 from os import listdir, walk
 from os.path import join, isfile
+from mainprocess import mainprocess
 
 
 def replay_file_parser(folderpath):
@@ -29,3 +30,23 @@ def winloss_to_victory(result):
         return False
     else:
         return None
+
+class mainfunctionclass:
+    def __init__(self):
+        self.replayfolderpath = ""
+        self.textfolderpath = ""
+        self.replayfilepaths = []
+        self.replaycount = 0
+        self.quickanalysis = False
+        self.quickcheck = "mainclass load complete!"
+
+    def get_replays_from_folder(self):
+        self.replayfilepaths, self.replaycount = replay_file_parser(self.replayfolderpath)
+
+    def analyze_replays(self, list_of_replaypaths):
+        for replaypath in list_of_replaypaths:
+            mainprocess(replaypath, self.quickanalysis)
+
+    def send_replays_to_self(self):
+        if len(self.replayfilepaths) > 100:
+            self.analyze_replays(self.replayfilepaths)
