@@ -21,7 +21,7 @@ def select_text_output_folder():
     textfolderpathentry.insert(0, textfolderpath)
 
 
-imagepath = "C:/Users/USER/PycharmProjects/onizanalyzer/sc2 stock photos/557285.jpg"
+imagepath = "C:/Users/wooil/Downloads/410542.jpg"
 
 window = tk.Tk(screenName="ONIZ Replay Analyzer   - by ProDem")
 frame = ttk.Frame(window)

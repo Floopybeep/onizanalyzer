@@ -4,6 +4,8 @@ from bankextractor import S2Replay
 from playerclasses import *
 from humanupgradecomplete import *
 
+tempset = {'UpgradeCompleteEvent', 'UnitTypeChangeEvent', 'UnitBornEvent', 'UnitInitEvent', 'PlayerStatsEvent'}
+
 
 def winloss_to_victory(result):
     if result == 'Win':
@@ -74,16 +76,17 @@ def extract_eventinfo(replay, humandict, zombieplayer):
     z_id = zombieplayer.pid
 
     for event in replay.events:
-        if event.name == 'UpgradeCompleteEvent':
-            UpgradeCompleteEventCheck(event, humandict, humanset, zombieplayer)
-        elif event.name == 'UnitTypeChangeEvent':
-            UnitTypeChangeEventCheck(event, zombieplayer)
-        elif event.name == 'UnitBornEvent':
-            UnitBornEventCheck(event, zombieplayer)
-        elif event.name == 'UnitInitEvent':
-            UnitInitEventCheck(event, humandict, zombieplayer)
-        elif event.name == 'PlayerStatsEvent':
-            PlayerStatsEventCheck(event, zombieplayer, z_id)
+        if event.name in tempset:
+            if event.name == 'UpgradeCompleteEvent':
+                UpgradeCompleteEventCheck(event, humandict, humanset, zombieplayer)
+            elif event.name == 'UnitTypeChangeEvent':
+                UnitTypeChangeEventCheck(event, zombieplayer)
+            elif event.name == 'UnitBornEvent':
+                UnitBornEventCheck(event, zombieplayer)
+            elif event.name == 'UnitInitEvent':
+                UnitInitEventCheck(event, humandict, zombieplayer)
+            elif event.name == 'PlayerStatsEvent':
+                PlayerStatsEventCheck(event, zombieplayer, z_id)
 
 
     # extract the following information
@@ -133,6 +136,7 @@ def UnitInitEventCheck(event, humandict, zombieplayer):
         zombieplayer.structurebuilt += 1
     elif name == 'GreaterNydusWorm':
         zombieplayer.greaternydustimings.append(event.second)
+
 
 def PlayerStatsEventCheck(event, zombieplayer, z_id):
     if event.pid == z_id:
