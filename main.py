@@ -1,16 +1,10 @@
 import multiprocessing
-
-from functions import *
+from functions import maininfoclass
 from guifunctions import NewClass
 
 
-# mainclass = mainfunctionclass()
-# NC = NewClass(mainclass)
-
-# Right now, GUI takes mainclass and makes mainclass_copy, but it does not execute for some reason
-
-
 if __name__ == '__main__':
+    multiprocessing.freeze_support()
     mainclass = maininfoclass()
     mainclass.numberofprocesses = multiprocessing.cpu_count() - 1
     NC = NewClass(mainclass)

@@ -6,7 +6,7 @@ import multiprocessing
 from tkinter import scrolledtext
 from tkinter import filedialog
 from PIL import Image, ImageTk
-from functions import *
+from functions import replay_file_parser, separate_replaypool
 
 global mainclass_copy
 
@@ -18,8 +18,8 @@ class NewClass:
         self.ui.add_frame("frame1")
 
         self.ui.add_canvas("canvas", 1440, 810)
-        # self.ui.register_image("canvas", "C:/Users/USER/PycharmProjects/onizanalyzer/sc2 stock photos/557285.jpg")
-        self.ui.register_image("canvas", "410542.jpg")
+        self.ui.register_image("canvas", "C:/Users/USER/PycharmProjects/onizanalyzer/410542.jpg")
+        # self.ui.register_image("canvas", "410542.jpg")
 
         self.ui.add_button("startbutton", "canvas", 8, "Start")
         self.ui.add_button("closebutton", "canvas", 7, "Close")
@@ -70,7 +70,7 @@ class onizGUI:
 
     def start(gui):
         class Threader(threading.Thread):
-            def __init__(self):
+            def start(self):
                 gui.window.mainloop()
         Threader().start()
 

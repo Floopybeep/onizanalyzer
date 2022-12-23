@@ -21,3 +21,15 @@ To-Do
                                         Could also edit the extract_playerinfo at infoextract.py
 
 99. Suggest Improvements                - measure time between DropshipsFueled and UltimateInfestationResearched (UpgradeCompleteEvent)
+
+
+AUTO-PY-TO-EXE
+pip install auto-py-to-exe
+Options:
+    script: main.py
+    onefile: one file
+    console window: window based
+    icon: add whatever
+    additional file: make sure to add the 412~~~.jpg file
+    ADVANCED:
+        collect all: add sc2reader

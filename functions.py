@@ -13,7 +13,7 @@ def splitlist(list, n):
     for i in range(n-1):
         result.append(list[count:count+len_sublist])
         count += len_sublist
-    result.append(list[count:])
+    result.append([list[count:]])
     return result
 
 
@@ -37,19 +37,39 @@ def replay_file_parser(folderpath):
     return filepaths, count
 
 
-def separate_replays_analysis(repl_list):
-    print("analysis started!")
+def separate_replays_analysis(repl_list, textoutputpath):
     for rep in repl_list:
-        mainprocess(rep)
+        mainprocess(rep, textoutputpath)
 
 
 def separate_replaypool(repl_list, textoutputpath, num_of_proc):
-    inputlist = rep_txt_wrapper(repl_list, textoutputpath)
-    pool = multiprocessing.Pool(num_of_proc)
-    pool.starmap(mainprocess, inputlist)
+    # inputlist = rep_txt_wrapper(repl_list, textoutputpath)
+    # pool = multiprocessing.Pool(num_of_proc)
+    # pool.starmap(mainprocess, inputlist)
+    processlist = []
+    sublist = splitlist(repl_list, num_of_proc)
 
+    for i in range(num_of_proc):
+        p = multiprocessing.Process(target=separate_replays_analysis, args=(sublist[i], textoutputpath))
+        p.start()
+    #     processlist.append(p)
+    # for i, p in enumerate(processlist):
+    #     if i == 0:
+    #         p.start()
+    #     else:
+    #         p.join()
 
-# def initiate_multiprocessing()
+# def check_analyzer_status(p):
+#     if p.is_alive(): # Then the process is still running
+#         label.config(text = "MP Running")
+#         mp_button.config(state = "disabled")
+#         not_mp_button.config(state = "disabled")
+#         root.after(200, lambda p=p: check_status(p)) # After 200 ms, it will check the status again.
+#     else:
+#         label.config(text = "MP Not Running")
+#         mp_button.config(state = "normal")
+#         not_mp_button.config(state = "normal")
+#     return
 
 
 class maininfoclass:
@@ -68,22 +88,22 @@ class maininfoclass:
         self.replayfilepaths, self.replaycount = replay_file_parser(self.replayfolderpath)
 
     # Depreciated in favor of local functions (they cause multiple instances of GUI to pop up)
-    def send_replays_to_self(self):
-        if len(self.replayfilepaths) > 1:
-            # self.replaypool_loop(self.replayfilepaths)
-            separate_replaypool(self.replayfilepaths, self.numberofprocesses)
-        else:
-            print("No replays detected!")
-            pass
-
-    def analyze_replays(self, replaypaths):          # pass multiple analyze_replays w different lists to replayque_loop
-        print("analysis started!")
-        for replaypath in replaypaths:
-            mainprocess(replaypath, self.quickanalysis)
-
-    def replaypool_loop(self, list_of_replays):
-        pool = multiprocessing.Pool(self.numberofprocesses)
-        pool.map(separate_replays_analysis, list_of_replays)
+    # def send_replays_to_self(self):
+    #     if len(self.replayfilepaths) > 1:
+    #         # self.replaypool_loop(self.replayfilepaths)
+    #         separate_replaypool(self.replayfilepaths, self.numberofprocesses)
+    #     else:
+    #         print("No replays detected!")
+    #         pass
+    #
+    # def analyze_replays(self, replaypaths):          # pass multiple analyze_replays w different lists to replayque_loop
+    #     print("analysis started!")
+    #     for replaypath in replaypaths:
+    #         mainprocess(replaypath, self.quickanalysis)
+    #
+    # def replaypool_loop(self, list_of_replays):
+    #     pool = multiprocessing.Pool(self.numberofprocesses)
+    #     pool.map(separate_replays_analysis, list_of_replays)
 
 
 # https://docs.python.org/3/library/multiprocessing.html
