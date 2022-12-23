@@ -1,10 +1,12 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import threading
+import multiprocessing
 
 from tkinter import scrolledtext
 from tkinter import filedialog
 from PIL import Image, ImageTk
+from functions import *
 
 global mainclass_copy
 
@@ -17,7 +19,7 @@ class NewClass:
 
         self.ui.add_canvas("canvas", 1440, 810)
         # self.ui.register_image("canvas", "C:/Users/USER/PycharmProjects/onizanalyzer/sc2 stock photos/557285.jpg")
-        self.ui.register_image("canvas", "C:/Users/wooil/Downloads/410542.jpg")
+        self.ui.register_image("canvas", "410542.jpg")
 
         self.ui.add_button("startbutton", "canvas", 8, "Start")
         self.ui.add_button("closebutton", "canvas", 7, "Close")
@@ -135,12 +137,10 @@ class onizGUI:
     # Function Declarations
     def press_start(self):
         print("Button pressed!")
-        mainclass_copy.replayfolderpath = self.entries["replayfolderpathentry"].get()
-        mainclass_copy.textfolderpath = self.entries["textfolderpathentry"].get()
-        mainclass_copy.get_replays_from_folder()
-        mainclass_copy.send_replays_to_self()
-        print(mainclass_copy.quickcheck)
-        print(mainclass_copy.replayfilepaths)
+        repentry = self.entries["replayfolderpathentry"].get()
+        txtentry = self.entries["textfolderpathentry"].get()
+        replist, repcount = replay_file_parser(repentry)
+        separate_replaypool(replist, mainclass_copy.numberofprocesses)
 
     def select_replay_folder(self):
         replayfolderpath = filedialog.askdirectory(title="Select the root directory for ONIZ replays")

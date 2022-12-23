@@ -1,7 +1,3 @@
-import sc2reader
-
-from bankextractor import S2Replay
-from playerclasses import *
 from humanupgradecomplete import *
 
 tempset = {'UpgradeCompleteEvent', 'UnitTypeChangeEvent', 'UnitBornEvent', 'UnitInitEvent', 'PlayerStatsEvent'}
