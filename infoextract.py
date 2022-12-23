@@ -22,6 +22,8 @@ def extract_playerinfo(replay):                                         # input:
 
         if human.play_race == 'Terran':
             humandict[human.pid] = marineinfo(name=human.name, pid=human.pid, handle=human.toon_handle, role='Human', victory=victory)
+            humandict[human.pid].kills = len(human.killed_units)
+
         elif human.play_race == 'Zerg':
             zombieplayer = zombieinfo(name=human.name, pid=human.pid, handle=human.toon_handle, role='Zombie', victory=victory)
             z_player_hangar_kill_check(human.killed_units, zombieplayer)
@@ -78,7 +80,7 @@ def extract_eventinfo(replay, humandict, zombieplayer):
             elif event.name == 'UnitTypeChangeEvent':
                 UnitTypeChangeEventCheck(event, zombieplayer)
             elif event.name == 'UnitBornEvent':
-                UnitBornEventCheck(event, zombieplayer)
+                UnitBornEventCheck(event, humandict, zombieplayer)
             elif event.name == 'UnitInitEvent':
                 UnitInitEventCheck(event, humandict, zombieplayer)
             elif event.name == 'PlayerStatsEvent':
@@ -110,17 +112,21 @@ def UnitTypeChangeEventCheck(event, zombieplayer):
         zombieplayer.cocoonids.discard(event.unit_id_index)
 
 
-def UnitBornEventCheck(event, zombieplayer):
+def UnitBornEventCheck(event, humandict, zombieplayer):
     name = event.unit_type_name
 
     if name == 'ZergDropPod':
         zombieplayer.droppodsused += 1
     elif name == 'MassiveCocoon':
         zombieplayer.cocoonsmade += 1
+        if event.unit.killed_by is not None:
+            humandict[event.unit.killed_by.pid].cocoonkills += 1
     elif name in t1alphadict:
         zombieplayer.t1alpha_create(name)
         if zombieplayer.startingalpha is None:
             zombieplayer.startingalpha = t1alphatonamedict[name]
+        if event.unit.killed_by is not None:
+            humandict[event.unit.killed_by.pid].alphakills[t1alphadict[name]] += 1
 
 
 def UnitInitEventCheck(event, humandict, zombieplayer):
@@ -131,6 +137,8 @@ def UnitInitEventCheck(event, humandict, zombieplayer):
     elif name in zstructuredict:
         zombieplayer.structure_create(name)
         zombieplayer.structurebuilt += 1
+        if event.unit.killed_by is not None and event.unit.killed_by.pid != zombieplayer.pid:
+            humandict[event.unit.killed_by.pid].zstructurekills[zstructuredict[name]] += 1
     elif name == 'GreaterNydusWorm':
         zombieplayer.greaternydustimings.append(event.second)
 
