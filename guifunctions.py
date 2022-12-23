@@ -140,7 +140,7 @@ class onizGUI:
         repentry = self.entries["replayfolderpathentry"].get()
         txtentry = self.entries["textfolderpathentry"].get()
         replist, repcount = replay_file_parser(repentry)
-        separate_replaypool(replist, mainclass_copy.numberofprocesses)
+        separate_replaypool(replist, txtentry, mainclass_copy.numberofprocesses)
 
     def select_replay_folder(self):
         replayfolderpath = filedialog.askdirectory(title="Select the root directory for ONIZ replays")

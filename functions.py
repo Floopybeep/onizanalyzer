@@ -17,6 +17,13 @@ def splitlist(list, n):
     return result
 
 
+def rep_txt_wrapper(replist, txtout):
+    result = []
+    for rep in replist:
+        result.append(tuple((rep, txtout)))
+    return result
+
+
 def replay_file_parser(folderpath):
     filepaths = []
     count = 0
@@ -36,15 +43,16 @@ def separate_replays_analysis(repl_list):
         mainprocess(rep)
 
 
-def separate_replaypool(repl_list, num_of_proc):
+def separate_replaypool(repl_list, textoutputpath, num_of_proc):
+    inputlist = rep_txt_wrapper(repl_list, textoutputpath)
     pool = multiprocessing.Pool(num_of_proc)
-    pool.map(mainprocess, repl_list)
+    pool.starmap(mainprocess, inputlist)
 
 
 # def initiate_multiprocessing()
 
 
-class mainfunctionclass:
+class maininfoclass:
     def __init__(self):
         self.replayfolderpath = ""
         self.textfolderpath = ""
@@ -76,3 +84,11 @@ class mainfunctionclass:
     def replaypool_loop(self, list_of_replays):
         pool = multiprocessing.Pool(self.numberofprocesses)
         pool.map(separate_replays_analysis, list_of_replays)
+
+
+# https://docs.python.org/3/library/multiprocessing.html
+# https://towardsdatascience.com/multiprocessing-in-python-9d498b1029ca
+# https://superfastpython.com/multiprocessing-in-python/#How_to_Run_a_Function_In_a_Process
+
+# https://superfastpython.com/multiprocessing-semaphore-in-python/
+# check out the above if data leak happens

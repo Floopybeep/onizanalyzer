@@ -64,8 +64,11 @@ What's in the Replay object?
 
 '''
 Output file format
+NAME: date / Victory / Zombie / Humans
+
 1. text file summary for each game
 game ID - to prevent re-analysis of game (00000001 - eight-digit format, one for each?) (maybe make unique identifier?)
+(put this in textfile name instead)
 
 2. Players
 ProDem       Zerg    16

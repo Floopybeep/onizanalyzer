@@ -86,12 +86,13 @@ zstructuredict = {'PrimalSunkenColony': 0, 'LocustNest': 1, 'NydusCanalCreeper':
 
 
 class playerinfo():
-    def __init__(self, name=None, pid=None, handle=None, role=None, victory=None):
+    def __init__(self, name=None, pid=None, handle=None, role=None, victory=None, rank=0):
         self.playername = name
         self.pid = pid
         self.handle = handle
         self.playerrole = role
         self.victory = victory
+        self.rank = rank
 
 
 class marineinfo(playerinfo):

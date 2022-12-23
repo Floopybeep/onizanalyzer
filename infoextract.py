@@ -85,6 +85,7 @@ def extract_eventinfo(replay, humandict, zombieplayer):
                 PlayerStatsEventCheck(event, zombieplayer, z_id)
 
 
+
     # extract the following information
     # 1. roomcaptures
     # 4. totalgasincome

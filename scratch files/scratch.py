@@ -1,60 +1,42 @@
-import s2protocol
-import sc2reader
-from s2protocol import versions
-import mpyq
+import tkinter as tk
+import multiprocessing
 import time
-from os import listdir, walk
-from os.path import isfile, join
 
-from playerclasses import *
-from bankextractor import extract_banks
-from infoextract import *
+def loop(a, b, c, d):
+     # Will just sleep for 3 seconds.. simulates whatever processing you do.
+    time.sleep(3)
+    return
 
-quickanalyze = False
+def queue_loop():
+    p = multiprocessing.Process(target = loop,
+                                args = (1, 2),
+                                kwargs = {"c": 3, "d": 4})
+    # You can pass args and kwargs to the target function like that
+    # Note that the process isn't started yet. You call p.start() to activate it.
+    p.start()
+    check_status(p) # This is the next function we'll define.
+    return
 
-folderpath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays"
-savepath = "C:/Users/wooil/Downloads/analysis.txt"
+def check_status(p):
+    """ p is the multiprocessing.Process object """
+    if p.is_alive(): # Then the process is still running
+        label.config(text = "MP Running")
+        mp_button.config(state = "disabled")
+        not_mp_button.config(state = "disabled")
+        root.after(200, lambda p=p: check_status(p)) # After 200 ms, it will check the status again.
+    else:
+        label.config(text = "MP Not Running")
+        mp_button.config(state = "normal")
+        not_mp_button.config(state = "normal")
+    return
 
-# The path for replays in the folder and subfolders are saved in replaypaths(list)
-replaypaths = []
 
-for path, subdirs, files in walk(folderpath):
-    for name in files:
-        if isfile(join(path, name)): replaypaths.append(join(path, name))
-
-for replaypath in replaypaths:
-    t0 = time.time()
-    try:
-        replay = sc2reader.load_replay(replaypath, load_level=4)
-    except Exception:
-        print("Replay corrupted, deleting replay: ", replaypath)
-        pass
-
-    playerlist = []
-
-    # Declare players according to their race(M/Z)
-    for player in replay.humans:
-        if player.play_race == 'Zerg':
-            zplayer = extract_z_info(replay, player, quickanalyze)
-            playerlist.append(zplayer)
-
-        if player.play_race == 'Terran' and player.result == 'Win':
-            count = 0
-            for unit in player.units:
-                if 190 < unit.location[0] and 190 < unit.location[1]:
-                    count += 1
-
-            print("For player", player.name, ": ", count)
-            if count == 0:
-                count = 0
-
-        else:
-            playerlist.append(marineinfo(name=player.name, pid=player.pid, handle=player.toon_handle, role='M'))
-            # if not quickanalyze:
-    t1 = time.time()
-    timetaken = t1 - t0
-    print("Time taken for replay analysis: ", timetaken)
-
-    # Possibly analyze replay win here, if player.victory == None?
-
-    # print(1)
+if __name__ == "__main__":
+    root = tk.Tk()
+    mp_button = tk.Button(master = root, text = "Using MP", command = queue_loop)
+    mp_button.pack()
+    label = tk.Label(master = root, text = "MP Not Running")
+    label.pack()
+    not_mp_button = tk.Button(master = root, text = "Not MP", command = lambda: loop(1,2,3,4))
+    not_mp_button.pack()
+    root.mainloop()
