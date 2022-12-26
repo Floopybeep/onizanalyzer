@@ -34,24 +34,18 @@ def mainprocess(replaypath, textoutputpath, quickanalysis=False, format='text'):
     # t1 = time.time()
     # print(t1-t0)
 
-if __name__ == "__main__":
-    replaypath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/Oh No It's Zombies Arctic Map (249).SC2Replay"
-    outputpath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/text file output"
-
-    # replay_load_level = quickanalysis_to_loadlevel(False)
-    # try:
-    replay = sc2reader.load_replay(replaypath, load_level=3)
-    humandict, zombieplayer = extract_playerinfo(replay)
-
-    if len(humandict) < 6:
-        print("Incomplete Lobby Detected!")
-        pass
-
-    extract_eventinfo(replay, humandict, zombieplayer)
-    condense_eventinfo(replay, outputpath, humandict, zombieplayer)
-    print("textfile successfully created!")
-    print(1)
-
-    # except Exception:
-    #     print("Error in loading replay!")
-    #     pass
+# if __name__ == "__main__":
+#     replaypath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/Oh No It's Zombies Arctic Map (249).SC2Replay"
+#     outputpath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/text file output"
+#
+#     replay = sc2reader.load_replay(replaypath, load_level=3)
+#     humandict, zombieplayer = extract_playerinfo(replay)
+#
+#     if len(humandict) < 6:
+#         print("Incomplete Lobby Detected!")
+#         pass
+#
+#     extract_eventinfo(replay, humandict, zombieplayer)
+#     condense_eventinfo(replay, outputpath, humandict, zombieplayer)
+#     print("textfile successfully created!")
+#     print(1)

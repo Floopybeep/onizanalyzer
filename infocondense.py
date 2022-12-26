@@ -1,6 +1,6 @@
 import datetime
 from infodict import *
-import pandas as pd
+# import pandas as pd
 import tabulate
 from prettytable import *
 
@@ -28,10 +28,10 @@ def set_replay_name(replay, humanlist, zplayer):
     return textfilename
 
 def condense_eventinfo(replay, txtpath, humandict, zplayer):
-    pd.set_option('display.max_colwidth', None)
-    pd.set_option('display.max_columns', None)
-    pd.set_option('display.width', 2000)
-    pd.set_option("expand_frame_repr", False) # print cols side by side as it's supposed to be
+    # pd.set_option('display.max_colwidth', None)
+    # pd.set_option('display.max_columns', None)
+    # pd.set_option('display.width', 2000)
+    # pd.set_option("expand_frame_repr", False) # print cols side by side as it's supposed to be
 
     humanlist = [humandict[m] for m in humandict]
     name = set_replay_name(replay, humanlist, zplayer)
@@ -62,11 +62,11 @@ def condense_eventinfo(replay, txtpath, humandict, zplayer):
         f.close()
 
 def humaninfocondense(humandict, txtpath, f):
-    df = pd.DataFrame(columns=['Player Name', 'Handle', 'Result', 'Weapons Used', 'Mod Used', 'Grenades Used',
-                                   'Mining Equipment', 'Weapon Accessory', 'Suits Used', 'Misc Items', 'Structures',
-                                   'Structure Mods', 'Experimental', 'Total Kills', 'Deaths', 'Cocoons Killed',
-                                   'Alphas Killed', 'Zerg Structures Killed', 'Explo Droids Made',
-                                   'Turrets Built', 'Repair Drones Built', 'Psis Built', 'Dropship Fueling Time'])
+    # df = pd.DataFrame(columns=['Player Name', 'Handle', 'Result', 'Weapons Used', 'Mod Used', 'Grenades Used',
+    #                                'Mining Equipment', 'Weapon Accessory', 'Suits Used', 'Misc Items', 'Structures',
+    #                                'Structure Mods', 'Experimental', 'Total Kills', 'Deaths', 'Cocoons Killed',
+    #                                'Alphas Killed', 'Zerg Structures Killed', 'Explo Droids Made',
+    #                                'Turrets Built', 'Repair Drones Built', 'Psis Built', 'Dropship Fueling Time'])
     tab = PrettyTable()
     tab.field_names = ['Player Name', 'Handle', 'Result', 'Weapons Used', 'Mod Used', 'Grenades Used',
                                    'Mining Equipment', 'Weapon Accessory', 'Suits Used', 'Misc Items', 'Structures',
@@ -101,7 +101,7 @@ def humaninfocondense(humandict, txtpath, f):
         data['Psis Built'] = human.psisbuilt
         data['Fueling Time'] = human.dropshipfueledtime
 
-        df = pd.concat([df, pd.DataFrame(data, index=[0])])
+        # df = pd.concat([df, pd.DataFrame(data, index=[0])])
         tab.add_row(list(data.values()))
 
     # tabulate.PRESERVE_WHITESPACE = True
@@ -224,11 +224,11 @@ def hzstructkillf(zkilllist):
     return result
 
 def zombieinfocondense(zplayer, txtpath, f):
-    df = pd.DataFrame(columns=['Player Name', 'Handle', 'Result', 'Major Rooms Captured', 'Starting Alpha',
-                                   'Alphas Built', 'Strains Purchased', 'Upgrades Purchased', 'Advanced Infestations',
-                                   'Ultimate Infestation', 'Hangars Captured', 'Structures Built',
-                                   'Infestation Level Timings', 'Greater Nydus Timings',
-                                   'Marine Captures', 'Cocoons Made', 'Drop Pods Used', 'Structures Built', 'Siphons'])
+    # df = pd.DataFrame(columns=['Player Name', 'Handle', 'Result', 'Major Rooms Captured', 'Starting Alpha',
+    #                                'Alphas Built', 'Strains Purchased', 'Upgrades Purchased', 'Advanced Infestations',
+    #                                'Ultimate Infestation', 'Hangars Captured', 'Structures Built',
+    #                                'Infestation Level Timings', 'Greater Nydus Timings',
+    #                                'Marine Captures', 'Cocoons Made', 'Drop Pods Used', 'Structures Built', 'Siphons'])
     data = {}
     ztab = PrettyTable()
     ztab.field_names = ['Player Name', 'Handle', 'Result', 'Major Rooms Captured', 'Starting Alpha',
