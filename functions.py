@@ -46,12 +46,14 @@ def separate_replaypool(repl_list, textoutputpath, num_of_proc):
     # inputlist = rep_txt_wrapper(repl_list, textoutputpath)
     # pool = multiprocessing.Pool(num_of_proc)
     # pool.starmap(mainprocess, inputlist)
-    processlist = []
+    # processlist = []
     sublist = splitlist(repl_list, num_of_proc)
+    multiprocessing.set_start_method("spawn")
 
     for i in range(num_of_proc):
         p = multiprocessing.Process(target=separate_replays_analysis, args=(sublist[i], textoutputpath))
         p.start()
+
     #     processlist.append(p)
     # for i, p in enumerate(processlist):
     #     if i == 0:

@@ -14,11 +14,9 @@ namelist = []
 
 
 for event in replay.events:
-    if event.name == 'UnitInitEvent':
-        if event.unit_type_name not in {'MiningDroid', 'AutoTurret', 'SensorTower', 'PsiIndoctrinator',
-                                        'NukePack', 'HealingDrone'} and event.control_pid == 4:
-            eventlist.append(event)
-            namelist.append(event.unit_type_name)
+    if event.name == 'UpgradeCompleteEvent':
+        eventlist.append(event)
+        eventset.add(event.upgrade_type_name)
 print(eventset)
 print(1)
 

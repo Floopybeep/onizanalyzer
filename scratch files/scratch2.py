@@ -29,6 +29,23 @@ for replaypath in replaypaths:
         pass
 
     print(1)
+def humaninfocondense(humandict, f):
+    f.write('Player Name\tHandle\tResult\tWeapons Used\tMod Used\tGrenades Used\tMining Equipment\n')
+    for key in humandict:
+        human = humandict[key]
+        f.write('{0:15}\t{1:14}\t{2:4}\t{3:13}\t{4:13}\t{5:14}\t{6:15}\n'.format(human.playername, human.handle,
+                bool_to_victory(human.victory), hweaponf(human.weapons), hwmodf(human.weapons),
+                hgrenadef(human.grenades), hminingf(human.minings)))
+
+    f.write('\nWeapon Accessories\tSuits\tMisc Items\tStructures Purchased\tStructure Mods\tExperimental Used\n')
+    for key in humandict:
+        human = humandict[key]
+        f.write('{0:15}\t{1:13}\t{2:12}\t{3:13}\t{4:7}\t{4:19}\n'.format(
+            haccf(human.accessories), hsuitf(human.suits), hmiscf(human.miscs), hstructuref(human.structures),
+            hstructmodf(human.structures), human.experimental
+        ))
+
+
 
 
 

@@ -8,7 +8,7 @@ weaponmoddict = {'ThermiteFilamentsUnlocked': 1, 'CryoFreezeUnlocked': 2, 'LongR
                  'AutoTargetingSystemUnlocked': 21, 'BayonetteUnlocked': 22, 'TitaniumBulletCasingsUnlocked': 23,
                  'CorrosivePlasmaUnlocked': 31, 'LongRangeScopeUnlocked': 32, 'ConcussivePlasmaUnlocked': 33,
                  'RocketLauncherMod1Unlocked': 41, 'ShockwaveMissilesUnlocked': 42, 'RocketLauncherMod3Unlocked': 43,
-                 'ArcWelderMod1': 51, 'ArcWelderMod2': 52, 'ArcWelderMod3': 53}
+                 'ArcWelderMod1Unlocked': 51, 'ArcWelderMod2Unlocked': 52, 'ArcWelderMod3Unlocked': 53}
 
 grenadedict = {'ForceFieldGrenadeUnlocked': 1, 'SpecOpsForcefieldGrenade': 2,
                'FlashbangUnlocked': 11, 'SpecOpsFlashbang': 12,
@@ -91,6 +91,8 @@ rweaponmodlist = [[None, 'Cryo', 'Range', 'Filaments'], [None, 'Focused Beams', 
                   [None, 'Scoot-n-Shoot', 'Bayonette', 'Tits'], [None, 'Corrosive', 'Range', 'Slow'],
                   [None, 'Scoot-n-Shoot', 'Shockwave', 'Flame'], [None, 'Fastcharge', 'Fastsalv', 'Supercharge']]
 
+rweaponmodshortdict = {0: '(F)', 1: '(S)', 2: '(AR)', 3: '(P)', 4: '(R)', 5: '(Arc)'}
+
 rgrenadedict = {0: 'Force Field', 1: 'Flashbang', 2: 'Frag Grenade', 3: 'Incendiary'}
 
 rminingdict = {0: 'Expo Droid', 1: 'Mining Droid', 2: 'Mining Charge', 3: 'Sensor Tower'}
@@ -112,8 +114,12 @@ rzstructurekillsdict = {0: 'Sunken', 1: 'SwarmNest', 2: 'Creep Tower', 3: 'Lesse
 ############################################# Zombie Dict (reverse order) #############################################
 rmajorroomdict = {0: 'Power', 1: 'FDC', 2: 'Containment', 3: 'Security', 4: 'Gates Control'}
 
+rt2alphasdict = {0: 'Abomination', 1: 'Genesplicer', 2: 'Anubalight', 3: 'Legionnaire', 4: 'Predator', 5: 'Saboteur'}
+
 rstrainsdict = {0: 'Speed Strain', 1: 'Health Strain', 2: 'Damage Strain', 3: 'Volatile Strain'}
 
-rupgradesdict = {0: 'Power Outage', 1: 'Siphon Gas', 2: 'Release Containment', 3: 'Chat Peek', 4: 'Door Closer'}
+rzupgradesdict = {0: 'Speed Creep', 1: 'Regen Creep', 2: 'Construction Creep', 3: 'Virulent Creep', 4: 'Drop Pods'}
+
+rzadvupgradesdict = {0: 'Power Outage', 1: 'Siphon Gas', 2: 'Release Containment', 3: 'Chat Peek', 4: 'Door Closer'}
 
 rhangardict = {0: 'Alpha', 1: 'Beta', 2: 'Delta'}

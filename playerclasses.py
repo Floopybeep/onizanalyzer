@@ -83,28 +83,33 @@ class zombieinfo(playerinfo):
     def __init__(self, name, pid, handle, role, victory):
         super().__init__(name, pid, handle, role, victory)
         self.majorroomcaptures = [False for _ in range(5)]              # Power, Fuel, Containment, Security, Gates
+        self.alphasbuilt = [[0, 0] for _ in range(6)]                   # (Abom, Gene, Anub, Legion, Predator)(num)
         self.strainpurchases = [[0, 0, 0] for _ in range(4)]            # (Speed, Health, Damage, Volatile)(num)
         self.upgradepurchases = [0 for _ in range(5)]                   # (Speed, Regen, Constructive, Virulent, Pods)lv
         self.advancedinfestations = [False for _ in range(5)]           # Power, Fuel, Contain, Sec, Gates
+        self.ultimateinfestation = None                                 # done
         self.infestationleveltimes = [None for _ in range(5)]           # time of inf levels
 
         self.hangarcaptures = [False for _ in range(3)]                 # Alpha, Beta, Delta
-        self.alphasbuilt = [[0, 0] for _ in range(6)]                   # (Abom, Gene, Anub, Legion, Predator)(num)
-        self.structurebuiltist = [0 for _ in range(5)]                  # Sunken, Broodling, Creep, LNydus, Extractor
+        self.structurebuiltlist = [0 for _ in range(5)]                  # Sunken, Broodling, Creep, LNydus, Extractor
         self.greaternydustimings = []
 
         self.startingalpha = None                   # done
-        self.ultimateinfestation = None             # done
         self.marinecaptures = 0                     # done
         self.cocoonsmade = 0                        # done
         self.cocoonids = set()
         self.droppodsused = 0                       # done
         self.roomcaptures = 0
-        self.totalgasincome = 0                     # done
-        self.totalgasspent = 0                      # done
+        self.totalgasincome = 0
+        self.totalgasspent = 0
         self.structurebuilt = 0                     # done
         self.siphons = 0                            # done
 
+    # df = pd.DataFrame(columns=['Player Name', 'Handle', 'Result', 'Major Rooms Captured', 'Starting Alpha',
+    #                                'Alphas Built', 'Strains Purchased', 'Upgrades Purchased', 'Advanced Infestations',
+    #                                'Ultimate Infestatin', 'Hangars Captured', 'Structures Built',
+    #                                'Infestation Level Timings', 'Greater Nydus Timings',
+    #                                'Marine Captures', 'Cocoons Made', 'Drop Pods Used', 'Structures Built', 'Siphons'])
     def majorroom_capture(self, name):
         self.majorroomcaptures[majorroomdict[name]] = True
 
@@ -131,5 +136,5 @@ class zombieinfo(playerinfo):
         self.alphasbuilt[t1alphadict[name]][0] += 1
 
     def structure_create(self, name):
-        self.structurebuiltist[zstructuredict[name]] += 1
+        self.structurebuiltlist[zstructuredict[name]] += 1
 
