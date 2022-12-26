@@ -20,8 +20,8 @@ class NewClass:
 
         self.ui.add_canvas("canvas", 1440, 810)
         # self.ui.register_image("canvas", "C:/Users/USER/PycharmProjects/onizanalyzer/410542.jpg")
-        # self.ui.register_image("canvas", "410542.jpg")
-        self.ui.register_image("canvas", str(Path(__file__).absolute())[:-16] + "410542.jpg")
+        self.ui.register_image("canvas", "410542.jpg")
+        # self.ui.register_image("canvas", str(Path(__file__).absolute())[:-16] + "410542.jpg")
 
         self.ui.add_button("startbutton", "canvas", 8, "Start")
         self.ui.add_button("closebutton", "canvas", 7, "Close")
@@ -55,6 +55,7 @@ class NewClass:
         self.ui.add_text_on_canvas("canvas", 30, 725, 500, "white", "Estimated time remaining: ")
         self.ui.add_text_on_canvas("canvas", 820, 130, 700, "white", "NOTE: You must change the font in Notepad to "
                                                                      "Consolas (otherwise unreadable!)")
+        self.ui.add_text_on_canvas("canvas", 1350, 780, 200, "white", ''.join(['Version: ', mainclass_copy.version]))
 
         self.ui.start()
 

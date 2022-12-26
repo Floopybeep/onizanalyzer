@@ -7,13 +7,17 @@ from mainprocess import mainprocess
 
 def splitlist(list, n):
     len_list = len(list)
-    len_sublist = len_list//n
+    if len_list == 1: return list
+    len_sublist = len_list//n + 1
     result = []
     count = 0
     for i in range(n-1):
         result.append(list[count:count+len_sublist])
         count += len_sublist
-    result.append([list[count:]])
+        if count > len_list:
+            break
+    if count < len(list):
+        result.append([list[count:]])
     return result
 
 
@@ -82,6 +86,7 @@ class maininfoclass:
         self.replaycount = 0
         self.quickanalysis = False
         self.quickcheck = "mainclass load complete!"
+        self.version = ""
 
         self.numberofprocesses = 3
 
