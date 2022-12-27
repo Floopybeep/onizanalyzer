@@ -1,8 +1,6 @@
 import datetime
 from playerclasses import *
 
-# MAKE SURE TO SORT humanUCEcheck if's in descending order of frequency!
-
 
 def humanUCEcheck(event, name, humandict, humanset, zombieplayer):                         # checks for human events
     if name in structurecountset:

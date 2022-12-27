@@ -71,6 +71,7 @@ def extract_playerbanks(replay, humandict, zombieplayer):
     game_events = extract_s2protocol_events(reppath)
     extract_bank_events(game_events, humandict, zombieplayer)
     set_player_ranks(humandict, zombieplayer)
+    set_bank_date(replay, humandict, zombieplayer)
 
 
 def extract_s2protocol_events(reppath):
@@ -116,6 +117,12 @@ def set_player_ranks(humandict, zplayer):
     zplayer.setrank()
 
 
+def set_bank_date(replay, humandict, zplayer):
+    for key in humandict:
+        humandict[key].bankinfo.date = replay.date
+    zplayer.setrank()
+
+
 def extract_eventinfo(replay, humandict, zombieplayer):
     humanlist = []
     for key in humandict:
@@ -135,13 +142,6 @@ def extract_eventinfo(replay, humandict, zombieplayer):
                 UnitInitEventCheck(event, humandict, zombieplayer)
             elif event.name == 'PlayerStatsEvent':
                 PlayerStatsEventCheck(event, zombieplayer, z_id)
-
-
-
-    # extract the following information
-    # 1. roomcaptures
-    # 4. totalgasincome
-    # 5. totalgasspent
 
 
 def UpgradeCompleteEventCheck(event, humandict, humanset, zombieplayer):

@@ -136,3 +136,6 @@ bankplayerdict = {'4:3AspectRatioSettings': 0, 'FuelDiverted': 0, 'GamesPlayedAs
 
 bankloaddict = {'Chosen_Zombie': 0, 'Color': 0, 'Difficulty': 0,
                 'Experimental_Mode': 0, 'Host_Chooses_Zombie': 0, 'Opt_In': 0}
+
+############################################## csv dict & sets ########################################################
+total_df_column_list = ['Replay #', 'Replay Date', 'Player Name', 'Player Handle', 'Role', 'Rank', 'Result', ]

@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import threading
-import multiprocessing
+import pandas as pd
 
 from tkinter import scrolledtext
 from tkinter import filedialog
@@ -20,17 +20,19 @@ class NewClass:
 
         self.ui.add_canvas("canvas", 1440, 810)
         # self.ui.register_image("canvas", "C:/Users/USER/PycharmProjects/onizanalyzer/410542.jpg")
-        self.ui.register_image("canvas", "410542.jpg")
-        # self.ui.register_image("canvas", str(Path(__file__).absolute())[:-16] + "410542.jpg")
+        # self.ui.register_image("canvas", "410542.jpg")
+        self.ui.register_image("canvas", str(Path(__file__).absolute())[:-16] + "410542.jpg")
 
         self.ui.add_button("startbutton", "canvas", 8, "Start")
         self.ui.add_button("closebutton", "canvas", 7, "Close")
         self.ui.add_button("repentrybutton", "canvas", 15, "Designate Path")
         self.ui.add_button("textentrybutton", "canvas", 15, "Designate Path")
+        # self.ui.add_button("csventrybutton", "canvas", 15, "Designate Path")
         self.ui.register_button("canvas", 1260, 748, "startbutton")
         self.ui.register_button("canvas", 1340, 748, "closebutton")
         self.ui.register_button("canvas", 1300, 48, "repentrybutton")
         self.ui.register_button("canvas", 1300, 98, "textentrybutton")
+        # self.ui.register_button("canvas", 1300, 198, "csventrybutton")
         self.ui.register_function("closebutton", self.ui.window.destroy)
 
         self.ui.add_progress_bar("replayprogressbar", 1200, 1200)
@@ -38,8 +40,10 @@ class NewClass:
 
         self.ui.add_ttk_entry("replayfolderpathentry", 70)
         self.ui.add_ttk_entry("textfolderpathentry", 70)
+        # self.ui.add_ttk_entry("csvfolderpathentry", 70)
         self.ui.register_ttk_entry("canvas", 800, 50, "replayfolderpathentry")
         self.ui.register_ttk_entry("canvas", 800, 100, "textfolderpathentry")
+        # self.ui.register_ttk_entry("canvas", 800, 200, "csvfolderpathentry")
         self.ui.register_function("repentrybutton", self.ui.select_replay_folder)
         self.ui.register_function("textentrybutton", self.ui.select_text_output_folder)
         self.ui.register_function("startbutton", self.ui.press_start)
@@ -145,6 +149,7 @@ class onizGUI:
         repentry = self.entries["replayfolderpathentry"].get()
         txtentry = self.entries["textfolderpathentry"].get()
         replist, repcount = replay_file_parser(repentry)
+        total_dataframe = pd.DataFrame(columns=['Replay #', ])
         separate_replaypool(replist, txtentry, mainclass_copy.numberofprocesses)
 
     def select_replay_folder(self):

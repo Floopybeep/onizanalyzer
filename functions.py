@@ -6,11 +6,14 @@ from mainprocess import mainprocess
 
 
 def splitlist(list, n):
-    len_list = len(list)
+    len_list, result, count = len(list), [], 0
+
     if len_list == 1: return list
-    len_sublist = len_list//n + 1
-    result = []
-    count = 0
+    if len_list % n:
+        len_sublist = len_list//n + 1
+    else:
+        len_sublist = len_list//n
+
     for i in range(n-1):
         result.append(list[count:count+len_sublist])
         count += len_sublist
@@ -60,6 +63,7 @@ def separate_replaypool(repl_list, textoutputpath, num_of_proc):
     for i in range(num_of_proc):
         p = multiprocessing.Process(target=separate_replays_analysis, args=(sublist[i], textoutputpath))
         p.start()
+    print("All Processes Started")
 
     #     processlist.append(p)
     # for i, p in enumerate(processlist):

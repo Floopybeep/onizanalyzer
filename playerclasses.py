@@ -5,6 +5,7 @@ class replayclass:
     def __init__(self):
         self.filename = "onizstats"
         self.signature = ""
+        self.date = ""
 
         self.player_bankinfo = bankplayerdict.copy()
         self.load_bankinfo = bankloaddict.copy()
