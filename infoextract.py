@@ -1,6 +1,6 @@
+import mpyq
+from s2protocol import versions
 from humanupgradecomplete import *
-
-tempset = {'UpgradeCompleteEvent', 'UnitTypeChangeEvent', 'UnitBornEvent', 'UnitInitEvent', 'PlayerStatsEvent'}
 
 
 def winloss_to_victory(result):
@@ -66,6 +66,56 @@ def z_player_hangar_kill_check(units, zombieplayer):
             zombieplayer.hangarcaptures[2] = True
 
 
+def extract_playerbanks(replay, humandict, zombieplayer):
+    reppath = replay.filename
+    game_events = extract_s2protocol_events(reppath)
+    extract_bank_events(game_events, humandict, zombieplayer)
+    set_player_ranks(humandict, zombieplayer)
+
+
+def extract_s2protocol_events(reppath):
+    archive = mpyq.MPQArchive(reppath)
+    # contents = archive.header['user_data_header']['content']
+    # header = versions.latest().decode_replay_header(contents)
+    # baseBuild = header['m_version']['m_baseBuild']
+    protocol = versions.build(88500)
+    contents = archive.read_file('replay.game.events')
+    game_events = protocol.decode_replay_game_events(contents)
+
+    return game_events
+
+
+def extract_bank_events(game_events, humandict, zombieplayer):
+    for event in game_events:
+        if event['_gameloop'] > 0:
+            break
+        if event['_event'] == 'NNet.Game.SBankKeyEvent':
+            if (event['_userid']['m_userId'] + 1) == zombieplayer.pid:
+                zombieplayer.bankinfo.setplayeropt(event)
+                zombieplayer.bankinfo.setloadopt(event)
+            else:
+                humandict[event['_userid']['m_userId'] + 1].bankinfo.setplayeropt(event)
+                humandict[event['_userid']['m_userId'] + 1].bankinfo.setloadopt(event)
+        elif event['_event'] == 'NNet.Game.SBankSignatureEvent':
+            if (event['_userid']['m_userId'] + 1) == zombieplayer.pid:
+                zombieplayer.bankinfo.signature = calculate_signature(event['m_signature'])
+            else:
+                humandict[event['_userid']['m_userId'] + 1].bankinfo.signature = calculate_signature(event['m_signature'])
+
+
+def calculate_signature(list):
+    resultlist = []
+    for decimal in list:
+        resultlist.append(format(decimal, 'x').upper())
+    return ''.join(resultlist)
+
+
+def set_player_ranks(humandict, zplayer):
+    for key in humandict:
+        humandict[key].setrank()
+    zplayer.setrank()
+
+
 def extract_eventinfo(replay, humandict, zombieplayer):
     humanlist = []
     for key in humandict:
@@ -74,7 +124,7 @@ def extract_eventinfo(replay, humandict, zombieplayer):
     z_id = zombieplayer.pid
 
     for event in replay.events:
-        if event.name in tempset:
+        if event.name in upgradeeventset:
             if event.name == 'UpgradeCompleteEvent':
                 UpgradeCompleteEventCheck(event, humandict, humanset, zombieplayer)
             elif event.name == 'UnitTypeChangeEvent':

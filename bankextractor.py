@@ -12,7 +12,7 @@ PROTO_VERSION_MAPPINGS = {
     80188: 79998,
 }
 
-outpath = "C:/Users/wooil/Downloads/replay_analysis/"
+outpath = "C:/Users/USER/Downloads/replaybanks"
 
 
 # https://github.com/Blizzard/s2protocol/blob/master/docs/tutorial_API.rst
@@ -266,3 +266,8 @@ def extract_banks(path):
 
         filename = bank_store.write_sc2bank(outpath, True, "{} - {}".format(gbmeta.player.handle, gbmeta.player.name))
         print(f'File saved at "{filename}"')
+
+
+if __name__ == '__main__':
+    reppath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/Oh No It's Zombies Arctic Map (245).SC2Replay"
+    extract_banks(reppath)

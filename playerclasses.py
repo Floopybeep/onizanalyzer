@@ -1,5 +1,23 @@
 from infodict import *
 
+
+class replayclass:
+    def __init__(self):
+        self.filename = "onizstats"
+        self.signature = ""
+
+        self.player_bankinfo = bankplayerdict.copy()
+        self.load_bankinfo = bankloaddict.copy()
+
+    def setplayeropt(self, opt):
+        if opt['m_name'].decode('utf-8') in bankplayerdict:
+            self.player_bankinfo[opt['m_name'].decode('utf-8')] = opt['m_data'].decode('utf-8')
+
+    def setloadopt(self, opt):
+        if opt['m_name'].decode('utf-8') in bankloaddict:
+            self.load_bankinfo[opt['m_name'].decode('utf-8')] = opt['m_data'].decode('utf-8')
+
+
 class playerinfo():
     def __init__(self, name=None, pid=None, handle=None, role=None, victory=None, rank=0):
         self.playername = name
@@ -8,6 +26,22 @@ class playerinfo():
         self.playerrole = role
         self.victory = victory
         self.rank = rank
+        self.bankinfo = replayclass()
+
+    def setrank(self):
+        if self.playerrole == 'Human':
+            temprank = float(self.bankinfo.player_bankinfo['HumanRank'])
+            if temprank < 1:
+                self.rank = 1
+            else:
+                self.rank = int((temprank + 1)/2)
+        else:
+            temprank = float(self.bankinfo.player_bankinfo['ZombieRank'])
+            if temprank < 0:
+                self.rank = 1
+            else:
+                self.rank = int((temprank + 1)/2)
+
 
 
 class marineinfo(playerinfo):
@@ -138,3 +172,17 @@ class zombieinfo(playerinfo):
     def structure_create(self, name):
         self.structurebuiltlist[zstructuredict[name]] += 1
 
+
+
+
+        # self.HumansCaptured = 0
+        # self.HumansRescued = 0
+        # self.IdleRally = 0
+        # self.LeftLastGame = 0
+        # self.NumberOfTimesCaptured = 0
+        # self.SecurityForcesKilled = 0
+        # self.TurretsBuilt = 0
+        # self.VespeneHarvested = 0
+        # self.ZombieRank = 0
+        # self.ZombieWins = 0
+        # self.ZombiesKilled = 0

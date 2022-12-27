@@ -46,17 +46,17 @@ def condense_eventinfo(replay, txtpath, humandict, zplayer):
         f.write('{0:15}\t{1:6}\t\t{2:4}\t{3}\n'.format(zplayer.playername, zplayer.playerrole, zplayer.rank, bool_to_victory(zplayer.victory)))
         for hplayer in humanlist:
             f.write('{0:15}\t{1:5}\t\t{2:4}\t{3}\n'.format(hplayer.playername, hplayer.playerrole, hplayer.rank, bool_to_victory(hplayer.victory)))
-        f.write("\n\n")
+        f.write("\n\nResult: ")
         if zplayer.victory:
             f.write("Zombie victory\n\n\n")
         else:
             f.write("Human victory\n\n\n")
 
-        f.write("Detailed Analysis - Humans\n")
+        f.write("### Detailed Analysis - Humans ###\n")
 
         humaninfocondense(humandict, txtpath, f)
 
-        f.write("\nDetailed Analysis - Zombie\n")
+        f.write("\n### Detailed Analysis - Zombie ###\n")
         zombieinfocondense(zplayer, txtpath, f)
 
         f.close()
@@ -67,55 +67,55 @@ def humaninfocondense(humandict, txtpath, f):
     #                                'Structure Mods', 'Experimental', 'Total Kills', 'Deaths', 'Cocoons Killed',
     #                                'Alphas Killed', 'Zerg Structures Killed', 'Explo Droids Made',
     #                                'Turrets Built', 'Repair Drones Built', 'Psis Built', 'Dropship Fueling Time'])
-    tab = PrettyTable()
-    tab.field_names = ['Player Name', 'Handle', 'Result', 'Weapons Used', 'Mod Used', 'Grenades Used',
-                                   'Mining Equipment', 'Weapon Accessory', 'Suits Used', 'Misc Items', 'Structures',
-                                   'Structure Mods', 'Experimental', 'Total Kills', 'Deaths', 'Cocoons Killed',
-                                   'Alphas Killed', 'Zerg Structures Killed', 'Explo Droids Made',
-                                   'Turrets Built', 'Repair Drones Built', 'Psis Built', 'Dropship Fueling Time']
+    tabone, tabtwo, tabthree = PrettyTable(), PrettyTable(), PrettyTable()
+    tabone.field_names = ['Player Name', 'Handle', 'Result', 'Weapons Used', 'Mod Used', 'Grenades Used',
+                          'Mining Equipment', 'Weapon Accessory']
+    tabtwo.field_names = ['Player Name', 'Suits Used', 'Misc Items', 'Structures',
+                          'Structure Mods']
+    tabthree.field_names = ['Player Name', 'Experimental', 'Total Kills', 'Deaths', 'Cocoons Killed', 'Alphas Killed',
+                            'Zerg Structures Killed', 'Explo Droids #', 'Turrets #', 'Heal Drones #', 'Psis #', 'Dropship Fueling Time']
+    # cut at mining, deaths
 
     for key in humandict:
         human = humandict[key]
-        data = {}
-        data['Player Name'] = human.playername
-        data['Handle'] = human.handle
-        data['Result'] = bool_to_victory(human.victory)
-        data['Weapons Used'] = hweaponf(human.weapons)
-        data['Mod Used'] = hwmodf(human.weapons)
-        data['Grenades Used'] = hgrenadef(human.grenades)
-        data['Mining Equipment'] = hminingf(human.minings)
-        data['Weapon Accessory'] = haccf(human.accessories)
-        data['Suits Used'] = hsuitf(human.suits)
-        data['Misc Items'] = hmiscf(human.miscs)
-        data['Structures'] = hstructuref(human.structures)
-        data['Structure Mods'] = hstructmodf(human.structures)
-        data['Experimental'] = human.experimental
-        data['Total Kills'] = human.kills
-        data['Deaths'] = human.captures
-        data['Cocoons Killed'] = human.cocoonkills
-        data['Alphas Killed'] = halphakillf(human.alphakills)
-        data['Zerg Structures Killed'] = hzstructkillf(human.zstructurekills)
-        data['Explo Droids Made'] = human.explorationdroidsmade
-        data['Turrets Built'] = human.turretsbuilt
-        data['Repair Drones Built'] = human.repairdronesebuilt
-        data['Psis Built'] = human.psisbuilt
-        data['Fueling Time'] = human.dropshipfueledtime
+        dataone, datatwo, datathree = {}, {}, {}
+        dataone['Player Name'] = human.playername
+        datatwo['Player Name'] = human.playername
+        datathree['Player Name'] = human.playername
+        dataone['Handle'] = human.handle
+        dataone['Result'] = bool_to_victory(human.victory)
+        dataone['Weapons Used'] = hweaponf(human.weapons)
+        dataone['Mod Used'] = hwmodf(human.weapons)
+        dataone['Grenades Used'] = hgrenadef(human.grenades)
+        dataone['Mining Equipment'] = hminingf(human.minings)
+        dataone['Weapon Accessory'] = haccf(human.accessories)
+        datatwo['Suits Used'] = hsuitf(human.suits)
+        datatwo['Misc Items'] = hmiscf(human.miscs)
+        datatwo['Structures'] = hstructuref(human.structures)
+        datatwo['Structure Mods'] = hstructmodf(human.structures)
+        datathree['Experimental'] = human.experimental
+        datathree['Total Kills'] = human.kills
+        datathree['Deaths'] = human.captures
+        datathree['Cocoons Killed'] = human.cocoonkills
+        datathree['Alphas Killed'] = halphakillf(human.alphakills)
+        datathree['Zerg Structures Killed'] = hzstructkillf(human.zstructurekills)
+        datathree['Explo Droids #'] = human.explorationdroidsmade
+        datathree['Turrets #'] = human.turretsbuilt
+        datathree['Heal Drones #'] = human.repairdronesebuilt
+        datathree['Psis #'] = human.psisbuilt
+        datathree['Fueling Time'] = human.dropshipfueledtime
 
         # df = pd.concat([df, pd.DataFrame(data, index=[0])])
-        tab.add_row(list(data.values()))
+        tabone.add_row(list(dataone.values()))
+        tabtwo.add_row(list(datatwo.values()))
+        tabthree.add_row(list(datathree.values()))
 
-    # tabulate.PRESERVE_WHITESPACE = True
-    # with open("C:/Users/USER/PycharmProjects/onizanalyzer/replays/text file output/asdf.txt", 'a') as f:
-        # f.write(tabulate.tabulate(df, headers='keys', showindex=False, tablefmt="presto", colalign="right"))
-        # print(tabulate.tabulate(df), file=f)
-    tab.align = "l"
-    tabstring = tab.get_string()
-    print(tabstring, file=f)
+    tabone.align, tabtwo.align, tabthree.align = "l", "l", "l"
+    tabstringone, tabstringtwo, tabstringthree = tabone.get_string(), tabtwo.get_string(), tabthree.get_string()
+    print(tabstringone, '\n', tabstringtwo, '\n', tabstringthree, file=f)
 
     # df.to_csv(txtpath, sep='\t', index=False, header=False, encoding='ascii', mode='a')       # save df to diff file?
 
-
-    # What if player bought heavy and flame turrets, AND spec ops psi? it will show heavy, flame, specops... fix to heavy, flame turret, spec ops psi
 
 def hweaponf(weaponlist):
     result = ''
@@ -198,6 +198,10 @@ def hstructuref(structlist):
 def hstructmodf(structlist):
     result = ''
     for i in range(3):
+        if any(structlist[i][1:]):
+            if len(result) > 0:
+                result = result + '/ '
+            result = ''.join([result, rstructuremodshortdict[i], ': '])
         for j in range(1, 4):
             if structlist[i][j]:
                 if len(result) > 0:
@@ -229,40 +233,45 @@ def zombieinfocondense(zplayer, txtpath, f):
     #                                'Ultimate Infestation', 'Hangars Captured', 'Structures Built',
     #                                'Infestation Level Timings', 'Greater Nydus Timings',
     #                                'Marine Captures', 'Cocoons Made', 'Drop Pods Used', 'Structures Built', 'Siphons'])
-    data = {}
-    ztab = PrettyTable()
-    ztab.field_names = ['Player Name', 'Handle', 'Result', 'Major Rooms Captured', 'Starting Alpha',
-                                   'Alphas Built', 'Strains Purchased', 'Upgrades Purchased', 'Advanced Infestations',
-                                   'Ultimate Infestation', 'Hangars Captured', 'Structures Built',
-                                   'Infestation Level Timings', 'Greater Nydus Timings',
-                                   'Marine Captures', 'Cocoons Made', 'Drop Pods Used', 'Structures Built #', 'Siphons']
+    dataone, datatwo, datathree = {}, {}, {}
+    ztabone, ztabtwo, ztabthree = PrettyTable(), PrettyTable(), PrettyTable()
+    ztabone.field_names = ['Player Name', 'Handle', 'Result', 'Major Rooms Captured', 'Starting Alpha',
+                           'Alphas Built', 'Strains Purchased']
+    ztabtwo.field_names = ['Upgrades Purchased', 'Advanced Infestations', 'Ultimate Infestation',
+                           'Structures Built']
+    ztabthree.field_names = ['Hangars Captured', 'Infestation Level Timings', 'Greater Nydus Timings',
+                             'Marine Captures', 'Cocoons Made', 'Drop Pods Used', 'Structures Built #', 'Siphons']
+    # cut at upgrades, infestation levels
 
-    data['Player Name'] = zplayer.playername
-    data['Handle'] = zplayer.handle
-    data['Result'] = bool_to_victory(zplayer.victory)
-    data['Major Rooms Captured'] = zmajorroomf(zplayer.majorroomcaptures)
-    data['Starting Alpha'] = zplayer.startingalpha
-    data['Alphas Built'] = zalphasbuiltf(zplayer.alphasbuilt)
-    data['Strains Purchased'] = zstrainf(zplayer.strainpurchases)
-    data['Upgrades Purchased'] = zupgradef(zplayer.upgradepurchases)
-    data['Advanced Infestation'] = zadvinff(zplayer.advancedinfestations)
-    data['Ultimate Infestation'] = zplayer.ultimateinfestation
-    data['Hangars Captured'] = zhangarsf(zplayer.hangarcaptures)
-    data['Structures Built'] = zstructf(zplayer.structurebuiltlist)
-    data['Infestation Level Timings'] = zinftimingf(zplayer.infestationleveltimes)
-    data['Greater Nydus Timings'] = zgreatertimingf(zplayer.greaternydustimings)
-    data['Marine Captures'] = zplayer.marinecaptures
-    data['Cocoons Made'] = zplayer.cocoonsmade
-    data['Drop Pods Used'] = zplayer.droppodsused
-    data['Structures Built #'] = zplayer.structurebuilt
-    data['Siphons'] = zplayer.siphons
+    dataone['Player Name'] = zplayer.playername
+    dataone['Handle'] = zplayer.handle
+    dataone['Result'] = bool_to_victory(zplayer.victory)
+    dataone['Major Rooms Captured'] = zmajorroomf(zplayer.majorroomcaptures)
+    dataone['Starting Alpha'] = zplayer.startingalpha
+    dataone['Alphas Built'] = zalphasbuiltf(zplayer.alphasbuilt)
+    dataone['Strains Purchased'] = zstrainf(zplayer.strainpurchases)
+    datatwo['Upgrades Purchased'] = zupgradef(zplayer.upgradepurchases)
+    datatwo['Advanced Infestation'] = zadvinff(zplayer.advancedinfestations)
+    datatwo['Ultimate Infestation'] = zplayer.ultimateinfestation
+    datatwo['Structures Built'] = zstructf(zplayer.structurebuiltlist)
+    datathree['Hangars Captured'] = zhangarsf(zplayer.hangarcaptures)
+    datathree['Infestation Level Timings'] = zinftimingf(zplayer.infestationleveltimes)
+    datathree['Greater Nydus Timings'] = zgreatertimingf(zplayer.greaternydustimings)
+    datathree['Marine Captures'] = zplayer.marinecaptures
+    datathree['Cocoons Made'] = zplayer.cocoonsmade
+    datathree['Drop Pods Used'] = zplayer.droppodsused
+    datathree['Structures Built #'] = zplayer.structurebuilt
+    datathree['Siphons'] = zplayer.siphons
 
     # df = pd.concat([df, pd.DataFrame(data, index=[0])])
-    ztab.add_row(list(data.values()))
+    ztabone.add_row(list(dataone.values()))
+    ztabtwo.add_row(list(datatwo.values()))
+    ztabthree.add_row(list(datathree.values()))
 
-    ztab.align = "l"
-    ztabstring = ztab.get_string()
-    print(ztabstring, file=f)
+    ztabone.align, ztabtwo.align, ztabthree.align = "l", "l", "l"
+    ztabstringone, ztabstringtwo, ztabstringthree = ztabone.get_string(), ztabtwo.get_string(), ztabthree.get_string()
+    print(ztabstringone, '\n', ztabstringtwo, '\n', ztabstringthree, file=f)
+
 
 def zmajorroomf(mrlist):
     result = ''

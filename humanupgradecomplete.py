@@ -1,4 +1,4 @@
-import sc2reader
+import datetime
 from playerclasses import *
 
 # MAKE SURE TO SORT humanUCEcheck if's in descending order of frequency!
@@ -26,7 +26,7 @@ def humanUCEcheck(event, name, humandict, humanset, zombieplayer):              
     elif name in experimentaldict:
         humandict[event.pid].add_experimental(name)
     elif name == 'DropshipsFueled' and event.pid in humanset:
-        humandict[event.pid].dropshipfueledtime = event.second
+        humandict[event.pid].dropshipfueledtime = datetime.timedelta(seconds=event.second)
     elif name == 'EmergencyCloakOn':
         humandict[event.pid].captures += 1
         zombieplayer.marinecaptures += 1

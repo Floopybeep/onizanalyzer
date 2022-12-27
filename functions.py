@@ -53,6 +53,9 @@ def separate_replaypool(repl_list, textoutputpath, num_of_proc):
     # processlist = []
     sublist = splitlist(repl_list, num_of_proc)
     multiprocessing.set_start_method("spawn")
+    if num_of_proc != len(sublist):
+        print("Sublist length: ", len(sublist))
+        print("Number of Processors: ", num_of_proc)
 
     for i in range(num_of_proc):
         p = multiprocessing.Process(target=separate_replays_analysis, args=(sublist[i], textoutputpath))
@@ -111,6 +114,7 @@ class maininfoclass:
     # def replaypool_loop(self, list_of_replays):
     #     pool = multiprocessing.Pool(self.numberofprocesses)
     #     pool.map(separate_replays_analysis, list_of_replays)
+
 
 
 # https://docs.python.org/3/library/multiprocessing.html

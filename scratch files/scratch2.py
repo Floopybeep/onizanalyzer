@@ -1,70 +1,114 @@
-import sc2reader
-from os import listdir, walk
-from os.path import isfile, join
+import s2protocol
+import mpyq
+from s2protocol import versions
 
-folderpath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays"
-replaypaths = []
+reppath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/Oh No It's Zombies Arctic Map (249).SC2Replay"
 
+archive = mpyq.MPQArchive(reppath)
+print(archive.files)
 
-def dropship_player_check(unit):
-    if 188 <= unit.location[0] <= 211 and 212 <= unit.location[1] <= 255:
-        return 1
-    elif 212 <= unit.location[0] <= 235 and 212 <= unit.location[1] <= 255:
-        return 2
-    elif 236 <= unit.location[0] <= 256 and 212 <= unit.location[1] <= 255:
-        return 3
-    else:
-        return False
+contents = archive.header['user_data_header']['content']
+header = versions.latest().decode_replay_header(contents)
+baseBuild = header['m_version']['m_baseBuild']
+protocol = versions.build(baseBuild)
 
+contents = archive.read_file('replay.game.events')
+game_events = protocol.decode_replay_game_events(contents)
+eventlist = []
+eventnameset = set()
 
-for path, subdirs, files in walk(folderpath):
-    for name in files:
-        if isfile(join(path, name)): replaypaths.append(join(path, name))
-
-for replaypath in replaypaths:
-    try:
-        replay = sc2reader.load_replay(replaypath, load_level=3)
-    except Exception:
-        print("Replay corrupted, deleting replay: ", replaypath)
-        pass
-
-    print(1)
-def humaninfocondense(humandict, f):
-    f.write('Player Name\tHandle\tResult\tWeapons Used\tMod Used\tGrenades Used\tMining Equipment\n')
-    for key in humandict:
-        human = humandict[key]
-        f.write('{0:15}\t{1:14}\t{2:4}\t{3:13}\t{4:13}\t{5:14}\t{6:15}\n'.format(human.playername, human.handle,
-                bool_to_victory(human.victory), hweaponf(human.weapons), hwmodf(human.weapons),
-                hgrenadef(human.grenades), hminingf(human.minings)))
-
-    f.write('\nWeapon Accessories\tSuits\tMisc Items\tStructures Purchased\tStructure Mods\tExperimental Used\n')
-    for key in humandict:
-        human = humandict[key]
-        f.write('{0:15}\t{1:13}\t{2:12}\t{3:13}\t{4:7}\t{4:19}\n'.format(
-            haccf(human.accessories), hsuitf(human.suits), hmiscf(human.miscs), hstructuref(human.structures),
-            hstructmodf(human.structures), human.experimental
-        ))
+banksectionlist = []
+bankkeylist = []
+bankfilelist = []
+banksignaturelist = []
 
 
+for event in game_events:
+    if event['_event'] not in eventnameset:
+        eventnameset.add(event['_event'])
+    if event['_event'] == 'NNet.Game.SBankSectionEvent':
+        banksectionlist.append(event)
+    elif event['_event'] == 'NNet.Game.SBankKeyEvent':
+        bankkeylist.append(event)
+    elif event['_event'] == 'NNet.Game.SBankFileEvent':
+        bankfilelist.append(event)
+    elif event['_event'] == 'NNet.Game.SBankSignatureEvent':
+        banksignaturelist.append(event)
+
+    # if event['_event'] in {'NNet.Game.SBankSectionEvent', 'NNet.Game.SBankKeyEvent',
+    #                        'NNet.Game.SBankFileEvent', 'NNet.Game.SBankSignatureEvent'}:
+    eventlist.append(event)
+
+    if event['_gameloop'] > 0:
+        break
+
+print(1)
+
+# NNet.Game.SBankKeyEvent
+
+    # b'HumanWinsNormal'
+    # b'ZombieRank'
+    # b'VespeneHarvested'
+    # b'HumansRescued'
+    # b'SecurityForcesKilled'
+    # b'ZombiesKilled'
+    # b'FuelDiverted'
+    # b'HumanWinsInsane'
+    # b'LeftLastGame'
+    # b'4:3AspectRatioSettings'
+    # b'HumanRank'
+    # b'IdleRally'
+    # b'NumberOfTimesCaptured'
+    # b'TurretsBuilt'
+    # b'ZombieWins'
+    # b'GamesLeft'
+    # b'GamesPlayedAsHuman'
+    # b'GamesPlayedAsZombie'
+    # b'HumansCaptured'
+    # b'HumanWinsHard'
+    # b'Difficulty'
+    # b'Opt In'
+    # b'Color'
+    # b'Chosen Zombie'
+    # b'Host Chooses Zombie'
+    # b'Experimental Mode'
+
+# event[_event] == 'NNet.Game.SBankFileEvent' : load bank
+
+# event[_event] == 'NNet.Game.SBankSectionEvent' : defines sub-section
+
+    # b'Player'
+    # b'Load'
+
+# NNet.Game.SBankSignatureEvent : signs bank, change event['_m_signature'] to hexadcimal for signature
+    # use hex(NUM).split('x')[-1] or format(number, 'x')
 
 
 
 
-# totalcount = [0 for _ in range(7)]
-# zBasicCommandEventlist = []
-# print(1)
-#
-# for event in replay.game_events:
-#     blacklist = {'UserOptionsEvent', 'CameraEvent', 'TargetPointCommandEvent', 'BasicCommandEvent',
-#                  'SelectionEvent', 'GetControlGroupEvent', 'CommandManagerStateEvent',
-#                  'UpdateTargetPointCommandEvent', 'UpdateTargetUnitCommandEvent', 'AddToControlGroupEvent',
-#                  'ControlGroupEvent', 'PlayerLeaveEvent'}
-#     if event.name not in blacklist:
-#         totalcount[event.pid] += 1
-#         if event.pid == 0:
-#             zBasicCommandEventlist.append(event)
 
-# print(1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 '''
 How to determine winner?
@@ -92,6 +136,17 @@ Alpha	130	34078721	(50, 41)        (188,212) ~ (211,255)
 Beta	128	33554433	(145, 234)      (212,212) ~ (235,255)
 Delta	129	33816577	(215, 39)       (236,212) ~ (256,255)
 '''
+
+def dropship_player_check(unit):
+    if 188 <= unit.location[0] <= 211 and 212 <= unit.location[1] <= 255:
+        return 1
+    elif 212 <= unit.location[0] <= 235 and 212 <= unit.location[1] <= 255:
+        return 2
+    elif 236 <= unit.location[0] <= 256 and 212 <= unit.location[1] <= 255:
+        return 3
+    else:
+        return False
+
 
 # https://pypi.org/project/sc2reader/
 # https://sc2reader.readthedocs.io/en/latest/articles/creatingagameengineplugin.html

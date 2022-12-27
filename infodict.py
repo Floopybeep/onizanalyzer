@@ -1,3 +1,5 @@
+upgradeeventset = {'UpgradeCompleteEvent', 'UnitTypeChangeEvent', 'UnitBornEvent', 'UnitInitEvent', 'PlayerStatsEvent'}
+
 weapondict = {'FlamethrowerUnlocked': 10, 'ShotgunUnlocked': 11, 'AssaultRifleUnlocked': 12,
               'BeamRifleUnlocked': 13, 'HellfireRocketLauncherUnlocked': 14, 'ArcWelderUnlocked': 15,
               'SpecOpsFlamethrower': 20, 'SpecOpsShotgun': 21, 'SpecOpsAssaultRifle': 22,
@@ -107,6 +109,8 @@ rstructuredict = {0: 'Turret', 1: 'Heal Droid', 2: 'Psi Disruptor'}
 
 rstructuremodlist = [[None, 'Heavy', 'SpecOps', 'Flame'], [None, 'SpecOps', 'Accel', 'Energy'], [None, 'Slow', 'SpecOps']]
 
+rstructuremodshortdict = {0: '(T)', 1: '(HD)', 2: '(P)'}
+
 ralphakillsdict = {0: 'Abberation', 1: 'Gene', 2: 'Anubalisk', 3: 'Legion', 4: 'Hunter', 5: 'Underseer'}
 
 rzstructurekillsdict = {0: 'Sunken', 1: 'SwarmNest', 2: 'Creep Tower', 3: 'Lesser Nydus', 4: 'Extractor'}
@@ -123,3 +127,12 @@ rzupgradesdict = {0: 'Speed Creep', 1: 'Regen Creep', 2: 'Construction Creep', 3
 rzadvupgradesdict = {0: 'Power Outage', 1: 'Siphon Gas', 2: 'Release Containment', 3: 'Chat Peek', 4: 'Door Closer'}
 
 rhangardict = {0: 'Alpha', 1: 'Beta', 2: 'Delta'}
+
+############################################## Bank dicts & Sets ######################################################
+bankplayerdict = {'4:3AspectRatioSettings': 0, 'FuelDiverted': 0, 'GamesPlayedAsHuman': 0, 'GamesPlayedAsZombie': 0,
+                  'HumanRank': 0, 'HumanWinsHard': 0, 'HumanWinsInsane': 0, 'HumanWinsNormal': 0, 'HumansCaptured': 0,
+                  'HumansRescued': 0, 'IdleRally': 0, 'LeftLastGame': 0, 'NumberOfTimesCaptured': 0, 'ZombiesKilled': 0,
+                  'SecurityForcesKilled': 0, 'TurretsBuilt': 0, 'VespeneHarvested': 0, 'ZombieRank': 0, 'ZombieWins': 0}
+
+bankloaddict = {'Chosen_Zombie': 0, 'Color': 0, 'Difficulty': 0,
+                'Experimental_Mode': 0, 'Host_Chooses_Zombie': 0, 'Opt_In': 0}
