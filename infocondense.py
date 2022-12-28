@@ -199,7 +199,7 @@ def hmiscf(misclist):
 def hstructuref(structlist):
     result = ''
     for i in range(3):
-        if structlist[i]:
+        if structlist[i][0]:
             if len(result) > 0:
                 result = result + ', '
             result = ''.join([result, rstructuredict[i], ' '])
@@ -365,7 +365,7 @@ def zstructf(slist):
         if slist[i]:
             if len(result) > 0:
                 result = result + ', '
-            result = ''.join([result, rzupgradesdict[i], ': ', str(slist[i])])
+            result = ''.join([result, rzstructurekillsdict[i], ': ', str(slist[i])])
     return result
 
 def zinftimingf(tlist):

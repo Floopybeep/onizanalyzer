@@ -23,4 +23,5 @@ Much more down the line
 - 1.0.0: Initial launch of beta version
 - 1.0.1: Added initial barebones textfile output
 - 1.0.2: Fleshed out textfile output to include full scope of the replay
-- 1.0.3: (coming soon) Excel file output for user-custom data analysis
+- 1.0.3: bugfixes
+- 1.0.4: (coming soon) Excel file output for user-custom data analysis
