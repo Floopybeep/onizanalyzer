@@ -33,7 +33,7 @@ accessoryset = {'DefensiveMatrixUnlocked', 'StimpackUnlocked', 'OverloadWeaponUn
 suitdict = {'HazmatSuitUnlocked': 1, 'AdvancedHazmatSuitUnlocked': 2,
             'EnergySuitUnlocked': 11, 'AdvancedEnergySuitUnlocked': 12,
             'CombatSuitUnlocked': 21, 'AdvancedCombatSuitUnlocked': 22,
-            'ShieldSuitUnlocked': 31, 'AdvancedShieldSuitUnlocked': 32}
+            'ShieldSiotUnlocked': 31, 'AdvancedShieldSuitUnlocked': 32}
 
 structuredict = {'AutoTurretUnlocked': 0, 'HeavyTurretUnlocked': 1, 'SpecOpsTurretUnlocked': 2, 'FlameTurretUnlocked': 3,
                  'BioMechanicalRepairDroneUnlocked': 10, 'SpecOpsBioMechanicalRepairDroneUnlocked': 11,

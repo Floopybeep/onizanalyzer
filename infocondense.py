@@ -134,11 +134,13 @@ def hwmodf(weaponlist, aresmodlist):
             if len(result) > 0:
                 result = result + '/ '
             result = ''.join([result, rweaponmodshortdict[i], ': '])
+        tempresult = ''
         for j in range(1, 4):
             if weaponlist[i][j]:
-                if len(result) > 10:
-                    result = result + ', '
-                result = ''.join([result, rweaponmodlist[i][j]])
+                if len(tempresult) > 0:
+                    tempresult = tempresult + ', '
+                tempresult = ''.join([tempresult, rweaponmodlist[i][j]])
+        result = ''.join([result, tempresult])
     if any(aresmodlist):
         if len(result) > 10:
             result = result + '/ '
