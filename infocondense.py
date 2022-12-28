@@ -22,8 +22,14 @@ def set_replay_name(replay, humanlist, zplayer):
     if zplayer.victory: whowins = '(Zwin)'
     else: whowins = '(Hwin)'
 
+    numgm = 0
+    for human in humanlist:
+        if human.rank > 12:
+            numgm += 1
+    number_of_gm = f"{numgm}GM"
+
     playernames = ', '.join([zplayer.playername, ', '.join([player.playername for player in humanlist])])
-    textfilename = ' - '.join([replaytime, whowins, playernames, '.txt'])
+    textfilename = ' - '.join([replaytime, whowins, number_of_gm, playernames, '.txt'])
 
     return textfilename
 
@@ -39,7 +45,8 @@ def condense_eventinfo(replay, txtpath, humandict, zplayer):
 
     with open(txtpath, 'w') as f:
         f.write(f"Date: {replay.date}\n")
-        f.write(f"Game Length: {replay.game_length.mins}.{replay.game_length.secs}\n\n")
+        f.write(f"Game Length: {replay.game_length.mins}.{replay.game_length.secs}\n")
+        f.write(f"Replay File Path: {replay.filename}\n\n")
 
         f.write("Players\n")
         f.write('Player Name\tRole\t\tRank\tVictory\n')

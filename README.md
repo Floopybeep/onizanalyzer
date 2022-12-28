@@ -2,6 +2,8 @@
 
 Things to do
  - Add ARES tank mods
+ - Group processes into ONE PROCESS?
+   - task manager shows 30 different processes lol
  - Add diverts
  - Add excel table of data
    - More complicated than I thought - how am I going to keep updating the dataframe?
