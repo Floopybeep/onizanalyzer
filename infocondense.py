@@ -305,7 +305,7 @@ def zalphasbuiltf(alist):
         if alist_copy[i][0]:
             if len(result) > 0:
                 result = result + ', '
-            result = ''.join([result, rt2alphasdict[i], ': ', str(alist_copy[i][0])])
+            result = ''.join([result, rt1alphasdict[i], ': ', str(alist_copy[i][0])])
         elif alist_copy[i][1]:
             if len(result) > 0:
                 result = result + ', '
@@ -327,7 +327,7 @@ def zstrainf(slist):
                 if len(temp) > 0:
                     temp = temp + ', '
                 if slist_copy[i][j]:
-                    result = ''.join([result, 'T', str(j+1), ' ', rstrainsdict[i], ': ', str(slist_copy[i][j])])
+                    temp = ''.join([temp, 'T', str(j+1), ' ', rstrainsdict[i], ': ', str(slist_copy[i][j])])
         if len(temp) > 0:
             result = ''.join([result, temp])
     return result

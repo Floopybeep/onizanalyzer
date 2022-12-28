@@ -152,7 +152,7 @@ def UnitTypeChangeEventCheck(event, zombieplayer):
     name = event.unit_type_name
 
     if name == 'MassiveCocoon':
-        zombieplayer.cocoonsmade += 1
+        # zombieplayer.cocoonsmade += 1
         zombieplayer.cocoonids.add(event.unit_id_index)
     elif name in t2alphadict and event.unit_id_index in zombieplayer.cocoonids:
         zombieplayer.t2alpha_create(name)

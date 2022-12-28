@@ -130,6 +130,8 @@ rzstructurekillsdict = {0: 'Sunken', 1: 'SwarmNest', 2: 'Creep Tower', 3: 'Lesse
 ############################################# Zombie Dict (reverse order) #############################################
 rmajorroomdict = {0: 'Power', 1: 'FDC', 2: 'Containment', 3: 'Security', 4: 'Gates Control'}
 
+rt1alphasdict = {0: 'Abberation', 1: 'Geneweaver', 2: 'Anubalisk', 3: 'Legion', 4: 'Hunter', 5: 'Underseer'}
+
 rt2alphasdict = {0: 'Abomination', 1: 'Genesplicer', 2: 'Anubalight', 3: 'Legionnaire', 4: 'Predator', 5: 'Saboteur'}
 
 rstrainsdict = {0: 'Speed Strain', 1: 'Health Strain', 2: 'Damage Strain', 3: 'Volatile Strain'}

@@ -48,7 +48,7 @@ class NewClass:
         self.ui.register_function("textentrybutton", self.ui.select_text_output_folder)
         self.ui.register_function("startbutton", self.ui.press_start)
 
-        self.ui.add_scrolltext_window("outputscroll", 40, 100)
+        self.ui.add_scrolltext_window("outputscroll", 40, 70)
         self.ui.register_scrolltext_window("canvas", 30, 30, "outputscroll")
 
         self.ui.add_labels("remainingtimelabel", 60, "white", "black")
