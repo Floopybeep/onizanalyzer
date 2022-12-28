@@ -212,11 +212,13 @@ def hstructmodf(structlist):
             if len(result) > 0:
                 result = result + '/ '
             result = ''.join([result, rstructuremodshortdict[i], ': '])
-        for j in range(1, 4):
-            if structlist[i][j]:
-                if len(result) > 0:
-                    result = result + ', '
-                result = ''.join([result, rstructuremodlist[i][j]])
+            tempresult = ''
+            for j in range(1, 4):
+                if structlist[i][j]:
+                    if len(tempresult) > 0:
+                        tempresult = tempresult + ', '
+                    tempresult = ''.join([tempresult, rstructuremodlist[i][j]])
+            result = ''.join([result, tempresult])
     return result
 
 def halphakillf(akilllist):
@@ -318,7 +320,7 @@ def zstrainf(slist):
         temp = ''
         if any(slist_copy[i]):
             if len(result) > 0:
-                result = result + '/ '
+                result = result + ' / '
             for j in range(3):
                 if len(temp) > 0:
                     temp = temp + ', '

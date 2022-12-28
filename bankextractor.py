@@ -269,5 +269,5 @@ def extract_banks(path):
 
 
 if __name__ == '__main__':
-    reppath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/Oh No It's Zombies Arctic Map (245).SC2Replay"
+    reppath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/Oh No It's Zombies Arctic Map (248).SC2Replay"
     extract_banks(reppath)

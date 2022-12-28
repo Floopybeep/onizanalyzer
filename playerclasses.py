@@ -38,7 +38,7 @@ class playerinfo():
                 self.rank = int((temprank + 1)/2)
         else:
             temprank = float(self.bankinfo.player_bankinfo['ZombieRank'])
-            if temprank < 0:
+            if temprank < 1:
                 self.rank = 1
             else:
                 self.rank = int((temprank + 1)/2)
@@ -62,6 +62,7 @@ class marineinfo(playerinfo):
         self.score = 0
         self.captures = 0                   # done
         self.saves = 0
+        self.diverts = 0
         self.alphakills = [0, 0, 0, 0, 0, 0]        # done
         self.cocoonkills = 0                # done
         self.zstructurekills = [0, 0, 0, 0, 0]      # done

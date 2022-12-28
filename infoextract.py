@@ -76,9 +76,6 @@ def extract_playerbanks(replay, humandict, zombieplayer):
 
 def extract_s2protocol_events(reppath):
     archive = mpyq.MPQArchive(reppath)
-    # contents = archive.header['user_data_header']['content']
-    # header = versions.latest().decode_replay_header(contents)
-    # baseBuild = header['m_version']['m_baseBuild']
     protocol = versions.build(88500)
     contents = archive.read_file('replay.game.events')
     game_events = protocol.decode_replay_game_events(contents)

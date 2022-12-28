@@ -1,4 +1,5 @@
 import multiprocessing
+import pandas as pd
 
 from os import listdir, walk
 from os.path import join, isfile
@@ -94,6 +95,8 @@ class maininfoclass:
         self.quickanalysis = False
         self.quickcheck = "mainclass load complete!"
         self.version = ""
+        self.replays_data_human = pd.DataFrame()
+        self.replays_data_zombie = pd.DataFrame()
 
         self.numberofprocesses = 3
 

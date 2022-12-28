@@ -151,5 +151,10 @@ bankloaddict = {'Chosen_Zombie': 0, 'Color': 0, 'Difficulty': 0,
 
 ############################################## csv dict & sets ########################################################
 total_df_human_column_list = ['Replay #', 'Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Result', 'Weapon',
-                              'Weapon Mod', 'Grenade', 'Mining Equipment', 'Accessory', 'Structure', 'Structure Mod',
-                              'Experimental', 'kills', 'captures', ]
+                              'Weapon Mod #1', 'Weapon Mod #2', 'Weapon Mod #3', 'Grenade', 'Scout Droid Upgrade',
+                              'Mining Droid Upgrade', 'Nuke Upgrade', 'Sensor Upgrade', 'Accessory', 'Suits'
+                              'Turret Bought', 'Heal Droid Bought', 'Psi Bought', 'Turret Mod',
+                              'Heal Droid Mod', 'Psi Mod', 'Turrets Built', 'Heal Droids Built', 'Psis Built',
+                              'Experimental', 'Kills', 'Deaths', 'Aber/Aboms Killed', 'Genes Killed', 'Anubs Killed',
+                              'Legions Killed', 'Hunter/Pred Killed', 'Cocoons Killed', 'Structures Killed',
+                              'Sunkens Killed', 'Creep Towers Killed', 'Lesser Nydi Killed', 'Extractors Killed']
