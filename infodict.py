@@ -1,9 +1,11 @@
 upgradeeventset = {'UpgradeCompleteEvent', 'UnitTypeChangeEvent', 'UnitBornEvent', 'UnitInitEvent', 'PlayerStatsEvent'}
 
-weapondict = {'FlamethrowerUnlocked': 10, 'ShotgunUnlocked': 11, 'AssaultRifleUnlocked': 12,
+weapondict = {'FlamethrowerUnlocked': 10, 'ShotgunUnlocked': 11,
               'BeamRifleUnlocked': 13, 'HellfireRocketLauncherUnlocked': 14, 'ArcWelderUnlocked': 15,
+              'AresUnlocked': 16, 'SpecOpsAresUnlocked': 26,
               'SpecOpsFlamethrower': 20, 'SpecOpsShotgun': 21, 'SpecOpsAssaultRifle': 22,
               'SpecOpsPlasmaRifle':23, 'SpecOpsHellfireRocketLauncher': 24, 'SpecOpsArcWelder': 25}
+    #'AssaultRifleUnlocked': 12,
 
 weaponmoddict = {'ThermiteFilamentsUnlocked': 1, 'CryoFreezeUnlocked': 2, 'LongRangeIncineratorsUnlocked': 3,
                  'HighPrecisionBeamsUnlocked': 11, 'ConcussiveShotUnlocked': 12, 'DoubleBarrelUnlocked': 13,
@@ -11,6 +13,10 @@ weaponmoddict = {'ThermiteFilamentsUnlocked': 1, 'CryoFreezeUnlocked': 2, 'LongR
                  'CorrosivePlasmaUnlocked': 31, 'LongRangeScopeUnlocked': 32, 'ConcussivePlasmaUnlocked': 33,
                  'RocketLauncherMod1Unlocked': 41, 'ShockwaveMissilesUnlocked': 42, 'RocketLauncherMod3Unlocked': 43,
                  'ArcWelderMod1Unlocked': 51, 'ArcWelderMod2Unlocked': 52, 'ArcWelderMod3Unlocked': 53}
+
+aresmoddict = {'AresMod1Unlocked': 0, 'AresMod2Unlocked': 1, 'AresMod3Unlocked': 2, 'AresMod4Unlocked': 3,
+               'AresMod5Unlocked': 4, 'AresMod6Unlocked': 5, 'AresMod7Unlocked': 6, 'AresMod8Unlocked': 7,
+               'AresMod9Unlocked': 8, 'AresMod10Unlocked': 9}
 
 grenadedict = {'ForceFieldGrenadeUnlocked': 1, 'SpecOpsForcefieldGrenade': 2,
                'FlashbangUnlocked': 11, 'SpecOpsFlashbang': 12,
@@ -38,14 +44,15 @@ miscset = {'CombatShieldUnlocked', 'MedicShieldUnlocked', 'EnergyPackUnlocked', 
            'OpticalVisorUnlocked', 'AIAssistantUnlocked'}
 
 experimentaldict = {'CloakingDeviceUnlocked': 0, 'SpecOpsCloakingDeviceUnlocked': 1,
-                    'GASCOVNERTER': 10, 'SPECOPSGASCONVERTER': 11,
-                    'SuperStimpackUnlocked': 20, 'SPECOPSSUPERSTIM': 21,
+                    'PowerConverterUnlocked': 10, 'SpecOpsPowerConverterUnlocked': 11,
+                    'SuperStimpackUnlocked': 20, 'SpecOpsSuperStimpackUnlocked': 21,
                     'TeleporterUnlocked': 30, 'SpecOpsTeleporterUnlocked': 31,
                     'SuperHealingDroneUnlocked': 40, 'SpecOpsSuperHealingDroneUnlocked': 41,
-                    'ARESTANK': 50, 'SPECOPSARESTANK': 51}
+                    'ArcWelderUnlocked': 50, 'SpecOpsArcWelder': 51,
+                    'AresUnlocked': 60, 'SpecOpsAresUnlocked': 61}
 
-experimentallist = ['Cloaking Device', 'Gas Converter', 'Super Stimpack',
-                    'Teleporter', 'Super Healing Drone', 'ARES Tank']
+experimentallist = ['Cloaking Device', 'Power Converter', 'Super Stimpack',
+                    'Teleporter', 'Super Healing Drone', 'Arc Welder', 'ARES Tank']
 
 structurecountset = {'TurretBuildCounter', 'RepairDroneBuildCounter', 'PsiDisruptorBuildCounter'}
 
@@ -88,12 +95,17 @@ zstructuredict = {'PrimalSunkenColony': 0, 'LocustNest': 1, 'NydusCanalCreeper':
 
 ################################################### Human Equip Dict (reverse order) ##################################
 rweapondict = {0: 'Flamethrower', 1: 'Shotgun', 2: 'Assault Rifle',
-               3: 'Plasma', 4: 'Rocket', 5: 'Arc Welder'}
+               3: 'Plasma', 4: 'Rocket', 5: 'Arc Welder', 6: 'ARES Tank'}
 rweaponmodlist = [[None, 'Cryo', 'Range', 'Filaments'], [None, 'Focused Beams', 'Knockback', 'More in Wider'],
                   [None, 'Scoot-n-Shoot', 'Bayonette', 'Tits'], [None, 'Corrosive', 'Range', 'Slow'],
-                  [None, 'Scoot-n-Shoot', 'Shockwave', 'Flame'], [None, 'Fastcharge', 'Fastsalv', 'Supercharge']]
+                  [None, 'Scoot-n-Shoot', 'Shockwave', 'Flame'], [None, 'Fastcharge', 'Fastsalv', 'Supercharge'],
+                  [None, '']]
 
-rweaponmodshortdict = {0: '(F)', 1: '(S)', 2: '(AR)', 3: '(P)', 4: '(R)', 5: '(Arc)'}
+raresmoddict = {0: '', 1: '', 2: '',
+                3: '', 4: '', 5: '',
+                6: '', 7: '', 8: 'Hostile Treads', 9: ''}
+
+rweaponmodshortdict = {0: '(F)', 1: '(S)', 2: '(AR)', 3: '(P)', 4: '(R)', 5: '(Arc)', 6: '(ARES)'}
 
 rgrenadedict = {0: 'Force Field', 1: 'Flashbang', 2: 'Frag Grenade', 3: 'Incendiary'}
 
@@ -138,4 +150,6 @@ bankloaddict = {'Chosen_Zombie': 0, 'Color': 0, 'Difficulty': 0,
                 'Experimental_Mode': 0, 'Host_Chooses_Zombie': 0, 'Opt_In': 0}
 
 ############################################## csv dict & sets ########################################################
-total_df_column_list = ['Replay #', 'Replay Date', 'Player Name', 'Player Handle', 'Role', 'Rank', 'Result', ]
+total_df_human_column_list = ['Replay #', 'Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Result', 'Weapon',
+                              'Weapon Mod', 'Grenade', 'Mining Equipment', 'Accessory', 'Structure', 'Structure Mod',
+                              'Experimental', 'kills', 'captures', ]

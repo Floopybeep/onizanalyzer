@@ -15,8 +15,13 @@ def humanUCEcheck(event, name, humandict, humanset, zombieplayer):              
         humandict[event.pid].add_suit(name)
     elif name in weapondict:
         humandict[event.pid].add_weapon(weapon=name)
+        if name in {'AresUnlocked', 'SpecOpsAresUnlocked', 'ArcWelderUnlocked', 'SpecOpsArcWelder'}:
+            humandict[event.pid].add_experimental(name)
     elif name in weaponmoddict:
         humandict[event.pid].add_weapon(mod=name)
+    elif name in aresmoddict:
+        humandict[event.pid].add_aresmod(name)
+        humandict[event.pid].weapons[6][1] = True
     elif name in grenadedict:
         humandict[event.pid].add_grenade(name)
     elif name in accessoryset:

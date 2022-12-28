@@ -1,7 +1,7 @@
 import sc2reader
 import playerclasses
 
-path = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/Oh No It's Zombies Arctic Map (249).SC2Replay"
+path = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/Oh No It's Zombies Arctic Map (248).SC2Replay"
 # path = "C:/Users/wooil/Documents/StarCraft II/Accounts/12861615/1-S2-1-5777751/Replays/Multiplayer/Oh No It's Zombies/Oh No It's Zombies Arctic Map (11).SC2Replay"
 
 replay = sc2reader.load_replay(path, load_level=3)
@@ -14,7 +14,7 @@ namelist = []
 
 
 for event in replay.events:
-    if event.name == 'UpgradeCompleteEvent':
+    if event.name == 'UpgradeCompleteEvent' and event.pid == 6:
         eventlist.append(event)
         eventset.add(event.upgrade_type_name)
 print(eventset)

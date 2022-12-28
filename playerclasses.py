@@ -48,7 +48,8 @@ class playerinfo():
 class marineinfo(playerinfo):
     def __init__(self, name, pid, handle, role, victory):
         super().__init__(name, pid, handle, role, victory)
-        self.weapons = [[0, False, False, False] for _ in range(6)]             # weapon lv, respective mod levels
+        self.weapons = [[0, False, False, False] for _ in range(7)]             # weapon lv, respective mod levels
+        self.aresmods = [False for _ in range(10)]
         self.grenades = [False for _ in range(4)]                               # grenade lv for respective grenade
         self.minings = [False for _ in range(4)]
         self.accessories = [False for _ in range(3)]
@@ -77,6 +78,9 @@ class marineinfo(playerinfo):
             self.weapons[weapondict[weapon]%10][0] = weapondict[weapon]//10
         elif mod:
             self.weapons[weaponmoddict[mod]//10][weaponmoddict[mod]%10] = True
+
+    def add_aresmod(self, upgrade):
+        self.aresmods[aresmoddict[upgrade]] = True
 
     def add_grenade(self, grenade):
         self.grenades[grenadedict[grenade]//10] = grenadedict[grenade]%10

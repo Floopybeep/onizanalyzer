@@ -85,7 +85,7 @@ def humaninfocondense(humandict, txtpath, f):
         dataone['Handle'] = human.handle
         dataone['Result'] = bool_to_victory(human.victory)
         dataone['Weapons Used'] = hweaponf(human.weapons)
-        dataone['Mod Used'] = hwmodf(human.weapons)
+        dataone['Mod Used'] = hwmodf(human.weapons, human.aresmods)
         dataone['Grenades Used'] = hgrenadef(human.grenades)
         dataone['Mining Equipment'] = hminingf(human.minings)
         dataone['Weapon Accessory'] = haccf(human.accessories)
@@ -119,7 +119,7 @@ def humaninfocondense(humandict, txtpath, f):
 
 def hweaponf(weaponlist):
     result = ''
-    for i in range(6):
+    for i in range(7):
         if weaponlist[i][0] > 0:
             if len(result) > 0:
                 result = result + ', '
@@ -127,18 +127,28 @@ def hweaponf(weaponlist):
 
     return result
 
-def hwmodf(weaponlist):
+def hwmodf(weaponlist, aresmodlist):
     result = ''
-    for i in range(6):
+    for i in range(7):
         if any(weaponlist[i][1:]):
             if len(result) > 0:
                 result = result + '/ '
             result = ''.join([result, rweaponmodshortdict[i], ': '])
         for j in range(1, 4):
             if weaponlist[i][j]:
-                if len(result) > 7:
+                if len(result) > 10:
                     result = result + ', '
                 result = ''.join([result, rweaponmodlist[i][j]])
+    if any(aresmodlist):
+        if len(result) > 10:
+            result = result + '/ '
+        tempresult = ''
+        for i in range(10):
+            if aresmodlist[i]:
+                if len(tempresult) > 0:
+                    tempresult = tempresult + ', '
+                tempresult = ''.join([tempresult, raresmoddict[i]])
+        ''.join([result, tempresult])
     return result
 
 def hgrenadef(grenadelist):
