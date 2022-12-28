@@ -308,12 +308,12 @@ def zalphasbuiltf(alist):
     alist_copy = alist.copy()
     for alpha in alist_copy:
         alpha[0] -= alpha[1]
-    for i in range(5):
-        if alist_copy[i][0]:
+    for i in range(6):
+        if alist_copy[i][0] > 0:
             if len(result) > 0:
                 result = result + ', '
             result = ''.join([result, rt1alphasdict[i], ': ', str(alist_copy[i][0])])
-        elif alist_copy[i][1]:
+        if alist_copy[i][1] > 0:
             if len(result) > 0:
                 result = result + ', '
             result = ''.join([result, rt2alphasdict[i], ': ', str(alist_copy[i][1])])

@@ -3,9 +3,7 @@ from playerclasses import *
 
 
 def humanUCEcheck(event, name, humandict, humanset, zombieplayer):                         # checks for human events
-    if name in structurecountset:
-        humandict[event.pid].add_structurecounter(name)
-    elif name in miningdict:
+    if name in miningdict:
         humandict[event.pid].add_mining(name)
     elif name in structuredict:
         humandict[event.pid].add_structure(name)

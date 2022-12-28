@@ -114,8 +114,8 @@ class marineinfo(playerinfo):
         self.experimental = ''.join([result, experimentallist[experimentaldict[exp]//10]])
 
     def add_structurecounter(self, name):
-        if name == 'TurretBuildCounter':        self.turretsbuilt += 1
-        elif name == 'RepairDroneBuildCounter': self.repairdronesebuilt += 1
+        if name == 'AutoTurret':        self.turretsbuilt += 1
+        elif name == 'HealingDrone': self.repairdronesebuilt += 1
         else:                                   self.psisbuilt += 1
 
 

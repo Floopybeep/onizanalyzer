@@ -179,7 +179,9 @@ def UnitBornEventCheck(event, humandict, zombieplayer):
 def UnitInitEventCheck(event, humandict, zombieplayer):
     name = event.unit_type_name
 
-    if name == 'ExplorationDroid':
+    if name in structurecountset:
+        humandict[event.control_pid].addstructurecounter(name)
+    elif name == 'ExplorationDroid':
         humandict[event.control_pid].explorationdroidsmade += 1
     elif name in zstructuredict:
         zombieplayer.structure_create(name)

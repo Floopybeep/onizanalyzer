@@ -54,7 +54,7 @@ experimentaldict = {'CloakingDeviceUnlocked': 0, 'SpecOpsCloakingDeviceUnlocked'
 experimentallist = ['Cloaking Device', 'Power Converter', 'Super Stimpack',
                     'Teleporter', 'Super Healing Drone', 'Arc Welder', 'ARES Tank']
 
-structurecountset = {'TurretBuildCounter', 'RepairDroneBuildCounter', 'PsiDisruptorBuildCounter'}
+structurecountset = {'AutoTurret', 'HealingDrone', 'PsiIndoctrinator'}
 
 ########################################### Zerg Dicts & Sets ###################################################
 # UpgradeCompleteEvent dicts
@@ -75,8 +75,8 @@ zadvancedinfestationsdict = {'UnknownUpgrade': 0, 'SiphonFuel': 1, 'AdvancedInfe
 infestationleveldict = {'InfestationLevel2': 0, 'InfestationLevel3': 1, 'InfestationLevel4': 2,
                          'InfestationLevel5': 3, 'InfestationLevel6': 4}
 
-ultimateinfestationdict = {'SpawnHiveQueen': 'Hive Queen', 'CriticalMass': 'Critical Mass',
-                           'BlackOut': 'Power Drain', 'NydusNetwork': 'Nydus Network'}
+ultimateinfestationdict = {'SpawnHiveQueen': 'Hive Queen', 'CriticalMass': 'Critical Mass', 'BlackOut': 'Power Drain',
+                           'NydusNetwork': 'Nydus Network', 'SweepingInfestation': 'Drop Pods'}
 
 # UnitTypeChangeEvent dicts
 t2alphadict = {'Abomination': 0, 'GenesplicerUprooted': 1, 'Anubalight': 2, 'LegionnaireZombie': 3,
