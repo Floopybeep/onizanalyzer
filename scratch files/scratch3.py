@@ -15,10 +15,10 @@ namelist = []
 
 for event in replay.events:
     # if event.name == 'UpgradeCompleteEvent' and event.pid not in {1, 2, 3, 4, 5, 6, 7}:
-    if event.name == 'UpgradeCompleteEvent' and event.pid == 2:
+    if event.name == 'UnitBornEvent'and event.unit_type_name == 'MassiveCocoon':
         eventlist.append(event)
-        # namelist.append(event.unit_type_name)
-        eventset.add(event.upgrade_type_name)
+        namelist.append(event.unit_type_name)
+        # eventset.add(event.upgrade_type_name)
 print(eventset)
 print(1)
 

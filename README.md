@@ -27,6 +27,7 @@ Needs Fixes
   - looks like turret upgrades count as turret builds, maybe change to UnitInitEvent?
 - creep tower count is weird?
 - cocoons made count is way too high? maybe insert playerid check? (count for marine?)
+- kills weird?
 
 
 # Version Changes
