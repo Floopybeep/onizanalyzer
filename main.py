@@ -11,5 +11,3 @@ if __name__ == '__main__':
     # mainclass.numberofprocesses = 3
     mainclass.version = "1.0.4"
     NC = NewClass(mainclass)
-
-

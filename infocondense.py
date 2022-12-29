@@ -137,7 +137,7 @@ def hwmodf(weaponlist, aresmodlist):
     for i in range(7):
         if any(weaponlist[i][1:]):
             if len(result) > 0:
-                result = result + ' / '
+                result = result + ' | '
             result = ''.join([result, rweaponmodshortdict[i], ': '])
         tempresult = ''
         for j in range(1, 4):
@@ -148,7 +148,7 @@ def hwmodf(weaponlist, aresmodlist):
         result = ''.join([result, tempresult])
     if any(aresmodlist):
         if len(result) > 10:
-            result = result + ' / '
+            result = result + ' | '
         tempresult = ''
         for i in range(10):
             if aresmodlist[i]:
@@ -217,7 +217,7 @@ def hstructmodf(structlist):
     for i in range(3):
         if any(structlist[i][1:]):
             if len(result) > 0:
-                result = result + ' / '
+                result = result + ' | '
             result = ''.join([result, rstructuremodshortdict[i], ': '])
             tempresult = ''
             for j in range(1, 4):
@@ -334,7 +334,7 @@ def zstrainf(slist):
         temp = ''
         if any(slist[i]):
             if len(result) > 0:
-                result = result + ' / '
+                result = result + ' | '
             for j in range(3):
                 if len(temp) > 0:
                     temp = temp + ', '

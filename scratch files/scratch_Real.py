@@ -1,5 +1,14 @@
+import openpyxl
+from openpyxl.worksheet.table import Table
+from openpyxl.utils import get_column_letter
 
-k = [(1, 2), (3, 4)]
+path = "E:/Python Projects/onizanalyzer/replays/txtfile output/#Humandata.xlsx"
 
-for (a, b) in k:
-    print(a)
+hwb = openpyxl.load_workbook(filename=path)
+hsheet = hwb.worksheets[0]
+
+htab = Table(displayName="Table1", ref="B1:AZ79")
+hsheet.add_table(htab)
+
+print(hsheet)
+

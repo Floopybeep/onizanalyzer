@@ -152,7 +152,7 @@ bankloaddict = {'Chosen_Zombie': 0, 'Color': 0, 'Difficulty': 0,
                 'Experimental_Mode': 0, 'Host_Chooses_Zombie': 0, 'Opt_In': 0}
 
 ############################################## csv dict & sets ########################################################
-total_df_human_column_list = ['Replay #', 'Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Result', 'Weapon',
+total_df_human_column_list = ['Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Result', 'Weapon',
                               'Weapon Mod #1', 'Weapon Mod #2', 'Weapon Mod #3', 'Grenade', 'Scout Droid Upgrade',
                               'Mining Droid Upgrade', 'Nuke Upgrade', 'Sensor Upgrade', 'Accessory', 'Suits',
                               'Misc Shield Purchase', 'Misc Backpack Purchase', 'Misc Visor Purchase',
@@ -163,9 +163,9 @@ total_df_human_column_list = ['Replay #', 'Replay Date', 'Player Name', 'Player 
                               'Legions Killed', 'Legionnaires Killed', 'Hunters Killed', 'Predators Killed',
                               'Underseers Killed', 'Saboteurs Killed', 'Cocoons Killed', 'Structures Killed',
                               'Sunkens Killed', 'Swarmling Nests Killed', 'Creep Towers Killed', 'Lesser Nydus Killed',
-                              'Extractors Killed']
+                              'Extractors Killed']      # deleted 'Replay #'
 
-total_df_zombie_column_list = ['Replay #', 'Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Result',
+total_df_zombie_column_list = ['Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Result',
                                'First Alpha', 'Abberations Built', 'Abominations Built', 'Geneweavers Built',
                                'Genesplicers Built', 'Anubalisks Built', 'Anubalights Built', 'Legions Built',
                                'Legionnaires Built', 'Hunters Built', 'Predators Built', 'Underseers Built',
@@ -179,3 +179,7 @@ total_df_zombie_column_list = ['Replay #', 'Replay Date', 'Player Name', 'Player
                                'Creep Towers Built', 'Lesser Nydus Built', 'Extractors Built', 'Greater Nydus Used',
                                'No. of Structures Built', 'Major Rooms Captured', 'Hangars Captured', 'Marines Captured',
                                'Cocoons Made', 'No. of Siphons']
+
+total_df_human_excel_column_list = [{'header': 'Replay Date'}, {'header': 'Player Name'}, {'header': 'Player Handle'}, {'header': 'Rank'}, {'header': 'Result'}, {'header': 'Weapon'}, {'header': 'Weapon Mod #1'}, {'header': 'Weapon Mod #2'}, {'header': 'Weapon Mod #3'}, {'header': 'Grenade'}, {'header': 'Scout Droid Upgrade'}, {'header': 'Mining Droid Upgrade'}, {'header': 'Nuke Upgrade'}, {'header': 'Sensor Upgrade'}, {'header': 'Accessory'}, {'header': 'Suits'}, {'header': 'Misc Shield Purchase'}, {'header': 'Misc Backpack Purchase'}, {'header': 'Misc Visor Purchase'}, {'header': 'Turret Bought'}, {'header': 'Heal Droid Bought'}, {'header': 'Psi Bought'}, {'header': 'Turret Mod'}, {'header': 'Heal Droid Mod'}, {'header': 'Psi Mod'}, {'header': 'Turrets Built'}, {'header': 'Heal Droids Built'}, {'header': 'Psis Built'}, {'header': 'Experimental'}, {'header': 'Kills'}, {'header': 'Deaths'}, {'header': 'Aberrations Killed'}, {'header': 'Abominations Killed'}, {'header': 'Geneweavers Killed'}, {'header': 'Genesplicers Killed'}, {'header': 'Anubalisks Killed'}, {'header': 'Anubalights Killed'}, {'header': 'Legions Killed'}, {'header': 'Legionnaires Killed'}, {'header': 'Hunters Killed'}, {'header': 'Predators Killed'}, {'header': 'Underseers Killed'}, {'header': 'Saboteurs Killed'}, {'header': 'Cocoons Killed'}, {'header': 'Structures Killed'}, {'header': 'Sunkens Killed'}, {'header': 'Swarmling Nests Killed'}, {'header': 'Creep Towers Killed'}, {'header': 'Lesser Nydus Killed'}, {'header': 'Extractors Killed'}]
+
+total_df_zombie_excel_column_list = [{'header': 'Replay Date'}, {'header': 'Player Name'}, {'header': 'Player Handle'}, {'header': 'Rank'}, {'header': 'Result'}, {'header': 'First Alpha'}, {'header': 'Abberations Built'}, {'header': 'Abominations Built'}, {'header': 'Geneweavers Built'}, {'header': 'Genesplicers Built'}, {'header': 'Anubalisks Built'}, {'header': 'Anubalights Built'}, {'header': 'Legions Built'}, {'header': 'Legionnaires Built'}, {'header': 'Hunters Built'}, {'header': 'Predators Built'}, {'header': 'Underseers Built'}, {'header': 'Saboteurs Built'}, {'header': 'No. of Alphas Built'}, {'header': 'T1 Speed Purchased'}, {'header': 'T2 Speed Purchased'}, {'header': 'T3 Speed Purchased'}, {'header': 'T1 Health Purchased'}, {'header': 'T2 Health Purchased'}, {'header': 'T3 Health Purchased'}, {'header': 'T1 Damage Purchased'}, {'header': 'T2 Damage Purchased'}, {'header': 'T3 Damage Purchased'}, {'header': 'T1 Volatile Purchased'}, {'header': 'T2 Volatile Purchased'}, {'header': 'T3 Volatile Purchased'}, {'header': 'Speed Creep Purchased'}, {'header': 'Regen Creep Purchased'}, {'header': 'Constructive Creep Purchased'}, {'header': 'Virulent Creep Purchased'}, {'header': 'Drop Pods Purchased'}, {'header': 'Drop Pods Used'}, {'header': 'Advanced Infestations'}, {'header': 'Ultimate Infestation'}, {'header': 'Sunkens Built'}, {'header': 'Swarmling Nests Built'}, {'header': 'Creep Towers Built'}, {'header': 'Lesser Nydus Built'}, {'header': 'Extractors Built'}, {'header': 'Greater Nydus Used'}, {'header': 'No. of Structures Built'}, {'header': 'Major Rooms Captured'}, {'header': 'Hangars Captured'}, {'header': 'Marines Captured'}, {'header': 'Cocoons Made'}, {'header': 'No. of Siphons'}]

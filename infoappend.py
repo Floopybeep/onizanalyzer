@@ -24,23 +24,23 @@ def append_humaninfo(replay, humandict, total_replay_data, replaynumber):
         human, data = humandict[key], {}
         data = {}
 
-        data['Replay #'] = replaynumber
-        data['Replay Date'] = replay.date
+        # data['Replay #'] = replaynumber
+        data['Replay Date'] = str(replay.date)
         data['Player Name'] = human.playername
         data['Player Handle'] = human.handle
         data['Rank'] = human.rank
         data['Result'] = bool_to_victory(human.victory)
-        data['Weapon'] = hweaponf(human.weapons)
+        data['Weapon'] = hweaponfa(human.weapons)
         data['Weapon Mod #1'] = wmod(1, human.weapons)
         data['Weapon Mod #2'] = wmod(2, human.weapons)
         data['Weapon Mod #3'] = wmod(3, human.weapons)
-        data['Grenade'] = hgrenadef(human.grenades)
+        data['Grenade'] = hgrenadefa(human.grenades)
         data['Scout Droid Upgrade'] = miningmod(0, human.minings)
         data['Mining Droid Upgrade'] = miningmod(1, human.minings)
         data['Nuke Upgrade'] = miningmod(2, human.minings)
         data['Sensor Upgrade'] = miningmod(3, human.minings)
-        data['Accessory'] = haccf(human.accessories)
-        data['Suits'] = hsuitf(human.suits)
+        data['Accessory'] = haccfa(human.accessories)
+        data['Suits'] = hsuitfa(human.suits)
         data['Misc Shield Purchase'] = miscmod(0, human.miscs)
         data['Misc Backpack Purchase'] = miscmod(2, human.miscs)
         data['Misc Visor Purchase'] = miscmod(4, human.miscs)
@@ -80,15 +80,52 @@ def append_humaninfo(replay, humandict, total_replay_data, replaynumber):
         total_replay_data.replays_data_human_list.append(data)
     return outlist
 
+
+def hweaponfa(weaponlist):
+    result = ''
+    for i in range(7):
+        if weaponlist[i][0] > 0:
+            if len(result) > 0:
+                result = result + ' & '
+            result = ''.join([result, 'T', str(weaponlist[i][0]), ' ', rweapondict[i], ' '])
+
+    return result
+
+def hgrenadefa(grenadelist):
+    result = ''
+    for i in range(4):
+        if grenadelist[i]:
+            if len(result) > 0:
+                result = result + ' & '
+            result = ''.join([result, 'T', str(grenadelist[i]), ' ', rgrenadedict[i]])
+    return result
+
+def haccfa(acclist):
+    result = ''
+    for i in range(3):
+        if acclist[i]:
+            if len(result) > 0:
+                result = result + ' & '
+            result = ''.join([result, raccessorydict[i]])
+    return result
+
+def hsuitfa(suitlist):
+    result = ''
+    for i in range(4):
+        if suitlist[i]:
+            if len(result) > 0:
+                result = result + ' & '
+            result = ''.join([result, 'T', str(suitlist[i]), ' ', rsuitdict[i]])
+    return result
+
 def wmod(modnum, weaponlist):
     result = ''
     for i in range(7):
         if weaponlist[i][0] == 2:
-            if len(result) > 0:
-                result = result + ' / '
-            result = ''.join([result, rweaponmodshortdict[i], ': '])
             if weaponlist[i][modnum]:
-                result = ''.join([result, rweaponmodlist[i][modnum]])
+                if len(result) > 0:
+                    result = result + ' | '
+                result = ''.join([result, rweaponmodshortdict[i], ': ', rweaponmodlist[i][modnum]])
     return result
 
 def miningmod(modnum, mlist):
@@ -113,17 +150,17 @@ def smod(mn, slist):
     if not any(slist):
         return 'None'
     for i in range(1, 4):
-        if len(result) > 0:
-            result = result + ', '
         if slist[mn][i]:
+            if len(result) > 0:
+                result = result + ' & '
             result = ''.join([result, rstructuremodlist[mn][i]])
     return result
 
 def append_zombieinfo(replay, zplayer, total_replay_data, replaynumber):
     data = {}
 
-    data['Replay #'] = replaynumber
-    data['Replay Date'] = replay.date
+    # data['Replay #'] = replaynumber
+    data['Replay Date'] = str(replay.date)
     data['Player Name'] = zplayer.playername
     data['Player Handle'] = zplayer.handle
     data['Rank'] = zplayer.rank
@@ -160,17 +197,17 @@ def append_zombieinfo(replay, zplayer, total_replay_data, replaynumber):
     data['Virulent Creep Purchased'] = zplayer.upgradepurchases[3]
     data['Drop Pods Purchased'] = zplayer.upgradepurchases[4]
     data['Drop Pods Used'] = zplayer.droppodsused
-    data['Advanced Infestations'] = zadvinff(zplayer.advancedinfestations)
+    data['Advanced Infestations'] = zadvinffa(zplayer.advancedinfestations)
     data['Ultimate Infestation'] = zplayer.ultimateinfestation
     data['Sunkens Built'] = zplayer.structurebuiltlist[0]
     data['Swarmling Nests Built'] = zplayer.structurebuiltlist[1]
     data['Creep Towers Built'] = zplayer.structurebuiltlist[2]
     data['Lesser Nydus Built'] = zplayer.structurebuiltlist[3]
-    data['Extractors Built'] =  zplayer.structurebuiltlist[4]
+    data['Extractors Built'] = zplayer.structurebuiltlist[4]
     data['Greater Nydus Used'] = len(zplayer.greaternydustimings)
     data['No. of Structures Built'] = sum(zplayer.structurebuiltlist)
     data['Major Rooms Captured'] = zmajorroomf(zplayer.majorroomcaptures)
-    data['Hangars Captured'] = zhangarsf(zplayer.hangarcaptures)
+    data['Hangars Captured'] = zhangarsfa(zplayer.hangarcaptures)
     data['Marines Captured'] = zplayer.marinecaptures
     data['Cocoons Made'] = zplayer.cocoonsmade
     data['No. of Siphons'] = zplayer.siphons
@@ -178,3 +215,21 @@ def append_zombieinfo(replay, zplayer, total_replay_data, replaynumber):
     total_replay_data.replays_data_zombie_list.append(data)
 
     return data
+
+def zadvinffa(alist):
+    result = ''
+    for i in range(5):
+        if alist[i]:
+            if len(result) > 0:
+                result = result + ' & '
+            result = ''.join([result, rzadvupgradesdict[i]])
+    return result
+
+def zhangarsfa(hlist):
+    result = ''
+    for i in range(3):
+        if hlist[i]:
+            if len(result) > 0:
+                result = result + ' & '
+            result = ''.join([result, rhangardict[i]])
+    return result
