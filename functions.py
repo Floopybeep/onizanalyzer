@@ -1,9 +1,11 @@
 import multiprocessing
 import pandas as pd
+import xlsxwriter
 
 from os import listdir, walk
 from os.path import join, isfile
 from mainprocess import mainprocess
+from infodict import total_df_human_column_list, total_df_zombie_column_list
 
 
 def splitlist(list, n):
@@ -25,10 +27,10 @@ def splitlist(list, n):
     return result
 
 
-def rep_txt_wrapper(replist, txtout):
+def rep_txt_wrapper(replist, txtout, obj):
     result = []
     for rep in replist:
-        result.append(tuple((rep, txtout)))
+        result.append((rep, txtout, obj))
     return result
 
 
@@ -45,26 +47,35 @@ def replay_file_parser(folderpath):
     return filepaths, count
 
 
-def separate_replays_analysis(repl_list, textoutputpath):
+def separate_replays_analysis(repl_list, textoutputpath, total_replay_data):
     for rep in repl_list:
-        mainprocess(rep, textoutputpath)
+        mainprocess(rep, textoutputpath, total_replay_data)
 
 
 def separate_replaypool(repl_list, textoutputpath, num_of_proc):
-    # inputlist = rep_txt_wrapper(repl_list, textoutputpath)
-    # pool = multiprocessing.Pool(num_of_proc)
-    # pool.starmap(mainprocess, inputlist)
-    # processlist = []
-    sublist = splitlist(repl_list, num_of_proc)
-    multiprocessing.set_start_method("spawn")
-    if num_of_proc != len(sublist):
-        print("Sublist length: ", len(sublist))
-        print("Number of Processors: ", num_of_proc)
+    total_replay_data = totalreplaydataclass()
 
-    for i in range(num_of_proc):
-        p = multiprocessing.Process(target=separate_replays_analysis, args=(sublist[i], textoutputpath))
-        p.start()
-    print("All Processes Started")
+    inputlist = rep_txt_wrapper(repl_list, textoutputpath, total_replay_data)
+    pool = multiprocessing.Pool(processes=num_of_proc)
+    output = pool.starmap(mainprocess, inputlist)
+
+    for out in output:
+        total_replay_data.appendtoself(out[0], out[1])
+
+    total_replay_data.create_dataframes()
+    total_replay_data.create_excel_file(textoutputpath)
+
+    print("All Processes Finished")
+
+    # sublist = splitlist(repl_list, num_of_proc)
+    # processlist = []
+    # if num_of_proc != len(sublist):
+    #     print("Sublist length: ", len(sublist))
+    #     print("Number of Processors: ", num_of_proc)
+    #
+    # for i in range(num_of_proc):
+    #     p = multiprocessing.Process(target=separate_replays_analysis, args=(sublist[i], textoutputpath, total_replay_data))
+    #     p.start()
 
     #     processlist.append(p)
     # for i, p in enumerate(processlist):
@@ -85,6 +96,42 @@ def separate_replaypool(repl_list, textoutputpath, num_of_proc):
 #         not_mp_button.config(state = "normal")
 #     return
 
+class totalreplaydataclass:
+    def __init__(self):
+        self.replays_data_human = None
+        self.replays_data_zombie = None
+        self.replays_data_human_list = []
+        self.replaynum = 1
+        self.replays_data_zombie_list = []
+        self.replaysignatures = set()
+        self.duplicatereplaylist = []
+
+    def appendtoself(self, hdata, zdata):
+        self.replays_data_human_list.extend(hdata)
+        self.replays_data_zombie_list.append(zdata)
+
+    def create_dataframes(self):
+        self.replays_data_human = pd.DataFrame.from_records(self.replays_data_human_list, index=total_df_human_column_list)
+        self.replays_data_zombie = pd.DataFrame.from_records(self.replays_data_zombie_list, index=total_df_zombie_column_list)
+
+    def create_excel_file(self, path):
+        h_writer = pd.ExcelWriter(f'{path}/#Humandata.xlsx', engine='xlsxwriter')
+        self.replays_data_human.to_excel(h_writer, sheet_name='Human Data')
+        h_workbook = h_writer.book
+        h_worksheet = h_writer.sheets['Human Data']
+        h_length = len(self.replays_data_human)
+        h_worksheet.add_table(f'B3:AZ{h_length}', {'data': self.replays_data_human.values.tolist()})
+
+        z_writer = pd.ExcelWriter(f'{path}/#Zombiedata.xlsx', engine='xlsxwriter')
+        self.replays_data_zombie.to_excel(z_writer, sheet_name='Zombie Data')
+        z_workbook = z_writer.book
+        z_worksheet = z_writer.sheets['Zombie Data']
+        z_length = len(self.replays_data_zombie)
+        z_worksheet.add_table(f'B3:BA{z_length}', {'data': self.replays_data_zombie.values.tolist()})
+
+# https://xlsxwriter.readthedocs.io/working_with_pandas.html
+# https://stackoverflow.com/questions/52052184/how-to-use-xlsxwriter-add-table-method-with-a-dataframe
+
 
 class maininfoclass:
     def __init__(self):
@@ -95,8 +142,6 @@ class maininfoclass:
         self.quickanalysis = False
         self.quickcheck = "mainclass load complete!"
         self.version = ""
-        self.replays_data_human = pd.DataFrame()
-        self.replays_data_zombie = pd.DataFrame()
 
         self.numberofprocesses = 3
 

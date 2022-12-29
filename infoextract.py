@@ -12,6 +12,23 @@ def winloss_to_victory(result):
         return None
 
 
+def dupcheck(humandict, replaypath, textoutputpath, total_replay_data):
+    replaykey = ""
+    txtpath = textoutputpath + '/#DuplicateReplays.txt'
+    for key in humandict:
+        ''.join([replaykey, humandict[key].bankinfo.signature])
+    if replaykey not in total_replay_data.replaysignatures:
+        total_replay_data.replaysignatures.add(replaykey)
+        return False
+    else:
+        total_replay_data.duplicatereplaylist.append(replaypath)
+        total_replay_data.duplicatereplaylist.append('\n')
+        with open(txtpath, 'a') as f:
+            f.write(f"{replaypath}\n")
+            f.close()
+        return True
+
+
 def extract_playerinfo(replay):                                         # input: replay / output: list of h/z objects
     humandict, zombieplayer = {}, None
 

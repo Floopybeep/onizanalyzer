@@ -1,7 +1,5 @@
 import datetime
 from infodict import *
-# import pandas as pd
-import tabulate
 from prettytable import *
 
 def log(text, logger_file):
@@ -139,7 +137,7 @@ def hwmodf(weaponlist, aresmodlist):
     for i in range(7):
         if any(weaponlist[i][1:]):
             if len(result) > 0:
-                result = result + '/ '
+                result = result + ' / '
             result = ''.join([result, rweaponmodshortdict[i], ': '])
         tempresult = ''
         for j in range(1, 4):
@@ -150,7 +148,7 @@ def hwmodf(weaponlist, aresmodlist):
         result = ''.join([result, tempresult])
     if any(aresmodlist):
         if len(result) > 10:
-            result = result + '/ '
+            result = result + ' / '
         tempresult = ''
         for i in range(10):
             if aresmodlist[i]:
@@ -219,7 +217,7 @@ def hstructmodf(structlist):
     for i in range(3):
         if any(structlist[i][1:]):
             if len(result) > 0:
-                result = result + '/ '
+                result = result + ' / '
             result = ''.join([result, rstructuremodshortdict[i], ': '])
             tempresult = ''
             for j in range(1, 4):
@@ -329,20 +327,19 @@ def zalphasbuiltf(alist):
 
 def zstrainf(slist):
     result = ''
-    slist_copy = slist.copy()
-    for strain in slist_copy:
+    for strain in slist:
         strain[0] -= strain[1]
         strain[1] -= strain[2]
     for i in range(4):
         temp = ''
-        if any(slist_copy[i]):
+        if any(slist[i]):
             if len(result) > 0:
                 result = result + ' / '
             for j in range(3):
                 if len(temp) > 0:
                     temp = temp + ', '
-                if slist_copy[i][j]:
-                    temp = ''.join([temp, 'T', str(j+1), ' ', rstrainsdict[i], ': ', str(slist_copy[i][j])])
+                if slist[i][j]:
+                    temp = ''.join([temp, 'T', str(j+1), ' ', rstrainsdict[i], ': ', str(slist[i][j])])
         if len(temp) > 0:
             result = ''.join([result, temp])
     return result

@@ -2,15 +2,12 @@ import s2protocol
 import mpyq
 from s2protocol import versions
 
-reppath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/Oh No It's Zombies Arctic Map (249).SC2Replay"
+reppath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/wonky replays/Oh_No_Its_Zombies_Arctic_Map_874.SC2Replay"
 
 archive = mpyq.MPQArchive(reppath)
 print(archive.files)
 
-contents = archive.header['user_data_header']['content']
-header = versions.latest().decode_replay_header(contents)
-baseBuild = header['m_version']['m_baseBuild']
-protocol = versions.build(baseBuild)
+protocol = versions.build(88500)
 
 contents = archive.read_file('replay.game.events')
 game_events = protocol.decode_replay_game_events(contents)
@@ -37,11 +34,13 @@ for event in game_events:
 
     # if event['_event'] in {'NNet.Game.SBankSectionEvent', 'NNet.Game.SBankKeyEvent',
     #                        'NNet.Game.SBankFileEvent', 'NNet.Game.SBankSignatureEvent'}:
+    eventnameset.add(event['_event'])
     eventlist.append(event)
 
-    if event['_gameloop'] > 0:
-        break
+    # if event['_gameloop'] > 100:
+    #     break
 
+print(1)
 print(1)
 
 # NNet.Game.SBankKeyEvent

@@ -154,9 +154,28 @@ bankloaddict = {'Chosen_Zombie': 0, 'Color': 0, 'Difficulty': 0,
 ############################################## csv dict & sets ########################################################
 total_df_human_column_list = ['Replay #', 'Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Result', 'Weapon',
                               'Weapon Mod #1', 'Weapon Mod #2', 'Weapon Mod #3', 'Grenade', 'Scout Droid Upgrade',
-                              'Mining Droid Upgrade', 'Nuke Upgrade', 'Sensor Upgrade', 'Accessory', 'Suits'
+                              'Mining Droid Upgrade', 'Nuke Upgrade', 'Sensor Upgrade', 'Accessory', 'Suits',
+                              'Misc Shield Purchase', 'Misc Backpack Purchase', 'Misc Visor Purchase',
                               'Turret Bought', 'Heal Droid Bought', 'Psi Bought', 'Turret Mod',
                               'Heal Droid Mod', 'Psi Mod', 'Turrets Built', 'Heal Droids Built', 'Psis Built',
-                              'Experimental', 'Kills', 'Deaths', 'Aber/Aboms Killed', 'Genes Killed', 'Anubs Killed',
-                              'Legions Killed', 'Hunter/Pred Killed', 'Cocoons Killed', 'Structures Killed',
-                              'Sunkens Killed', 'Creep Towers Killed', 'Lesser Nydi Killed', 'Extractors Killed']
+                              'Experimental', 'Kills', 'Deaths', 'Aberrations Killed', 'Abominations Killed',
+                              'Geneweavers Killed', 'Genesplicers Killed', 'Anubalisks Killed', 'Anubalights Killed',
+                              'Legions Killed', 'Legionnaires Killed', 'Hunters Killed', 'Predators Killed',
+                              'Underseers Killed', 'Saboteurs Killed', 'Cocoons Killed', 'Structures Killed',
+                              'Sunkens Killed', 'Swarmling Nests Killed', 'Creep Towers Killed', 'Lesser Nydus Killed',
+                              'Extractors Killed']
+
+total_df_zombie_column_list = ['Replay #', 'Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Result',
+                               'First Alpha', 'Abberations Built', 'Abominations Built', 'Geneweavers Built',
+                               'Genesplicers Built', 'Anubalisks Built', 'Anubalights Built', 'Legions Built',
+                               'Legionnaires Built', 'Hunters Built', 'Predators Built', 'Underseers Built',
+                               'Saboteurs Built', 'No. of Alphas Built', 'T1 Speed Purchased', 'T2 Speed Purchased',
+                               'T3 Speed Purchased', 'T1 Health Purchased', 'T2 Health Purchased', 'T3 Health Purchased',
+                               'T1 Damage Purchased', 'T2 Damage Purchased', 'T3 Damage Purchased',
+                               'T1 Volatile Purchased', 'T2 Volatile Purchased', 'T3 Volatile Purchased',
+                               'Speed Creep Purchased', 'Regen Creep Purchased', 'Constructive Creep Purchased',
+                               'Virulent Creep Purchased', 'Drop Pods Purchased', 'Drop Pods Used',
+                               'Advanced Infestations', 'Ultimate Infestation', 'Sunkens Built', 'Swarmling Nests Built',
+                               'Creep Towers Built', 'Lesser Nydus Built', 'Extractors Built', 'Greater Nydus Used',
+                               'No. of Structures Built', 'Major Rooms Captured', 'Hangars Captured', 'Marines Captured',
+                               'Cocoons Made', 'No. of Siphons']

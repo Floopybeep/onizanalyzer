@@ -22,12 +22,7 @@ Much more down the line
 
 
 Needs Fixes
-- human structures wonky? panda built 12 psis but shows only turrets and heal
-- human structure count is wonky... panda built 94 turrets? no way
-  - looks like turret upgrades count as turret builds, maybe change to UnitInitEvent?
 - creep tower count is weird?
-- cocoons made count is way too high? maybe insert playerid check? (count for marine?)
-- kills weird?
 
 
 # Version Changes
