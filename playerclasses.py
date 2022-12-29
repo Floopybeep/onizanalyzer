@@ -63,7 +63,7 @@ class marineinfo(playerinfo):
         self.captures = 0                   # done
         self.saves = 0
         self.diverts = 0
-        self.alphakills = [0, 0, 0, 0, 0, 0]        # done
+        self.alphakills = [[0, 0] for _ in range(6)]        # done
         self.cocoonkills = 0                # done
         self.zstructurekills = [0, 0, 0, 0, 0]      # done
         self.explorationdroidsmade = 0      # done
@@ -113,10 +113,14 @@ class marineinfo(playerinfo):
         if experimentaldict[exp]%10: result = 'Spec Ops '
         self.experimental = ''.join([result, experimentallist[experimentaldict[exp]//10]])
 
-    def add_structurecounter(self, name):
-        if name == 'AutoTurret':        self.turretsbuilt += 1
-        elif name == 'HealingDrone': self.repairdronesebuilt += 1
-        else:                                   self.psisbuilt += 1
+    def add_structurecounter(self, name, event):
+        if name == 'AutoTurret':
+            self.turretsbuilt += 1
+            self.kills += len(event.unit.killed_units)
+        elif name == 'HealingDrone':
+            self.repairdronesebuilt += 1
+        else:
+            self.psisbuilt += 1
 
 
 class zombieinfo(playerinfo):

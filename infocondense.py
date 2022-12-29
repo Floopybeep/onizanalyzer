@@ -211,7 +211,7 @@ def hstructuref(structlist):
         if structlist[i][0]:
             if len(result) > 0:
                 result = result + ', '
-            result = ''.join([result, rstructuredict[i], ' '])
+            result = ''.join([result, rstructuredict[i]])
     return result
 
 def hstructmodf(structlist):
@@ -233,10 +233,18 @@ def hstructmodf(structlist):
 def halphakillf(akilllist):
     result = ''
     for i in range(6):
-        if akilllist[i]:
+        if akilllist[i][0]:
             if len(result) > 0:
                 result = result + ', '
-            result = ''.join([result, str(akilllist[i]), ' ', ralphakillsdict[i]])
+            result = ''.join([result, str(akilllist[i][0]), ' ', ralphakillsdict[i]])
+            if akilllist[i][0] > 1:
+                result = result + 's'
+        if akilllist[i][1]:
+            if len(result) > 0:
+                result = result + ', '
+            result = ''.join([result, str(akilllist[i][1]), ' ', rt2alphasdict[i]])
+            if akilllist[i][1] > 1:
+                result = result + 's'
     return result
 
 def hzstructkillf(zkilllist):

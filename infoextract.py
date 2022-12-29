@@ -132,7 +132,7 @@ def extract_eventinfo(replay, humandict, zombieplayer):
             if event.name == 'UpgradeCompleteEvent':
                 UpgradeCompleteEventCheck(event, humandict, humanset, zombieplayer)
             elif event.name == 'UnitTypeChangeEvent':
-                UnitTypeChangeEventCheck(event, zombieplayer)
+                UnitTypeChangeEventCheck(event, humandict, zombieplayer)
             elif event.name == 'UnitBornEvent':
                 UnitBornEventCheck(event, humandict, zombieplayer)
             elif event.name == 'UnitInitEvent':
@@ -148,18 +148,24 @@ def UpgradeCompleteEventCheck(event, humandict, humanset, zombieplayer):
     zombieUCEcheck(event, name, zombieplayer, z_id)
 
 
-def UnitTypeChangeEventCheck(event, zombieplayer):
+def UnitTypeChangeEventCheck(event, humandict, zombieplayer):                      # for t2 alphas (and structure changes maybe)
     name = event.unit_type_name
 
-    if name == 'MassiveCocoon' and event.control_pid == zombieplayer.pid:
+    if name == 'MassiveCocoon':
         # zombieplayer.cocoonsmade += 1
         zombieplayer.cocoonids.add(event.unit_id_index)
     elif name in t2alphadict and event.unit_id_index in zombieplayer.cocoonids:
         zombieplayer.t2alpha_create(name)
         zombieplayer.cocoonids.discard(event.unit_id_index)
+        if event.unit.killed_by is not None:
+            humandict[event.unit.killed_by.pid].alphakills[t2alphadict[name]][1] += 1
+            humandict[event.unit.killed_by.pid].alphakills[t2alphadict[name]][0] -= 1
+        elif event.unit.killing_unit is not None and event.unit.killing_unit.name == 'AutoTurret':
+            humandict[event.unit.killing_unit.owner.pid].alphakills[t2alphadict[name]][1] += 1
+            humandict[event.unit.killing_unit.owner.pid].alphakills[t2alphadict[name]][0] -= 1
 
 
-def UnitBornEventCheck(event, humandict, zombieplayer):
+def UnitBornEventCheck(event, humandict, zombieplayer):                 # for drop pods, t1 cocoons, and t1 alphas
     name = event.unit_type_name
 
     if name == 'ZergDropPod':
@@ -168,19 +174,26 @@ def UnitBornEventCheck(event, humandict, zombieplayer):
         zombieplayer.cocoonsmade += 1
         if event.unit.killed_by is not None:
             humandict[event.unit.killed_by.pid].cocoonkills += 1
+        elif event.unit.killing_unit is not None and event.unit.killing_unit.name == 'AutoTurret':
+            humandict[event.unit.killing_unit.owner.pid].cocoonkills += 1
     elif name in t1alphadict:
         zombieplayer.t1alpha_create(name)
         if zombieplayer.startingalpha is None:
             zombieplayer.startingalpha = t1alphatonamedict[name]
         if event.unit.killed_by is not None:
-            humandict[event.unit.killed_by.pid].alphakills[t1alphadict[name]] += 1
+            humandict[event.unit.killed_by.pid].alphakills[t1alphadict[name]][0] += 1
+        elif event.unit.killing_unit is not None and event.unit.killing_unit.name == 'AutoTurret':
+            humandict[event.unit.killing_unit.owner.pid].alphakills[t1alphadict[name]][0] += 1
+    elif name == 'InfestedCocoon' and event.frame > 0:
+        zombieplayer.marinecaptures += 1
+        humandict[event.control_pid].captures += 1
 
 
-def UnitInitEventCheck(event, humandict, zombieplayer):
+def UnitInitEventCheck(event, humandict, zombieplayer):                         # for z structures
     name = event.unit_type_name
 
     if name in structurecountset:
-        humandict[event.control_pid].addstructurecounter(name)
+        humandict[event.control_pid].add_structurecounter(name, event)
     elif name == 'ExplorationDroid':
         humandict[event.control_pid].explorationdroidsmade += 1
     elif name in zstructuredict:
@@ -188,6 +201,8 @@ def UnitInitEventCheck(event, humandict, zombieplayer):
         zombieplayer.structurebuilt += 1
         if event.unit.killed_by is not None and event.unit.killed_by.pid != zombieplayer.pid:
             humandict[event.unit.killed_by.pid].zstructurekills[zstructuredict[name]] += 1
+        elif event.unit.killing_unit is not None and event.unit.killing_unit.name == 'AutoTurret':
+            humandict[event.unit.killing_unit.owner.pid].zstructurekills[zstructuredict[name]] += 1
     elif name == 'GreaterNydusWorm':
         zombieplayer.greaternydustimings.append(event.second)
 

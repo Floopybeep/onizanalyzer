@@ -28,9 +28,6 @@ def humanUCEcheck(event, name, humandict, humanset, zombieplayer):              
         humandict[event.pid].add_experimental(name)
     elif name == 'DropshipsFueled' and event.pid in humanset:
         humandict[event.pid].dropshipfueledtime = datetime.timedelta(seconds=event.second)
-    elif name == 'EmergencyCloakOn':
-        humandict[event.pid].captures += 1
-        zombieplayer.marinecaptures += 1
 
 
 def zombieUCEcheck(event, name, zombieplayer, z_id):

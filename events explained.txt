@@ -76,7 +76,7 @@ Predator - Predator2
                                                 'LocustMP', 'FlyingZombie', 'FlyingZombie2',
                                                 'RoachCorpser', 'RoachCorpserBurrowed', 'RoachVile', 'DefilerMP',
                                                 'InfestorTerran', 'DehakaMirrorImage', 'DehakaMirrorImageBurrowed',
-                                                'Zergling', 'HotSRaptor', 'Hunterling'}
+                                                'Zergling', 'HotSRaptor', 'Hunterling'}:
                     eventlist.append(event)
 
 

@@ -38,7 +38,7 @@ suitdict = {'HazmatSuitUnlocked': 1, 'AdvancedHazmatSuitUnlocked': 2,
 structuredict = {'AutoTurretUnlocked': 0, 'HeavyTurretUnlocked': 1, 'SpecOpsTurretUnlocked': 2, 'FlameTurretUnlocked': 3,
                  'BioMechanicalRepairDroneUnlocked': 10, 'SpecOpsBioMechanicalRepairDroneUnlocked': 11,
                  'RechargeDroneUnlocked': 12, 'CombatAccelerationDroneUnlocked': 13,
-                 'PsiDisruptorUnlocked': 20, 'PsiDepressorUnlocked': 21, 'SpecOpsPsiDisruptorUnlocked': 22}
+                 'PsiDisrupterUnlocked': 20, 'PsiDepressorUnlocked': 21, 'SpecOpsPsiDisruptorUnlocked': 22}
 
 miscset = {'CombatShieldUnlocked', 'MedicShieldUnlocked', 'EnergyPackUnlocked', 'QuantumBackpackUnlocked',
            'OpticalVisorUnlocked', 'AIAssistantUnlocked'}
@@ -119,7 +119,7 @@ rmiscdict = {0: 'Medic Shield', 1: 'Combat Shield', 2: 'Quantum Pack', 3: 'Energ
 
 rstructuredict = {0: 'Turret', 1: 'Heal Droid', 2: 'Psi Disruptor'}
 
-rstructuremodlist = [[None, 'Heavy', 'SpecOps', 'Flame'], [None, 'SpecOps', 'Accel', 'Energy'], [None, 'Slow', 'SpecOps']]
+rstructuremodlist = [[None, 'Heavy', 'SpecOps', 'Flame'], [None, 'SpecOps', 'Energy', 'Accel'], [None, 'Slow', 'SpecOps']]
 
 rstructuremodshortdict = {0: '(T)', 1: '(HD)', 2: '(P)'}
 
