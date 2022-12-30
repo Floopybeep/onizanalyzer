@@ -81,12 +81,17 @@ def separate_replays_analysis(repl_list, textoutputpath, total_replay_data):
         mainprocess(rep, textoutputpath, total_replay_data)
 
 
-def separate_replaypool(repl_list, textoutputpath, num_of_proc):
+def separate_replaypool(repl_list, textoutputpath, num_of_proc, pbar):
     total_replay_data = totalreplaydataclass()
+    pbar.configure(maximum=len(repl_list))
+
+    processqueue = multiprocessing.Queue()
 
     inputlist = rep_txt_wrapper(repl_list, textoutputpath, total_replay_data)
-    pool = multiprocessing.Pool(processes=num_of_proc)
-    output = pool.starmap(mainprocess, inputlist)
+    pool = multiprocessing.Pool(num_of_proc, mainprocess_init, [processqueue])
+    output = pool.imap_unordered(mainprocess, inputlist)
+    p = multiprocessing.Process(target=update_progressbar, args=(pbar, output))
+    p.start()
 
     for out in output:
         if out is not False:
@@ -96,6 +101,17 @@ def separate_replaypool(repl_list, textoutputpath, num_of_proc):
     total_replay_data.create_excel_file(textoutputpath)
 
     print("All Processes Finished")
+
+def mainprocess_init(queue):
+    mainprocess.queue = queue
+
+def update_progressbar(input, initvalue=0):
+    pbar, list = input[0], input[1]
+    delta = len(list)-initvalue
+    if delta > 0:
+        pbar.step(delta)
+        initvalue = len(list)
+    return initvalue
 
 # def check_analyzer_status(p):
 #     if p.is_alive(): # Then the process is still running
@@ -109,7 +125,7 @@ def separate_replaypool(repl_list, textoutputpath, num_of_proc):
 #         not_mp_button.config(state = "normal")
 #     return
 
-def replay_duplicate_check(repl_list, textoutpath, num_of_proc, deldupes):
+def replay_duplicate_check(repl_list, textoutpath, num_of_proc, deldupes, pbar):
     signatureset, duplicate_list = set(), []
     deldupes = numtobool(deldupes)
     repl_list.reverse()

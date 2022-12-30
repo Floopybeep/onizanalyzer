@@ -5,18 +5,11 @@ from infoappend import append_replayinfo
 import sc2reader
 
 
-def quickanalysis_to_loadlevel(quickanalysis):
-    if quickanalysis:
-        return 2
-    else:
-        return 3
-
-
-def mainprocess(replaypath, textoutputpath, total_replay_data, quickanalysis=False, format='text'):                  # take a replay file, convert to txt format
-    replay_load_level = quickanalysis_to_loadlevel(quickanalysis)
+def mainprocess(inputargs):                  # take a replay file, convert to txt format
+    replaypath, textoutputpath, total_replay_data = inputargs[0], inputargs[1], inputargs[2]
 
     try:
-        replay = sc2reader.load_replay(replaypath, load_level=replay_load_level)
+        replay = sc2reader.load_replay(replaypath, load_level=3)
         humandict, zombieplayer = extract_playerinfo(replay)
 
         if len(humandict) < 6:

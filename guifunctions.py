@@ -20,8 +20,8 @@ class NewClass:
 
         self.ui.add_canvas("canvas", 1440, 810)
         # self.ui.register_image("canvas", "C:/Users/USER/PycharmProjects/onizanalyzer/410542.jpg")
-        # self.ui.register_image("canvas", "410542.jpg")
-        self.ui.register_image("canvas", str(Path(__file__).absolute())[:-16] + "410542.jpg")
+        self.ui.register_image("canvas", "410542.jpg")
+        # self.ui.register_image("canvas", str(Path(__file__).absolute())[:-16] + "410542.jpg")
 
         self.ui.add_button("startbutton", "canvas", 8, "Start")
         self.ui.add_button("closebutton", "canvas", 8, "Close")
@@ -84,9 +84,9 @@ class onizGUI:
 
     def start(gui):
         class Threader(threading.Thread):
-            def start(self):
+            def run(self):
                 gui.window.mainloop()
-        Threader().start()
+        Threader().run()
 
     def add_frame(self, name):
         tmp = ttk.Frame(self.window)
@@ -165,7 +165,9 @@ class onizGUI:
         repentry = self.entries["replayfolderpathentry"].get()
         txtentry = self.entries["textfolderpathentry"].get()
         replist, repcount = replay_file_parser(repentry)
-        separate_replaypool(replist, txtentry, mainclass_copy.numberofprocesses)
+        arg=[replist, txtentry, mainclass_copy.numberofprocesses, self.progressbars["replayprogressbar"]]
+        p = threading.Thread(name="replay analysis", target=separate_replaypool, args=arg)
+        p.start()
 
     def select_replay_folder(self):
         replayfolderpath = filedialog.askdirectory(title="Select the root directory for ONIZ replays")
@@ -183,6 +185,7 @@ class onizGUI:
         txtentry = self.entries["textfolderpathentry"].get()
         delcheck = self.variables["deletedupes"].get()
         replist, _ = replay_file_parser(repentry)
-        replay_duplicate_check(replist, txtentry, mainclass_copy.numberofprocesses, delcheck)
+        replay_duplicate_check(replist, txtentry, mainclass_copy.numberofprocesses,
+                               delcheck, self.progressbars["replayprogressbar"])
 
 # https://hhj6212.github.io/programming/python/2021/04/18/python-multi.html
