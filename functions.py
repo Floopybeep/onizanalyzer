@@ -82,7 +82,6 @@ def separate_replaypool(repl_list, textoutputpath, num_of_proc):
 
     total_replay_data.create_dataframes()
     total_replay_data.create_excel_file(textoutputpath)
-    # total_replay_data.adjust_excel_data(textoutputpath)
 
     print("All Processes Finished")
 
@@ -117,70 +116,30 @@ class totalreplaydataclass:
         self.replays_data_zombie = pd.DataFrame.from_records(self.replays_data_zombie_list, columns=total_df_zombie_column_list)
 
     def create_excel_file(self, path):
-        self.replays_data_human.to_excel(f'{path}/#Humandata.xlsx', header=True)
-        self.replays_data_zombie.to_excel(f'{path}/#Zombiedata.xlsx', header=True)
-        # h_writer = pd.ExcelWriter(f'{path}/#Humandata.xlsx', engine='xlsxwriter')
-        # self.replays_data_human.to_excel(h_writer, sheet_name='Human Data')
-        # h_workbook = h_writer.book
-        # h_worksheet = h_writer.sheets['Human Data']
-        # h_length = len(self.replays_data_human)+2
-        # h_worksheet.add_table(f'A2:AY{h_length}', {'data': self.replays_data_human.values.tolist(),
-        #                                            'columns': total_df_human_excel_column_list,
-        #                                            'header_row': True})
-        #
-        # for i, width in enumerate(get_col_widths(self.replays_data_human)):
-        #     h_worksheet.set_column(i, i, width)
-        #
-        # h_writer.close()
-        #
-        # print(self.replays_data_human)
-        #
-        # z_writer = pd.ExcelWriter(f'{path}/#Zombiedata.xlsx', engine='xlsxwriter')
-        # self.replays_data_zombie.to_excel(z_writer, sheet_name='Zombie Data')
-        # z_workbook = z_writer.book
-        # z_worksheet = z_writer.sheets['Zombie Data']
-        # z_length = len(self.replays_data_zombie)+2
-        # z_worksheet.add_table(f'A2:AZ{z_length}', {'data': self.replays_data_zombie.values.tolist(),
-        #                                            'columns': total_df_zombie_excel_column_list,
-        #                                            'header_row': True})
-        #
-        # for i, width in enumerate(get_col_widths(self.replays_data_zombie)):
-        #     z_worksheet.set_column(i, i, width)
-        #
-        # z_writer.close()
-        #
-        # print(self.replays_data_zombie)
+        h_writer = pd.ExcelWriter(f'{path}/#Humandata.xlsx', engine='xlsxwriter')
+        z_writer = pd.ExcelWriter(f'{path}/#Zombiedata.xlsx', engine='xlsxwriter')
 
-    # def adjust_excel_data(self, path):
-    #     hwb = openpyxl.load_workbook(filename=f'{path}/#Humandata.xlsx')
-    #     hsheet_ranges = hwb['range names']
+        self.adjust_excel_data(h_writer, self.replays_data_human)
+        self.adjust_excel_data(z_writer, self.replays_data_zombie)
 
+    def adjust_excel_data(self, writer, df):
+        df.to_excel(writer, sheet_name='Sheet1', startrow=1, header=False, index=False)
+        worksheet = writer.sheets['Sheet1']
 
-        # h_workbook = xlsxwriter.Workbook(f'{path}/#Humandata.xlsx')
-        # print(h_workbook.worksheets())
-        # h_worksheet = h_workbook.worksheets()[0]
-        # h_length = len(self.replays_data_human) + 1
-        # h_worksheet.add_table(f'B1:AZ{h_length}', {'header_row': True})
-        #
-        # for i, width in enumerate(get_col_widths(self.replays_data_human)):
-        #     h_worksheet.set_column(i, i, width)
-        #
-        # h_workbook.close()
-        #
-        # z_workbook = xlsxwriter.Workbook(f'{path}/#Zombiedata.xlsx')
-        # z_worksheet = z_workbook.worksheets()[0]
-        # z_length = len(self.replays_data_zombie) + 1
-        # z_worksheet.add_table(f'B1:BA{z_length}', {'header_row': True})
-        #
-        # for i, width in enumerate(get_col_widths(self.replays_data_zombie)):
-        #     z_worksheet.set_column(i, i, width)
-        #
-        # z_workbook.close()
+        (max_row, max_col) = df.shape
+        column_settings = [{'header': column} for column in df.columns]
 
+        worksheet.add_table(0, 0, max_row, max_col - 1, {'columns': column_settings})
+
+        for i, width in enumerate(get_col_widths(df)):
+            worksheet.set_column(i-1, i, width+2)
+
+        writer.close()
 
 
 # https://xlsxwriter.readthedocs.io/working_with_pandas.html
 # https://stackoverflow.com/questions/52052184/how-to-use-xlsxwriter-add-table-method-with-a-dataframe
+# https://xlsxwriter.readthedocs.io/example_pandas_table.html
 
 
 class maininfoclass:
@@ -198,25 +157,6 @@ class maininfoclass:
     # Depreciated in favor of GUI-local functions (no real reason, these still work)
     def get_replays_from_folder(self):
         self.replayfilepaths, self.replaycount = replay_file_parser(self.replayfolderpath)
-
-    # Depreciated in favor of local functions (they cause multiple instances of GUI to pop up)
-    # def send_replays_to_self(self):
-    #     if len(self.replayfilepaths) > 1:
-    #         # self.replaypool_loop(self.replayfilepaths)
-    #         separate_replaypool(self.replayfilepaths, self.numberofprocesses)
-    #     else:
-    #         print("No replays detected!")
-    #         pass
-    #
-    # def analyze_replays(self, replaypaths):          # pass multiple analyze_replays w different lists to replayque_loop
-    #     print("analysis started!")
-    #     for replaypath in replaypaths:
-    #         mainprocess(replaypath, self.quickanalysis)
-    #
-    # def replaypool_loop(self, list_of_replays):
-    #     pool = multiprocessing.Pool(self.numberofprocesses)
-    #     pool.map(separate_replays_analysis, list_of_replays)
-
 
 
 # https://docs.python.org/3/library/multiprocessing.html
