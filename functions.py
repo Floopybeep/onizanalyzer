@@ -1,7 +1,5 @@
 import multiprocessing
 import pandas as pd
-import xlsxwriter
-import openpyxl
 
 from os import listdir, walk
 from os.path import join, isfile
@@ -87,23 +85,6 @@ def separate_replaypool(repl_list, textoutputpath, num_of_proc):
     # total_replay_data.adjust_excel_data(textoutputpath)
 
     print("All Processes Finished")
-
-    # sublist = splitlist(repl_list, num_of_proc)
-    # processlist = []
-    # if num_of_proc != len(sublist):
-    #     print("Sublist length: ", len(sublist))
-    #     print("Number of Processors: ", num_of_proc)
-    #
-    # for i in range(num_of_proc):
-    #     p = multiprocessing.Process(target=separate_replays_analysis, args=(sublist[i], textoutputpath, total_replay_data))
-    #     p.start()
-
-    #     processlist.append(p)
-    # for i, p in enumerate(processlist):
-    #     if i == 0:
-    #         p.start()
-    #     else:
-    #         p.join()
 
 # def check_analyzer_status(p):
 #     if p.is_alive(): # Then the process is still running
