@@ -1,11 +1,11 @@
 import multiprocessing
 import pandas as pd
 import mpyq
-import hashlib
-from s2protocol import versions
 
+import os
 from os import listdir, walk
 from os.path import join, isfile
+from s2protocol import versions
 from mainprocess import mainprocess
 from infodict import total_df_human_column_list, total_df_zombie_column_list, \
     total_df_human_excel_column_list, total_df_zombie_excel_column_list
@@ -47,7 +47,13 @@ def get_col_widths(dataframe):
     idx_max = max([len(str(s)) for s in dataframe.index.values] + [len(str(dataframe.index.name))])
     return [idx_max] + [max([len(str(s)) for s in dataframe[col].values] + [len(col)]) for col in dataframe.columns]
 
-
+def numtobool(num):
+    if num == 0:
+        return False
+    elif num == 1:
+        return True
+    else:
+        return None
 
 def rep_txt_wrapper(replist, txtout, obj):
     result = []
@@ -103,8 +109,10 @@ def separate_replaypool(repl_list, textoutputpath, num_of_proc):
 #         not_mp_button.config(state = "normal")
 #     return
 
-def replay_duplicate_check(repl_list, textoutpath, num_of_proc):
+def replay_duplicate_check(repl_list, textoutpath, num_of_proc, deldupes):
     signatureset, duplicate_list = set(), []
+    deldupes = numtobool(deldupes)
+    repl_list.reverse()
     open(f"{textoutpath}/#DuplicateReplays.txt", 'w').close()
 
     pool = multiprocessing.Pool(processes=num_of_proc)
@@ -113,12 +121,14 @@ def replay_duplicate_check(repl_list, textoutpath, num_of_proc):
     with open(f"{textoutpath}/#DuplicateReplays.txt", 'a') as f:
         for out in output:
             if dupcheck(out[0], out[1], signatureset, f):
-                duplicate_list.append(out[1])
+                if not deldupes:
+                    duplicate_list.append(out[1])
+                else:
+                    os.remove(out[1])
     f.close()
-    print("Duplicate Check Complete!")
+    print(duplicate_list)
 
 def extract_signatures(reppath):
-    print("extracting signature!")
     signaturelist, result = [], ""
     archive = mpyq.MPQArchive(reppath)
     contents = archive.read_file('replay.game.events')

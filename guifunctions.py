@@ -35,6 +35,9 @@ class NewClass:
         self.ui.register_button("canvas", 1300, 98, "textentrybutton")
         self.ui.register_function("closebutton", self.ui.window.destroy)
 
+        self.ui.add_checkbox("deletedupes", "Delete Duplicates?", "white", "black", "canvas")
+        self.ui.register_checkbox("canvas", 1260, 678, "deletedupes")
+
         self.ui.add_progress_bar("replayprogressbar", 1200, 1200)
         self.ui.register_progress_bar("canvas", 30, 750, "replayprogressbar")
 
@@ -68,6 +71,7 @@ class onizGUI:
         self.window = tk.Tk()
         self.frames = {}
         self.buttons = {}
+        self.checkboxes = {}
         self.canvases = {}
         self.images = {}
         self.progressbars = {}
@@ -75,6 +79,8 @@ class onizGUI:
         self.functions = {}
         self.scrolltexts = {}
         self.labels = {}
+        self.variables = {}
+        self.styles = {}
 
     def start(gui):
         class Threader(threading.Thread):
@@ -91,6 +97,14 @@ class onizGUI:
         tmp = ttk.Button(self.canvases[canvasname], width=width, text=text)
         self.buttons[name] = tmp
 
+    def add_checkbox(self, name, text, fg, bg, canvasname):
+        self.variables[name] = tk.IntVar()
+        self.styles[name] = ttk.Style()
+        self.styles[name].configure(f'{self.styles[name]}.TCheckbutton', foreground=fg, background=bg)
+        tmp = ttk.Checkbutton(self.canvases[canvasname], text=text, style=f"{self.styles[name]}.TCheckbutton",
+                              variable=self.variables[name])
+        self.checkboxes[name] = tmp
+
     def register_button(self, canvasname, x, y, buttonname):
         self.canvases[canvasname].create_window(x, y, anchor=tk.NW, window=self.buttons[buttonname])
 
@@ -99,6 +113,9 @@ class onizGUI:
             self.buttons[name].config(command=self.functions[functionname])
         else:
             self.buttons[name].config(command=function)
+
+    def register_checkbox(self, canvasname, x, y, checkboxname):
+        self.canvases[canvasname].create_window(x, y, anchor=tk.NW, window=self.checkboxes[checkboxname])
 
     def add_canvas(self, name, width, height):
         tmp = tk.Canvas(self.window, width=width, height=height)
@@ -164,9 +181,8 @@ class onizGUI:
         print("Button pressed!")
         repentry = self.entries["replayfolderpathentry"].get()
         txtentry = self.entries["textfolderpathentry"].get()
+        delcheck = self.variables["deletedupes"].get()
         replist, _ = replay_file_parser(repentry)
-        replay_duplicate_check(replist, txtentry, mainclass_copy.numberofprocesses)
-
-
+        replay_duplicate_check(replist, txtentry, mainclass_copy.numberofprocesses, delcheck)
 
 # https://hhj6212.github.io/programming/python/2021/04/18/python-multi.html
