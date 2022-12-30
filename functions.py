@@ -1,5 +1,8 @@
 import multiprocessing
 import pandas as pd
+import mpyq
+import hashlib
+from s2protocol import versions
 
 from os import listdir, walk
 from os.path import join, isfile
@@ -8,12 +11,14 @@ from infodict import total_df_human_column_list, total_df_zombie_column_list, \
     total_df_human_excel_column_list, total_df_zombie_excel_column_list
 
 
-pd.set_option('display.max_colwidth', None)
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', None)
-pd.set_option('display.width', 2000)
-pd.set_option("expand_frame_repr", True)
+# pd.set_option('display.max_colwidth', None)
+# pd.set_option('display.max_columns', None)
+# pd.set_option('display.max_rows', None)
+# pd.set_option('display.width', 2000)
+# pd.set_option("expand_frame_repr", True)
 
+global protocol
+protocol = versions.build(88500)
 
 def splitlist(list, n):
     len_list = len(list)
@@ -57,7 +62,8 @@ def replay_file_parser(folderpath):
     for path, subdirs, files in walk(folderpath):
         for name in files:
             extension = name[-9:]
-            if isfile(join(path, name)) and extension == 'SC2Replay':
+            mapname = name[:10]
+            if isfile(join(path, name)) and extension == 'SC2Replay' and mapname == "Oh No It's":
                 filepaths.append(join(path, name))
                 count += 1
 
@@ -96,6 +102,55 @@ def separate_replaypool(repl_list, textoutputpath, num_of_proc):
 #         mp_button.config(state = "normal")
 #         not_mp_button.config(state = "normal")
 #     return
+
+def replay_duplicate_check(repl_list, textoutpath, num_of_proc):
+    signatureset, duplicate_list = set(), []
+    open(f"{textoutpath}/#DuplicateReplays.txt", 'w').close()
+
+    pool = multiprocessing.Pool(processes=num_of_proc)
+    output = pool.imap(extract_signatures, repl_list)                             # outputs tuple of (signature, path)
+
+    with open(f"{textoutpath}/#DuplicateReplays.txt", 'a') as f:
+        for out in output:
+            if dupcheck(out[0], out[1], signatureset, f):
+                duplicate_list.append(out[1])
+    f.close()
+    print("Duplicate Check Complete!")
+
+def extract_signatures(reppath):
+    print("extracting signature!")
+    signaturelist, result = [], ""
+    archive = mpyq.MPQArchive(reppath)
+    contents = archive.read_file('replay.game.events')
+    game_events = protocol.decode_replay_game_events(contents)
+
+    for event in game_events:
+        if event['_gameloop'] > 1:
+            break
+
+        if event['_event'] == 'NNet.Game.SBankSignatureEvent':
+            signature = calculate_signature(event['m_signature'])
+            signaturelist.append(signature)
+
+    for signature in signaturelist:
+        result = f"{result}{signature}"
+
+    return tuple([result, reppath])
+
+def calculate_signature(list):
+    resultlist = []
+    for decimal in list:
+        resultlist.append(format(decimal, 'x').upper())
+    return ''.join(resultlist)
+
+def dupcheck(signature, replaypath, signatureset, f):
+    if signature not in signatureset:
+        signatureset.add(signature)
+        return False
+    else:
+        f.write(f"{replaypath}\n")
+        return True
+
 
 class totalreplaydataclass:
     def __init__(self):

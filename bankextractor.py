@@ -264,10 +264,10 @@ def extract_banks(path):
             'content': bank_store.tostring(),
         })
 
-        filename = bank_store.write_sc2bank(outpath, True, "{} - {}".format(gbmeta.player.handle, gbmeta.player.name))
+        filename = bank_store.write_sc2bank(outpath, True, "{}".format(gbmeta.player.name))
         print(f'File saved at "{filename}"')
 
 
 if __name__ == '__main__':
-    reppath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/Oh No It's Zombies Arctic Map (248).SC2Replay"
+    reppath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/Oh No It's Zombies Arctic Map (249).SC2Replay"
     extract_banks(reppath)

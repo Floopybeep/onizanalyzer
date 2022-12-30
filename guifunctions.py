@@ -7,7 +7,7 @@ from tkinter import scrolledtext
 from tkinter import filedialog
 from PIL import Image, ImageTk
 from pathlib import Path
-from functions import replay_file_parser, separate_replaypool
+from functions import replay_file_parser, separate_replaypool, replay_duplicate_check
 
 global mainclass_copy
 
@@ -24,15 +24,15 @@ class NewClass:
         self.ui.register_image("canvas", str(Path(__file__).absolute())[:-16] + "410542.jpg")
 
         self.ui.add_button("startbutton", "canvas", 8, "Start")
-        self.ui.add_button("closebutton", "canvas", 7, "Close")
+        self.ui.add_button("closebutton", "canvas", 8, "Close")
+        self.ui.add_button("dupcheckbutton", "canvas", 20, "Check Duplicate Replays")
         self.ui.add_button("repentrybutton", "canvas", 15, "Designate Path")
         self.ui.add_button("textentrybutton", "canvas", 15, "Designate Path")
-        # self.ui.add_button("csventrybutton", "canvas", 15, "Designate Path")
         self.ui.register_button("canvas", 1260, 748, "startbutton")
-        self.ui.register_button("canvas", 1340, 748, "closebutton")
+        self.ui.register_button("canvas", 1344, 748, "closebutton")
+        self.ui.register_button("canvas", 1260, 708, "dupcheckbutton")
         self.ui.register_button("canvas", 1300, 48, "repentrybutton")
         self.ui.register_button("canvas", 1300, 98, "textentrybutton")
-        # self.ui.register_button("canvas", 1300, 198, "csventrybutton")
         self.ui.register_function("closebutton", self.ui.window.destroy)
 
         self.ui.add_progress_bar("replayprogressbar", 1200, 1200)
@@ -40,13 +40,12 @@ class NewClass:
 
         self.ui.add_ttk_entry("replayfolderpathentry", 70)
         self.ui.add_ttk_entry("textfolderpathentry", 70)
-        # self.ui.add_ttk_entry("csvfolderpathentry", 70)
         self.ui.register_ttk_entry("canvas", 800, 50, "replayfolderpathentry")
         self.ui.register_ttk_entry("canvas", 800, 100, "textfolderpathentry")
-        # self.ui.register_ttk_entry("canvas", 800, 200, "csvfolderpathentry")
         self.ui.register_function("repentrybutton", self.ui.select_replay_folder)
         self.ui.register_function("textentrybutton", self.ui.select_text_output_folder)
         self.ui.register_function("startbutton", self.ui.press_start)
+        self.ui.register_function("dupcheckbutton", self.ui.press_duplicate_replay_check)
 
         self.ui.add_scrolltext_window("outputscroll", 40, 70)
         self.ui.register_scrolltext_window("canvas", 30, 30, "outputscroll")
@@ -149,7 +148,6 @@ class onizGUI:
         repentry = self.entries["replayfolderpathentry"].get()
         txtentry = self.entries["textfolderpathentry"].get()
         replist, repcount = replay_file_parser(repentry)
-        total_dataframe = pd.DataFrame(columns=['Replay #', ])
         separate_replaypool(replist, txtentry, mainclass_copy.numberofprocesses)
 
     def select_replay_folder(self):
@@ -161,6 +159,14 @@ class onizGUI:
         textfolderpath = filedialog.askdirectory(title="Select the output directory for text files")
         self.entries["textfolderpathentry"].delete(0, tk.END)
         self.entries["textfolderpathentry"].insert(0, textfolderpath)
+
+    def press_duplicate_replay_check(self):
+        print("Button pressed!")
+        repentry = self.entries["replayfolderpathentry"].get()
+        txtentry = self.entries["textfolderpathentry"].get()
+        replist, _ = replay_file_parser(repentry)
+        replay_duplicate_check(replist, txtentry, mainclass_copy.numberofprocesses)
+
 
 
 # https://hhj6212.github.io/programming/python/2021/04/18/python-multi.html

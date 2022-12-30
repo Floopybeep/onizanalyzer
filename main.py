@@ -9,5 +9,5 @@ if __name__ == '__main__':
     mainclass = maininfoclass()
     mainclass.numberofprocesses = multiprocessing.cpu_count()
     # mainclass.numberofprocesses = 3
-    mainclass.version = "1.0.4"
+    mainclass.version = "1.0.5"
     NC = NewClass(mainclass)

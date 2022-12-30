@@ -1,4 +1,4 @@
-from infoextract import extract_eventinfo, extract_playerinfo, extract_playerbanks, dupcheck
+from infoextract import extract_eventinfo, extract_playerinfo, extract_playerbanks
 from infocondense import condense_eventinfo
 from infoappend import append_replayinfo
 # import time
@@ -25,9 +25,9 @@ def mainprocess(replaypath, textoutputpath, total_replay_data, quickanalysis=Fal
 
         extract_playerbanks(replay, humandict, zombieplayer)
 
-        if dupcheck(humandict, replaypath, textoutputpath, total_replay_data):
-            print("Duplicate Replay detected!")
-            pass
+        # if dupcheck(humandict, replaypath, textoutputpath, total_replay_data):
+        #     print("Duplicate Replay detected!")
+        #     pass
 
         extract_eventinfo(replay, humandict, zombieplayer)
         condense_eventinfo(replay, textoutputpath, humandict, zombieplayer)
