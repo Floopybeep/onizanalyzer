@@ -87,15 +87,18 @@ class onizGUI:
             def run(self):
                 gui.window.mainloop()
 
-        class GUIinput(threading.Thread):
-            def run(self):
-                gui.inputqueue()
+        # class GUIinput(threading.Thread):
+        #     def run(self):
+        #         gui.inputqueue()
 
         Threader().run()
         # threading.Thread()
 
     def inputqueue(self):
         inputqueue = multiprocessing.Queue()
+
+    def pbarupdate(self, increment):
+        self.progressbars["replayprogressbar"].step(increment)
 
     def add_frame(self, name):
         tmp = ttk.Frame(self.window)
@@ -174,7 +177,8 @@ class onizGUI:
         repentry = self.entries["replayfolderpathentry"].get()
         txtentry = self.entries["textfolderpathentry"].get()
         replist, repcount = replay_file_parser(repentry)
-        arg=[replist, txtentry, mainclass_copy.numberofprocesses, self.progressbars["replayprogressbar"]]
+        arg=[replist, txtentry, mainclass_copy.numberofprocesses,
+             self.progressbars["replayprogressbar"], self.scrolltexts["outputscroll"]]
         p = threading.Thread(name="replay analysis", target=separate_replaypool, args=arg)
         p.start()
 

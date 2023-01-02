@@ -5,9 +5,9 @@ from infoappend import append_replayinfo
 import sc2reader
 
 
-def mainprocess(queue):                  # take a replay file, convert to txt format
+def mainprocess(inputqueue, messagequeue, outputqueue):                  # take a replay file, convert to txt format
     print("Mainprocess Started!")
-    qoutput = queue.get()
+    qoutput = inputqueue.get()
     replaypath, textoutputpath, total_replay_data = qoutput[0], qoutput[1], qoutput[2]
     # replaypath, textoutputpath, total_replay_data = inputargs[0], inputargs[1], inputargs[2]
 
@@ -17,6 +17,7 @@ def mainprocess(queue):                  # take a replay file, convert to txt fo
 
         if len(humandict) < 6:
             print("Incomplete/Leaver Lobby Detected!")
+            messagequeue.put("Incomplete/Leaver Lobby Detected!\n")
             return False
 
         extract_playerbanks(replay, humandict, zombieplayer)
@@ -29,6 +30,7 @@ def mainprocess(queue):                  # take a replay file, convert to txt fo
         condense_eventinfo(replay, textoutputpath, humandict, zombieplayer)
         output1, output2 = append_replayinfo(replay, humandict, zombieplayer, total_replay_data)
         print("textfile successfully created!")
+        outputqueue.put("textfile successfully created!")
 
     except Exception:
         print("Error in loading replay!")

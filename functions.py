@@ -81,22 +81,34 @@ def separate_replays_analysis(repl_list, textoutputpath, total_replay_data):
         mainprocess(rep, textoutputpath, total_replay_data)
 
 
-def separate_replaypool(repl_list, textoutputpath, num_of_proc, pbar):
+def separate_replaypool(repl_list, textoutputpath, num_of_proc, pbar, scrolltext):
     total_replay_data = totalreplaydataclass()
     pbar.configure(maximum=len(repl_list))
     inputlist = rep_txt_wrapper(repl_list, textoutputpath, total_replay_data)
 
     # Input replays to queue(rpaq - replay analysis queue)
     m = multiprocessing.Manager()
-    rpaq = m.Queue()
-    p = multiprocessing.Process(target=fill_queue_with_replays, args=(rpaq, inputlist))
+    inputqueue = m.Queue()
+    p = multiprocessing.Process(target=fill_queue_with_replays, args=(inputqueue, inputlist))
     p.start()
 
-    # output replays to output
-    pool = multiprocessing.Pool(num_of_proc, mainprocess, (rpaq,))
-    output = pool.map(mainprocess, (rpaq,))
+    # mainprocess outputs to outputqueue(actual files) and messagequeue(errors and other msgs)
+    messagequeue = m.Queue()
+    outputqueue = m.Queue()
+
+    # Define queue reading?
+    pbarp = multiprocessing.Process(target=update_progressbar, args=(outputqueue, pbar))
+    msgp = multiprocessing.Process(target=output_scrolltext, args=(messagequeue, scrolltext))
+
+    # Define mainprocess pool and execute
+    pool = multiprocessing.Pool(num_of_proc, mainprocess, (inputqueue, messagequeue, outputqueue,))
+    output = pool.map(mainprocess, (inputqueue, messagequeue, outputqueue,))
+    pbarp.start()
+    msgp.start()
     # p = multiprocessing.Process(target=update_progressbar, args=[pbar, output])   # unpickable pbar
     # p.start()
+
+
 
     for out in output:
         if out is not False:
@@ -107,22 +119,23 @@ def separate_replaypool(repl_list, textoutputpath, num_of_proc, pbar):
 
     print("All Processes Finished")
 
+
 def fill_queue_with_replays(queue, list):
     for item in list:
         queue.put(item)
     for _ in range(multiprocessing.cpu_count() - 1):
         queue.put(None)
 
-def mainprocess_init(queue):
-    separate_replaypool.queue = queue
 
-def update_progressbar(input, initvalue=0):
-    pbar, list = input[0], input[1]
-    delta = len(list)-initvalue
-    if delta > 0:
-        pbar.step(delta)
-        initvalue = len(list)
-    return initvalue
+def update_progressbar(outputqueue, pbar):
+    outputqueue.get()
+    pbar.increment(1)
+
+
+def output_scrolltext(msgqueue, scrolltext):
+    while True:
+        msg = msgqueue.get()
+        scrolltext.insert(index="1.0", chars=msg)
 
 # def check_analyzer_status(p):
 #     if p.is_alive(): # Then the process is still running
