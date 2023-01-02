@@ -1,23 +1,19 @@
 # onizanalyzer
 
 Things to do
+ - Update PROGRESSBAR & TEXT BOX
+   - One suggestion is to have one thread to run GUI, and another to receive updates from a queue
+     - Maybe have one queue for feeding into the mp.pool, and another to receive completed tasks? (for pbar)
  - Add ARES tank mods
  - Group processes into ONE PROCESS?
    - task manager shows 30 different processes lol
  - Add diverts
- - Add excel table of data
-   - More complicated than I thought - how am I going to keep updating the dataframe?
  - Add save files to user/documents feature 
    - Maybe as onizanalyzer
- - Add duplicate checker
-   - prototype is already made from arguing w frosky - I can reuse much of that
-   - use bank signatures to match?
 
 
 Much more down the line
 - bank reclaimer
-- .exe file size reduction (optimization)
-  - Done by creating a fresh env and installing only the necessary packages
 - discord bot
 
 

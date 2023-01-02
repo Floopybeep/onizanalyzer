@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import threading
-import pandas as pd
+import multiprocessing
 
 from tkinter import scrolledtext
 from tkinter import filedialog
@@ -86,7 +86,16 @@ class onizGUI:
         class Threader(threading.Thread):
             def run(self):
                 gui.window.mainloop()
+
+        class GUIinput(threading.Thread):
+            def run(self):
+                gui.inputqueue()
+
         Threader().run()
+        # threading.Thread()
+
+    def inputqueue(self):
+        inputqueue = multiprocessing.Queue()
 
     def add_frame(self, name):
         tmp = ttk.Frame(self.window)

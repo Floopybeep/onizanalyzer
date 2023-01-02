@@ -84,14 +84,19 @@ def separate_replays_analysis(repl_list, textoutputpath, total_replay_data):
 def separate_replaypool(repl_list, textoutputpath, num_of_proc, pbar):
     total_replay_data = totalreplaydataclass()
     pbar.configure(maximum=len(repl_list))
-
-    processqueue = multiprocessing.Queue()
-
     inputlist = rep_txt_wrapper(repl_list, textoutputpath, total_replay_data)
-    pool = multiprocessing.Pool(num_of_proc, mainprocess_init, [processqueue])
-    output = pool.imap_unordered(mainprocess, inputlist)
-    p = multiprocessing.Process(target=update_progressbar, args=(pbar, output))
+
+    # Input replays to queue(rpaq - replay analysis queue)
+    m = multiprocessing.Manager()
+    rpaq = m.Queue()
+    p = multiprocessing.Process(target=fill_queue_with_replays, args=(rpaq, inputlist))
     p.start()
+
+    # output replays to output
+    pool = multiprocessing.Pool(num_of_proc, mainprocess, (rpaq,))
+    output = pool.map(mainprocess, (rpaq,))
+    # p = multiprocessing.Process(target=update_progressbar, args=[pbar, output])   # unpickable pbar
+    # p.start()
 
     for out in output:
         if out is not False:
@@ -102,8 +107,14 @@ def separate_replaypool(repl_list, textoutputpath, num_of_proc, pbar):
 
     print("All Processes Finished")
 
+def fill_queue_with_replays(queue, list):
+    for item in list:
+        queue.put(item)
+    for _ in range(multiprocessing.cpu_count() - 1):
+        queue.put(None)
+
 def mainprocess_init(queue):
-    mainprocess.queue = queue
+    separate_replaypool.queue = queue
 
 def update_progressbar(input, initvalue=0):
     pbar, list = input[0], input[1]

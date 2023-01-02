@@ -5,8 +5,11 @@ from infoappend import append_replayinfo
 import sc2reader
 
 
-def mainprocess(inputargs):                  # take a replay file, convert to txt format
-    replaypath, textoutputpath, total_replay_data = inputargs[0], inputargs[1], inputargs[2]
+def mainprocess(queue):                  # take a replay file, convert to txt format
+    print("Mainprocess Started!")
+    qoutput = queue.get()
+    replaypath, textoutputpath, total_replay_data = qoutput[0], qoutput[1], qoutput[2]
+    # replaypath, textoutputpath, total_replay_data = inputargs[0], inputargs[1], inputargs[2]
 
     try:
         replay = sc2reader.load_replay(replaypath, load_level=3)
