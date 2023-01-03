@@ -7,11 +7,11 @@ from tkinter import scrolledtext
 from tkinter import filedialog
 from PIL import Image, ImageTk
 from pathlib import Path
-from functions import replay_file_parser, separate_replaypool, replay_duplicate_check
+from functions import replay_file_parser, replay_analysis_replaypool, replay_duplicate_check
 
 global mainclass_copy
 
-class NewClass:
+class GUIstart:
     def __init__(self, mainclass):
         global mainclass_copy
         mainclass_copy = mainclass
@@ -20,8 +20,8 @@ class NewClass:
 
         self.ui.add_canvas("canvas", 1440, 810)
         # self.ui.register_image("canvas", "C:/Users/USER/PycharmProjects/onizanalyzer/410542.jpg")
-        self.ui.register_image("canvas", "410542.jpg")
-        # self.ui.register_image("canvas", str(Path(__file__).absolute())[:-16] + "410542.jpg")
+        # self.ui.register_image("canvas", "410542.jpg")
+        self.ui.register_image("canvas", str(Path(__file__).absolute())[:-16] + "410542.jpg")
 
         self.ui.add_button("startbutton", "canvas", 8, "Start")
         self.ui.add_button("closebutton", "canvas", 8, "Close")
@@ -54,7 +54,7 @@ class NewClass:
         self.ui.register_scrolltext_window("canvas", 30, 30, "outputscroll")
 
         self.ui.add_labels("remainingtimelabel", 60, "white", "black")
-        self.ui.register_labels("canvas", 230, 724, "remainingtimelabel")
+        self.ui.register_labels("canvas", 220, 724, "remainingtimelabel")
 
         self.ui.add_text_on_canvas("canvas", 800, 30, 300, "white", "ONIZ replay root folder path:")
         self.ui.add_text_on_canvas("canvas", 800, 80, 300, "white", "ONIZ replay text file output folder path:")
@@ -79,6 +79,8 @@ class onizGUI:
         self.functions = {}
         self.scrolltexts = {}
         self.labels = {}
+        self.labeltextvariables = {}
+        self.labelconfigs = {}
         self.variables = {}
         self.styles = {}
 
@@ -165,8 +167,11 @@ class onizGUI:
         self.canvases[canvasname].create_text(x, y, text=text, width=width, anchor=tk.NW, fill=fill)
 
     def add_labels(self, name, width, foreground, background):
-        tmp = ttk.Label(background=background, foreground=foreground, width=width)
+        self.labeltextvariables[name] = ""
+        tmp = ttk.Label(background=background, foreground=foreground, width=width,
+                        textvariable=self.labeltextvariables[name])
         self.labels[name] = tmp
+        # self.labelconfigs[name] = self.labels[name].config
 
     def register_labels(self, canvasname, x, y, name):
         self.canvases[canvasname].create_window(x, y, anchor=tk.NW, window=self.labels[name])
@@ -179,7 +184,12 @@ class onizGUI:
         replist, repcount = replay_file_parser(repentry)
         arg=[replist, txtentry, mainclass_copy.numberofprocesses,
              self.progressbars["replayprogressbar"], self.scrolltexts["outputscroll"]]
-        p = threading.Thread(name="replay analysis", target=separate_replaypool, args=arg)
+
+        replay_analyzer_class = replay_analysis_replaypool(replist, txtentry, mainclass_copy.numberofprocesses,
+                                                           self.progressbars["replayprogressbar"], self.scrolltexts["outputscroll"],
+                                                           self.labels["remainingtimelabel"])
+
+        p = threading.Thread(name="replay analysis", target=replay_analyzer_class.replaypool_analysis)
         p.start()
 
     def select_replay_folder(self):
@@ -199,6 +209,6 @@ class onizGUI:
         delcheck = self.variables["deletedupes"].get()
         replist, _ = replay_file_parser(repentry)
         replay_duplicate_check(replist, txtentry, mainclass_copy.numberofprocesses,
-                               delcheck, self.progressbars["replayprogressbar"])
+                               delcheck, self.scrolltexts["outputscroll"])
 
 # https://hhj6212.github.io/programming/python/2021/04/18/python-multi.html

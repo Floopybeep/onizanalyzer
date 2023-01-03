@@ -1,14 +1,15 @@
 import multiprocessing
+import threading
 import pandas as pd
 import mpyq
-
+import time
 import os
-from os import listdir, walk
+
+from os import walk
 from os.path import join, isfile
 from s2protocol import versions
 from mainprocess import mainprocess
-from infodict import total_df_human_column_list, total_df_zombie_column_list, \
-    total_df_human_excel_column_list, total_df_zombie_excel_column_list
+from infodict import total_df_human_column_list, total_df_zombie_column_list
 
 
 # pd.set_option('display.max_colwidth', None)
@@ -19,6 +20,7 @@ from infodict import total_df_human_column_list, total_df_zombie_column_list, \
 
 global protocol
 protocol = versions.build(88500)
+
 
 def splitlist(list, n):
     len_list = len(list)
@@ -47,6 +49,7 @@ def get_col_widths(dataframe):
     idx_max = max([len(str(s)) for s in dataframe.index.values] + [len(str(dataframe.index.name))])
     return [idx_max] + [max([len(str(s)) for s in dataframe[col].values] + [len(col)]) for col in dataframe.columns]
 
+
 def numtobool(num):
     if num == 0:
         return False
@@ -55,10 +58,11 @@ def numtobool(num):
     else:
         return None
 
-def rep_txt_wrapper(replist, txtout, obj):
+
+def rep_txt_wrapper(replist, txtout):
     result = []
     for rep in replist:
-        result.append((rep, txtout, obj))
+        result.append((rep, txtout))
     return result
 
 
@@ -69,7 +73,8 @@ def replay_file_parser(folderpath):
         for name in files:
             extension = name[-9:]
             mapname = name[:10]
-            if isfile(join(path, name)) and extension == 'SC2Replay' and mapname == "Oh No It's":
+            if isfile(join(path, name)) and extension == 'SC2Replay' and \
+                    (mapname == "Oh No It's" or mapname == "Oh_No_Its_"):
                 filepaths.append(join(path, name))
                 count += 1
 
@@ -81,61 +86,124 @@ def separate_replays_analysis(repl_list, textoutputpath, total_replay_data):
         mainprocess(rep, textoutputpath, total_replay_data)
 
 
-def separate_replaypool(repl_list, textoutputpath, num_of_proc, pbar, scrolltext):
-    total_replay_data = totalreplaydataclass()
-    pbar.configure(maximum=len(repl_list))
-    inputlist = rep_txt_wrapper(repl_list, textoutputpath, total_replay_data)
+class replay_analysis_replaypool:
+    def __init__(self, repl_list, textoutpath, num_proc, pbar, scrolltext, remainingtimelabel):
+        self.replay_list = repl_list
+        self.textoutpath= textoutpath
+        self.num_process = num_proc
+        self.replaydataclass = totalreplaydataclass()
+        self.inputlist = []
+        self.outputlist = []
 
-    # Input replays to queue(rpaq - replay analysis queue)
-    m = multiprocessing.Manager()
-    inputqueue = m.Queue()
-    p = multiprocessing.Process(target=fill_queue_with_replays, args=(inputqueue, inputlist))
-    p.start()
+        self.pbar = pbar
+        self.scrolltext = scrolltext
+        self.remainingtimelabel = remainingtimelabel
 
-    # mainprocess outputs to outputqueue(actual files) and messagequeue(errors and other msgs)
-    messagequeue = m.Queue()
-    outputqueue = m.Queue()
+    def replaypool_analysis(self):
+        self.scrolltext.insert(index="1.0", chars="Replay Analysis Started!")
+        self.pbar.configure(maximum=len(self.replay_list))
+        self.inputlist = rep_txt_wrapper(self.replay_list, self.textoutpath)
+        self.num_process_update(self.num_process, len(self.inputlist))
 
-    # Define queue reading?
-    pbarp = multiprocessing.Process(target=update_progressbar, args=(outputqueue, pbar))
-    msgp = multiprocessing.Process(target=output_scrolltext, args=(messagequeue, scrolltext))
+        # Create queues
+        manager = multiprocessing.Manager()
+        inputqueue = manager.Queue()
+        outputqueue = manager.Queue()
+        messagequeue = manager.Queue()
+        queuelist = [inputqueue, messagequeue, outputqueue]
 
-    # Define mainprocess pool and execute
-    pool = multiprocessing.Pool(num_of_proc, mainprocess, (inputqueue, messagequeue, outputqueue,))
-    output = pool.map(mainprocess, (inputqueue, messagequeue, outputqueue,))
-    pbarp.start()
-    msgp.start()
-    # p = multiprocessing.Process(target=update_progressbar, args=[pbar, output])   # unpickable pbar
-    # p.start()
+        # Input replays to Queue
+        self.input_que_fill(inputqueue, self.inputlist)
+
+        # Define message reader & progressbar updater
+        # messagereader = multiprocessing.Process(target=self.update_scrolltext, args=(messagequeue,))
+        messagereader = threading.Thread(target=self.update_scrolltext, args=(messagequeue,))
+        # pbarupdater = multiprocessing.Process(target=self.update_pbar, args=(outputqueue,))
+        pbarupdater = threading.Thread(target=self.update_pbar, args=(outputqueue,))
+        timeupdater = threading.Thread(target=self.update_remainingtime, args=(inputqueue,))
+
+        # Define replay analyzer and execute all processes
+        for _ in range(self.num_process):
+            p = multiprocessing.Process(target=mainprocess, args=(inputqueue, messagequeue, outputqueue,))
+            p.start()
+
+        # pool = multiprocessing.Pool(self.num_process, mainprocess, (inputqueue, messagequeue, outputqueue,))             # pickle issues
+        # output = pool.map(mainprocess, (inputqueue, messagequeue, outputqueue,))
+        messagereader.start()
+        pbarupdater.start()
+        timeupdater.start()
+        messagereader.join()
+        pbarupdater.join()
+        timeupdater.join()
+
+        # Compile and send output data for analysis
+        self.analyze_data(self.outputlist)
+        self.scrolltext.insert(index="1.0", chars="Analysis Finished!\n")
+        print("Task Finished!")
+
+    def num_process_update(self, processor_number, replay_num):
+        if processor_number > replay_num:
+            self.num_process = replay_num
+
+    def input_que_fill(self, queue, list):
+        for item in list:
+            queue.put(item)
+        for _ in range(self.num_process):
+            queue.put(None)
+
+    def update_pbar(self, queue):
+        counter = 0
+        while True:
+            output = queue.get()
+            if output is None:
+                counter += 1
+                if counter == self.num_process:
+                    self.pbar.step(1)
+                    break
+            else:
+                if output != -1:
+                    self.outputlist.append(output)
+                self.pbar.step(1)
+
+    def update_scrolltext(self, queue):
+        counter = 0
+        while True:
+            message = queue.get()
+            if message is None:
+                counter += 1
+                if counter == self.num_process:
+                    break
+            else:
+                self.scrolltext.insert(index="1.0", chars=message)
+
+    def update_remainingtime(self, queue):
+        while True:
+            remainingtime = queue.qsize() * 4 / self.num_process
+            if queue.qsize() == 0:
+                break
+            self.remainingtimelabel.config(text=f"{int(remainingtime)} seconds")
+            time.sleep(1)
+
+    # def execute_mainprocess(self, queues):
+    #     inputqueue, outputqueue, messagequeue = queues[0], queues[1], queues[2]
+    #     while True:
+    #         input = inputqueue.get()
+    #         if input is None:
+    #             break
+    #         humandata, zombiedata = mainprocess(input, outputqueue, messagequeue)
+    #         self.outputlist.append((humandata, zombiedata))
 
 
+    def analyze_data(self, data):
+        print("data analysis started")
+        for output in data:
+            if output is not False:
+                self.replaydataclass.appendtoself(output[0], output[1])
 
-    for out in output:
-        if out is not False:
-            total_replay_data.appendtoself(out[0], out[1])
+        self.replaydataclass.create_dataframes()
+        self.replaydataclass.create_excel_file(self.textoutpath)
+        print("Analysis finished")
 
-    total_replay_data.create_dataframes()
-    total_replay_data.create_excel_file(textoutputpath)
-
-    print("All Processes Finished")
-
-
-def fill_queue_with_replays(queue, list):
-    for item in list:
-        queue.put(item)
-    for _ in range(multiprocessing.cpu_count() - 1):
-        queue.put(None)
-
-
-def update_progressbar(outputqueue, pbar):
-    outputqueue.get()
-    pbar.increment(1)
-
-
-def output_scrolltext(msgqueue, scrolltext):
-    while True:
-        msg = msgqueue.get()
-        scrolltext.insert(index="1.0", chars=msg)
 
 # def check_analyzer_status(p):
 #     if p.is_alive(): # Then the process is still running
@@ -149,7 +217,7 @@ def output_scrolltext(msgqueue, scrolltext):
 #         not_mp_button.config(state = "normal")
 #     return
 
-def replay_duplicate_check(repl_list, textoutpath, num_of_proc, deldupes, pbar):
+def replay_duplicate_check(repl_list, textoutpath, num_of_proc, deldupes, scrolltext):
     signatureset, duplicate_list = set(), []
     deldupes = numtobool(deldupes)
     repl_list.reverse()
@@ -167,6 +235,14 @@ def replay_duplicate_check(repl_list, textoutpath, num_of_proc, deldupes, pbar):
                     os.remove(out[1])
     f.close()
     print(duplicate_list)
+    if len(duplicate_list) > 0:
+        if deldupes:
+            scrolltext.insert(index="1.0", chars="Duplicate replays deleted!\n")
+        else:
+            scrolltext.insert(index="1.0", chars=f"Duplicate replays exported to \n{textoutpath}/#DuplicateReplays.txt!\n")
+    else:
+        scrolltext.insert(index="1.0", chars="No duplicates found!\n")
+
 
 def extract_signatures(reppath):
     signaturelist, result = [], ""
@@ -187,11 +263,13 @@ def extract_signatures(reppath):
 
     return tuple([result, reppath])
 
+
 def calculate_signature(list):
     resultlist = []
     for decimal in list:
         resultlist.append(format(decimal, 'x').upper())
     return ''.join(resultlist)
+
 
 def dupcheck(signature, replaypath, signatureset, f):
     if signature not in signatureset:
@@ -204,10 +282,9 @@ def dupcheck(signature, replaypath, signatureset, f):
 
 class totalreplaydataclass:
     def __init__(self):
-        self.replays_data_human = None
-        self.replays_data_zombie = None
+        self.dataframe_human = None
+        self.dataframe_zombie = None
         self.replays_data_human_list = []
-        self.replaynum = 1
         self.replays_data_zombie_list = []
         self.replaysignatures = set()
         self.duplicatereplaylist = []
@@ -217,15 +294,15 @@ class totalreplaydataclass:
         self.replays_data_zombie_list.append(zdata)
 
     def create_dataframes(self):
-        self.replays_data_human = pd.DataFrame.from_records(self.replays_data_human_list, columns=total_df_human_column_list)
-        self.replays_data_zombie = pd.DataFrame.from_records(self.replays_data_zombie_list, columns=total_df_zombie_column_list)
+        self.dataframe_human = pd.DataFrame.from_records(self.replays_data_human_list, columns=total_df_human_column_list)
+        self.dataframe_zombie = pd.DataFrame.from_records(self.replays_data_zombie_list, columns=total_df_zombie_column_list)
 
     def create_excel_file(self, path):
         h_writer = pd.ExcelWriter(f'{path}/#Humandata.xlsx', engine='xlsxwriter')
         z_writer = pd.ExcelWriter(f'{path}/#Zombiedata.xlsx', engine='xlsxwriter')
 
-        self.adjust_excel_data(h_writer, self.replays_data_human)
-        self.adjust_excel_data(z_writer, self.replays_data_zombie)
+        self.adjust_excel_data(h_writer, self.dataframe_human)
+        self.adjust_excel_data(z_writer, self.dataframe_zombie)
 
     def adjust_excel_data(self, writer, df):
         df.to_excel(writer, sheet_name='Sheet1', startrow=1, header=False, index=False)

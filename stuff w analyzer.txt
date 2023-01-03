@@ -1,35 +1,42 @@
-Algorithm Plan
-
-1. determine the winner/loser of game
-2. Loop over the events
-    2.1. Add/modify H/Z player data using relevant event (complete one at a time)
-        2.1.1.
-    2.2.
+To-Do for NEXT update
+- game length
+- lobby adv
+- lobby average rank
+- pub/priv
 
 
-To-Do
-1. viro
-2. rank
-3. lobby advantage                      might be different from based on rank calculations, due to preset adv
-3. implement multiprocess
-4. implement UI
-
-6. update playerclasses.py -            experimental dict, ultimate infestation set
-
-7. add to mainprocess.py -              Check for leavers! if there are 2 or more zergs, then there is a leaver!
-                                        Implement a player_check process, which picks up this anomaly
-                                        Could also edit the extract_playerinfo at infoextract.py
-
-99. Suggest Improvements                - measure time between DropshipsFueled and UltimateInfestationResearched (UpgradeCompleteEvent)
 
 
-AUTO-PY-TO-EXE
-pip install auto-py-to-exe
-Options:
-    script: main.py
-    onefile: one file
-    console window: window based
-    icon: add whatever
-    additional file: make sure to add the 412~~~.jpg file
-    ADVANCED:
-        collect all: add sc2reader
+Things to do
+ - Update PROGRESSBAR & TEXT BOX
+   - One suggestion is to have one thread to run GUI, and another to receive updates from a queue
+     - Maybe have one queue for feeding into the mp.pool, and another to receive completed tasks? (for pbar)
+ - Add ARES tank mods
+ - Group processes into ONE PROCESS?
+   - task manager shows 30 different processes lol
+ - Add diverts
+ - Add save files to user/documents feature
+   - Maybe as onizanalyzer
+ - Viro
+ - How many upgraded structures are built (check unittypechanges)
+
+
+Much more down the line
+- bank reclaimer
+- discord bot
+- player improvement suggestions
+    - average unspent gas throughout the game?
+- marginal analysis
+    - make game ID (re-hash the compounded player signatures), and if it exists in the excel file, then don't analyze
+    - would also have to add to previous file
+
+
+
+Needs Fixes
+- creep tower count is weird?
+
+Data to be Added
+- lobby average rank
+- pub/private check
+- lobby advantage
+

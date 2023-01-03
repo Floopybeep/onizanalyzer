@@ -1,13 +1,9 @@
-import pandas as pd
-import infodict
 from infocondense import *
 
 
-def append_replayinfo(replay, humandict, zombieplayer, total_replay_data):
-    replaynumber = total_replay_data.replaynum
-    total_replay_data.replaynum += 1
-    out1 = append_humaninfo(replay, humandict, total_replay_data, replaynumber)
-    out2 = append_zombieinfo(replay, zombieplayer, total_replay_data, replaynumber)
+def append_replayinfo(replay, humandict, zombieplayer):
+    out1 = append_humaninfo(replay, humandict)
+    out2 = append_zombieinfo(replay, zombieplayer)
     return out1, out2
 
 
@@ -18,18 +14,18 @@ def bool_to_victory(booleandata):
         return "Loss"
 
 
-def append_humaninfo(replay, humandict, total_replay_data, replaynumber):
+def append_humaninfo(replay, humandict):
     outlist = []
     for key in humandict:
         human, data = humandict[key], {}
         data = {}
 
-        # data['Replay #'] = replaynumber
         data['Replay Date'] = str(replay.date)
         data['Player Name'] = human.playername
         data['Player Handle'] = human.handle
         data['Rank'] = human.rank
         data['Result'] = bool_to_victory(human.victory)
+        data['Game Length'] = f"{replay.game_length.mins}.{replay.game_length.secs}"
         data['Weapon'] = hweaponfa(human.weapons)
         data['Weapon Mod #1'] = wmod(1, human.weapons)
         data['Weapon Mod #2'] = wmod(2, human.weapons)
@@ -77,7 +73,7 @@ def append_humaninfo(replay, humandict, total_replay_data, replaynumber):
         data['Extractors Killed'] = human.zstructurekills[4]
 
         outlist.append(data)
-        total_replay_data.replays_data_human_list.append(data)
+        # total_replay_data.replays_data_human_list.append(data)
     return outlist
 
 
@@ -156,15 +152,15 @@ def smod(mn, slist):
             result = ''.join([result, rstructuremodlist[mn][i]])
     return result
 
-def append_zombieinfo(replay, zplayer, total_replay_data, replaynumber):
+def append_zombieinfo(replay, zplayer):
     data = {}
 
-    # data['Replay #'] = replaynumber
     data['Replay Date'] = str(replay.date)
     data['Player Name'] = zplayer.playername
     data['Player Handle'] = zplayer.handle
     data['Rank'] = zplayer.rank
     data['Result'] = bool_to_victory(zplayer.victory)
+    data['Game Length'] = f"{replay.game_length.mins}.{replay.game_length.secs}"
     data['First Alpha'] = zplayer.startingalpha
     data['Abberations Built'] = zplayer.alphasbuilt[0][0]
     data['Abominations Built'] = zplayer.alphasbuilt[0][1]
@@ -212,7 +208,7 @@ def append_zombieinfo(replay, zplayer, total_replay_data, replaynumber):
     data['Cocoons Made'] = zplayer.cocoonsmade
     data['No. of Siphons'] = zplayer.siphons
 
-    total_replay_data.replays_data_zombie_list.append(data)
+    # total_replay_data.replays_data_zombie_list.append(data)
 
     return data
 

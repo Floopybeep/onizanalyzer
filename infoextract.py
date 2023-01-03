@@ -21,11 +21,13 @@ def extract_playerinfo(replay):                                         # input:
         victory = winloss_to_victory(human.result)
 
         if human.play_race == 'Terran':
-            humandict[human.pid] = marineinfo(name=human.name, pid=human.pid, handle=human.toon_handle, role='Human', victory=victory)
+            humandict[human.pid] = marineinfo(name=human.name, pid=human.pid, handle=human.toon_handle, role='Human',
+                                              victory=victory, gamelength=f"{replay.game_length.mins}.{replay.game_length.secs}")
             humandict[human.pid].kills = len(human.killed_units)
 
         elif human.play_race == 'Zerg':
-            zombieplayer = zombieinfo(name=human.name, pid=human.pid, handle=human.toon_handle, role='Zombie', victory=victory)
+            zombieplayer = zombieinfo(name=human.name, pid=human.pid, handle=human.toon_handle, role='Zombie',
+                                      victory=victory, gamelength=f"{replay.game_length.mins}.{replay.game_length.secs}")
             z_player_hangar_kill_check(human.killed_units, zombieplayer)
 
     if victory is None:

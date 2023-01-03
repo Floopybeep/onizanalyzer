@@ -20,7 +20,7 @@ class replayclass:
 
 
 class playerinfo():
-    def __init__(self, name=None, pid=None, handle=None, role=None, victory=None, rank=0):
+    def __init__(self, name=None, pid=None, handle=None, role=None, victory=None, rank=0, gamelength=None):
         self.playername = name
         self.pid = pid
         self.handle = handle
@@ -28,6 +28,7 @@ class playerinfo():
         self.victory = victory
         self.rank = rank
         self.bankinfo = replayclass()
+        self.gamelength = gamelength
 
     def setrank(self):
         if self.playerrole == 'Human':
@@ -46,8 +47,8 @@ class playerinfo():
 
 
 class marineinfo(playerinfo):
-    def __init__(self, name, pid, handle, role, victory):
-        super().__init__(name, pid, handle, role, victory)
+    def __init__(self, name, pid, handle, role, victory, gamelength):
+        super().__init__(name, pid, handle, role, victory, gamelength)
         self.weapons = [[0, False, False, False] for _ in range(7)]             # weapon lv, respective mod levels
         self.aresmods = [False for _ in range(10)]
         self.grenades = [False for _ in range(4)]                               # grenade lv for respective grenade
@@ -124,8 +125,8 @@ class marineinfo(playerinfo):
 
 
 class zombieinfo(playerinfo):
-    def __init__(self, name, pid, handle, role, victory):
-        super().__init__(name, pid, handle, role, victory)
+    def __init__(self, name, pid, handle, role, victory, gamelength):
+        super().__init__(name, pid, handle, role, victory, gamelength)
         self.majorroomcaptures = [False for _ in range(5)]              # Power, Fuel, Containment, Security, Gates
         self.alphasbuilt = [[0, 0] for _ in range(6)]                   # (Abom, Gene, Anub, Legion, Predator)(num)
         self.strainpurchases = [[0, 0, 0] for _ in range(4)]            # (Speed, Health, Damage, Volatile)(num)

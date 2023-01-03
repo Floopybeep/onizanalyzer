@@ -7,37 +7,41 @@ import sc2reader
 
 def mainprocess(inputqueue, messagequeue, outputqueue):                  # take a replay file, convert to txt format
     print("Mainprocess Started!")
-    qoutput = inputqueue.get()
-    replaypath, textoutputpath, total_replay_data = qoutput[0], qoutput[1], qoutput[2]
-    # replaypath, textoutputpath, total_replay_data = inputargs[0], inputargs[1], inputargs[2]
+    while True:
+        input = inputqueue.get()
+        if input is None:
+            print("Analysis Complete!")
+            messagequeue.put(None)
+            outputqueue.put(None)
+            break
+        replaypath, textoutputpath = input[0], input[1]
+        # replaypath, textoutputpath, total_replay_data = inputargs[0], inputargs[1], inputargs[2]
 
-    try:
-        replay = sc2reader.load_replay(replaypath, load_level=3)
-        humandict, zombieplayer = extract_playerinfo(replay)
+        try:
+            replay = sc2reader.load_replay(replaypath, load_level=3)
+            humandict, zombieplayer = extract_playerinfo(replay)
 
-        if len(humandict) < 6:
-            print("Incomplete/Leaver Lobby Detected!")
-            messagequeue.put("Incomplete/Leaver Lobby Detected!\n")
-            return False
+            if len(humandict) < 6:
+                print("Incomplete/Leaver Lobby Detected!")
+                messagequeue.put(f"Incomplete/Leaver Lobby Detected!\n{replaypath}\n")
+                continue
 
-        extract_playerbanks(replay, humandict, zombieplayer)
+            extract_playerbanks(replay, humandict, zombieplayer)
 
-        # if dupcheck(humandict, replaypath, textoutputpath, total_replay_data):
-        #     print("Duplicate Replay detected!")
-        #     pass
+            extract_eventinfo(replay, humandict, zombieplayer)
+            condense_eventinfo(replay, textoutputpath, humandict, zombieplayer)
+            humandata, zombiedata = append_replayinfo(replay, humandict, zombieplayer)
+            print("textfile successfully created!")
+            outputqueue.put((humandata, zombiedata))
 
-        extract_eventinfo(replay, humandict, zombieplayer)
-        condense_eventinfo(replay, textoutputpath, humandict, zombieplayer)
-        output1, output2 = append_replayinfo(replay, humandict, zombieplayer, total_replay_data)
-        print("textfile successfully created!")
-        outputqueue.put("textfile successfully created!")
+        except Exception as errormessage:
+            messagequeue.put(f"Error in loading {replaypath}\n")
+            outputqueue(-1)
+            print("Error in loading replay!")
+            print(errormessage)
+            continue
 
-    except Exception:
-        print("Error in loading replay!")
-        print(Exception)
-        return False
 
-    return output1, output2
 
 
 # if __name__ == "__main__":

@@ -152,7 +152,7 @@ bankloaddict = {'Chosen_Zombie': 0, 'Color': 0, 'Difficulty': 0,
                 'Experimental_Mode': 0, 'Host_Chooses_Zombie': 0, 'Opt_In': 0}
 
 ############################################## csv dict & sets ########################################################
-total_df_human_column_list = ['Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Result', 'Weapon',
+total_df_human_column_list = ['Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Game Length', 'Result', 'Weapon',
                               'Weapon Mod #1', 'Weapon Mod #2', 'Weapon Mod #3', 'Grenade', 'Scout Droid Upgrade',
                               'Mining Droid Upgrade', 'Nuke Upgrade', 'Sensor Upgrade', 'Accessory', 'Suits',
                               'Misc Shield Purchase', 'Misc Backpack Purchase', 'Misc Visor Purchase',
@@ -165,7 +165,7 @@ total_df_human_column_list = ['Replay Date', 'Player Name', 'Player Handle', 'Ra
                               'Sunkens Killed', 'Swarmling Nests Killed', 'Creep Towers Killed', 'Lesser Nydus Killed',
                               'Extractors Killed']      # deleted 'Replay #'
 
-total_df_zombie_column_list = ['Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Result',
+total_df_zombie_column_list = ['Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Game Length', 'Result',
                                'First Alpha', 'Abberations Built', 'Abominations Built', 'Geneweavers Built',
                                'Genesplicers Built', 'Anubalisks Built', 'Anubalights Built', 'Legions Built',
                                'Legionnaires Built', 'Hunters Built', 'Predators Built', 'Underseers Built',

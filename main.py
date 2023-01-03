@@ -1,6 +1,6 @@
 import multiprocessing
 from functions import maininfoclass
-from guifunctions import NewClass
+from guifunctions import GUIstart
 
 
 if __name__ == '__main__':
@@ -10,4 +10,4 @@ if __name__ == '__main__':
     mainclass.numberofprocesses = multiprocessing.cpu_count() - 1
     # mainclass.numberofprocesses = 3
     mainclass.version = "1.0.7"
-    NC = NewClass(mainclass)
+    GUIstart(mainclass)
