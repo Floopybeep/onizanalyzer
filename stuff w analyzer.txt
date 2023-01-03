@@ -8,12 +8,7 @@ To-Do for NEXT update
 
 
 Things to do
- - Update PROGRESSBAR & TEXT BOX
-   - One suggestion is to have one thread to run GUI, and another to receive updates from a queue
-     - Maybe have one queue for feeding into the mp.pool, and another to receive completed tasks? (for pbar)
  - Add ARES tank mods
- - Group processes into ONE PROCESS?
-   - task manager shows 30 different processes lol
  - Add diverts
  - Add save files to user/documents feature
    - Maybe as onizanalyzer
@@ -29,6 +24,7 @@ Much more down the line
 - marginal analysis
     - make game ID (re-hash the compounded player signatures), and if it exists in the excel file, then don't analyze
     - would also have to add to previous file
+- leaver lobby analysis
 
 
 

@@ -41,7 +41,7 @@ def condense_eventinfo(replay, txtpath, humandict, zplayer):
     name = set_replay_name(replay, humanlist, zplayer)
     txtpath = '/'.join([txtpath, name])
 
-    with open(txtpath, 'w') as f:
+    with open(txtpath, 'w', encoding="utf-8") as f:
         f.write(f"Date: {replay.date}\n")
         f.write(f"Game Length: {replay.game_length.mins}.{replay.game_length.secs}\n")
         f.write(f"Replay File Path: {replay.filename}\n\n")

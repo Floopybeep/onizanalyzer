@@ -1,6 +1,7 @@
 from infoextract import extract_eventinfo, extract_playerinfo, extract_playerbanks
 from infocondense import condense_eventinfo
 from infoappend import append_replayinfo
+import os
 # import time
 import sc2reader
 
@@ -23,7 +24,7 @@ def mainprocess(inputqueue, messagequeue, outputqueue):                  # take 
 
             if len(humandict) < 6:
                 print("Incomplete/Leaver Lobby Detected!")
-                messagequeue.put(f"Incomplete/Leaver Lobby Detected!\n{replaypath}\n")
+                messagequeue.put(f"Incomplete/Leaver Lobby Detected!\n{os.path.basename(replaypath)}\n")
                 continue
 
             extract_playerbanks(replay, humandict, zombieplayer)
@@ -32,6 +33,7 @@ def mainprocess(inputqueue, messagequeue, outputqueue):                  # take 
             condense_eventinfo(replay, textoutputpath, humandict, zombieplayer)
             humandata, zombiedata = append_replayinfo(replay, humandict, zombieplayer)
             print("textfile successfully created!")
+            messagequeue.put(f"Replay analyzed!\n{os.path.basename(replaypath)}\n")
             outputqueue.put((humandata, zombiedata))
 
         except Exception as errormessage:
