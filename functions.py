@@ -123,12 +123,12 @@ class replay_analysis_replaypool:
         timeupdater = threading.Thread(target=self.update_remainingtime, args=(inputqueue,))
 
         # Define replay analyzer and execute all processes
-        # for _ in range(self.num_process):
-            # p = multiprocessing.Process(target=mainprocess, args=(inputqueue, messagequeue, outputqueue,))
-            # p.start()
+        for _ in range(self.num_process):
+            p = multiprocessing.Process(target=mainprocess, args=(inputqueue, messagequeue, outputqueue,))
+            p.start()
 
-        pool = multiprocessing.Pool(self.num_process, mainprocess, (inputqueue, messagequeue, outputqueue,))             # pickle issues
-        pool.imap(mainprocess, (inputqueue, messagequeue, outputqueue,))
+        # pool = multiprocessing.Pool(self.num_process, mainprocess, (inputqueue, messagequeue, outputqueue,))             # pickle issues
+        # pool.imap(mainprocess, (inputqueue, messagequeue, outputqueue,))
 
         messagereader.start()
         pbarupdater.start()
@@ -159,7 +159,7 @@ class replay_analysis_replaypool:
             if output is None:
                 counter += 1
                 if counter == self.num_process:
-                    self.pbar.step(1)
+                    # self.pbar.step(1)
                     break
             else:
                 if output != -1:

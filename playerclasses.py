@@ -10,6 +10,8 @@ class replayclass:
         self.player_bankinfo = bankplayerdict.copy()
         self.load_bankinfo = bankloaddict.copy()
 
+        self.isprivate = False
+
     def setplayeropt(self, opt):
         if opt['m_name'].decode('utf-8') in bankplayerdict:
             self.player_bankinfo[opt['m_name'].decode('utf-8')] = opt['m_data'].decode('utf-8')
