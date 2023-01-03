@@ -47,8 +47,8 @@ class playerinfo():
 
 
 class marineinfo(playerinfo):
-    def __init__(self, name, pid, handle, role, victory, gamelength):
-        super().__init__(name, pid, handle, role, victory, gamelength)
+    def __init__(self, name, pid, handle, role, victory):
+        super().__init__(name, pid, handle, role, victory)
         self.weapons = [[0, False, False, False] for _ in range(7)]             # weapon lv, respective mod levels
         self.aresmods = [False for _ in range(10)]
         self.grenades = [False for _ in range(4)]                               # grenade lv for respective grenade
@@ -125,8 +125,8 @@ class marineinfo(playerinfo):
 
 
 class zombieinfo(playerinfo):
-    def __init__(self, name, pid, handle, role, victory, gamelength):
-        super().__init__(name, pid, handle, role, victory, gamelength)
+    def __init__(self, name, pid, handle, role, victory):
+        super().__init__(name, pid, handle, role, victory)
         self.majorroomcaptures = [False for _ in range(5)]              # Power, Fuel, Containment, Security, Gates
         self.alphasbuilt = [[0, 0] for _ in range(6)]                   # (Abom, Gene, Anub, Legion, Predator)(num)
         self.strainpurchases = [[0, 0, 0] for _ in range(4)]            # (Speed, Health, Damage, Volatile)(num)

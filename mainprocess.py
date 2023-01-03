@@ -26,15 +26,17 @@ def mainprocess(inputqueue, messagequeue, outputqueue):                  # take 
                 print("Incomplete/Leaver Lobby Detected!")
                 messagequeue.put(f"Incomplete/Leaver Lobby Detected!\n{os.path.basename(replaypath)}\n")
                 continue
+                # return False
+            else:
+                extract_playerbanks(replay, humandict, zombieplayer)
 
-            extract_playerbanks(replay, humandict, zombieplayer)
-
-            extract_eventinfo(replay, humandict, zombieplayer)
-            condense_eventinfo(replay, textoutputpath, humandict, zombieplayer)
-            humandata, zombiedata = append_replayinfo(replay, humandict, zombieplayer)
-            print("textfile successfully created!")
-            messagequeue.put(f"Replay analyzed!\n{os.path.basename(replaypath)}\n")
-            outputqueue.put((humandata, zombiedata))
+                extract_eventinfo(replay, humandict, zombieplayer)
+                condense_eventinfo(replay, textoutputpath, humandict, zombieplayer)
+                humandata, zombiedata = append_replayinfo(replay, humandict, zombieplayer)
+                print("textfile successfully created!")
+                messagequeue.put(f"Replay analyzed!\n{os.path.basename(replaypath)}\n")
+                outputqueue.put((humandata, zombiedata))
+                return humandata, zombiedata
 
         except Exception as errormessage:
             messagequeue.put(f"Error in loading {replaypath}\n")
@@ -42,6 +44,7 @@ def mainprocess(inputqueue, messagequeue, outputqueue):                  # take 
             print("Error in loading replay!")
             print(errormessage)
             continue
+        # return False
 
 
 
