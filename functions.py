@@ -128,7 +128,7 @@ class replay_analysis_replaypool:
             # p.start()
 
         pool = multiprocessing.Pool(self.num_process, mainprocess, (inputqueue, messagequeue, outputqueue,))             # pickle issues
-        output = pool.imap(mainprocess, (inputqueue, messagequeue, outputqueue,))
+        pool.imap(mainprocess, (inputqueue, messagequeue, outputqueue,))
 
         messagereader.start()
         pbarupdater.start()

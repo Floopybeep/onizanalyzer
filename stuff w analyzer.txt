@@ -1,5 +1,4 @@
 To-Do for NEXT update
-- game length
 - lobby adv
 - lobby average rank
 - pub/priv
@@ -13,7 +12,7 @@ Things to do
  - Add save files to user/documents feature
    - Maybe as onizanalyzer
  - Viro
- - How many upgraded structures are built (check unittypechanges)
+ - How many upgraded structures are built (check UnitTypeChanges)
 
 
 Much more down the line

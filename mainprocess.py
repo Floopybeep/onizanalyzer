@@ -36,7 +36,7 @@ def mainprocess(inputqueue, messagequeue, outputqueue):                  # take 
                 print("textfile successfully created!")
                 messagequeue.put(f"Replay analyzed!\n{os.path.basename(replaypath)}\n")
                 outputqueue.put((humandata, zombiedata))
-                return humandata, zombiedata
+                # return humandata, zombiedata
 
         except Exception as errormessage:
             messagequeue.put(f"Error in loading {replaypath}\n")
