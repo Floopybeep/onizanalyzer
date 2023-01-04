@@ -20,8 +20,8 @@ class GUIstart:
 
         self.ui.add_canvas("canvas", 1440, 810)
         # self.ui.register_image("canvas", "C:/Users/USER/PycharmProjects/onizanalyzer/410542.jpg")
-        # self.ui.register_image("canvas", "410542.jpg")
-        self.ui.register_image("canvas", str(Path(__file__).absolute())[:-16] + "410542.jpg")
+        self.ui.register_image("canvas", "410542.jpg")
+        # self.ui.register_image("canvas", str(Path(__file__).absolute())[:-16] + "410542.jpg")
 
         self.ui.add_button("startbutton", "canvas", 8, "Start")
         self.ui.add_button("closebutton", "canvas", 8, "Close")
