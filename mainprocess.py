@@ -16,7 +16,6 @@ def mainprocess(inputqueue, messagequeue, outputqueue):                  # take 
             outputqueue.put(None)
             break
         replaypath, textoutputpath = input[0], input[1]
-        # replaypath, textoutputpath, total_replay_data = inputargs[0], inputargs[1], inputargs[2]
 
         try:
             replay = sc2reader.load_replay(replaypath, load_level=3)
@@ -29,12 +28,12 @@ def mainprocess(inputqueue, messagequeue, outputqueue):                  # take 
             print(errormessage)
             continue
 
-        if len(humandict) < 6:
+        if len(humandict) < 6 or zombieplayer is None:
             print("Incomplete/Leaver Lobby Detected!")
             messagequeue.put(f"Incomplete/Leaver Lobby Detected!\n{os.path.basename(replaypath)}\n")
             outputqueue.put(-1)
             continue
-            # return False
+
         else:
             extract_playerbanks(replay, humandict, zombieplayer)
 
@@ -44,9 +43,6 @@ def mainprocess(inputqueue, messagequeue, outputqueue):                  # take 
             print("textfile successfully created!")
             messagequeue.put(f"Replay analyzed!\n{os.path.basename(replaypath)}\n")
             outputqueue.put((humandata, zombiedata))
-            # return humandata, zombiedata
-
-        # return False
 
 
 
