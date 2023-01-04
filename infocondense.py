@@ -26,7 +26,7 @@ def set_replay_name(replay, humanlist, zplayer):
             numgm += 1
     number_of_gm = f"{numgm}GM"
 
-    playernames = ', '.join([zplayer.playername, ', '.join([player.playername for player in humanlist])])
+    playernames = ', '.join([zplayer.playername+'(Z)', ', '.join([player.playername for player in humanlist])])
     textfilename = ' - '.join([replaytime, whowins, number_of_gm, playernames, '.txt'])
 
     return textfilename

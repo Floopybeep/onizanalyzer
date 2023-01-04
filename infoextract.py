@@ -162,7 +162,7 @@ def UnitTypeChangeEventCheck(event, humandict, zombieplayer):                   
     elif name in t2alphadict and event.unit_id_index in zombieplayer.cocoonids:
         zombieplayer.t2alpha_create(name)
         zombieplayer.cocoonids.discard(event.unit_id_index)
-        if event.unit.killed_by is not None and event.unit.killed_by.pid is not None:
+        if event.unit.killed_by is not None and event.unit.killed_by.pid is not None and event.unit.killed_by.pid != zombieplayer.pid:
             humandict[event.unit.killed_by.pid].alphakills[t2alphadict[name]][1] += 1
             humandict[event.unit.killed_by.pid].alphakills[t2alphadict[name]][0] -= 1
         elif event.unit.killing_unit is not None and event.unit.killing_unit.name == 'AutoTurret':
@@ -177,7 +177,7 @@ def UnitBornEventCheck(event, humandict, zombieplayer):                 # for dr
         zombieplayer.droppodsused += 1
     elif name == 'MassiveCocoon':
         zombieplayer.cocoonsmade += 1
-        if event.unit.killed_by is not None:
+        if event.unit.killed_by is not None and event.unit.killed_by.pid is not None and event.unit.killed_by.pid != zombieplayer.pid:
             humandict[event.unit.killed_by.pid].cocoonkills += 1
         elif event.unit.killing_unit is not None and event.unit.killing_unit.name == 'AutoTurret':
             humandict[event.unit.killing_unit.owner.pid].cocoonkills += 1
@@ -185,7 +185,7 @@ def UnitBornEventCheck(event, humandict, zombieplayer):                 # for dr
         zombieplayer.t1alpha_create(name)
         if zombieplayer.startingalpha is None:
             zombieplayer.startingalpha = t1alphatonamedict[name]
-        if event.unit.killed_by is not None and event.unit.killed_by.pid is not None:
+        if event.unit.killed_by is not None and event.unit.killed_by.pid is not None and event.unit.killed_by.pid != zombieplayer.pid:
             humandict[event.unit.killed_by.pid].alphakills[t1alphadict[name]][0] += 1
         elif event.unit.killing_unit is not None and event.unit.killing_unit.name == 'AutoTurret':
             humandict[event.unit.killing_unit.owner.pid].alphakills[t1alphadict[name]][0] += 1

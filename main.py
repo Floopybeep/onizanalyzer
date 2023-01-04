@@ -9,5 +9,5 @@ if __name__ == '__main__':
     mainclass = maininfoclass()
     mainclass.numberofprocesses = multiprocessing.cpu_count() - 1
     # mainclass.numberofprocesses = 3
-    mainclass.version = "1.0.7"
+    mainclass.version = "1.0.7.1"
     GUIstart(mainclass)
