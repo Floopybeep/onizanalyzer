@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import threading
 import multiprocessing
+import os
 
 from tkinter import scrolledtext
 from tkinter import filedialog
@@ -28,12 +29,18 @@ class GUIstart:
         self.ui.add_button("dupcheckbutton", "canvas", 20, "Check Duplicate Replays")
         self.ui.add_button("repentrybutton", "canvas", 15, "Designate Path")
         self.ui.add_button("textentrybutton", "canvas", 15, "Designate Path")
+        self.ui.add_button("savepathbutton", "canvas", 8, "Save Path")
+        self.ui.add_button("loadpathbutton", "canvas", 8, "Load Path")
         self.ui.register_button("canvas", 1260, 748, "startbutton")
         self.ui.register_button("canvas", 1344, 748, "closebutton")
         self.ui.register_button("canvas", 1260, 708, "dupcheckbutton")
         self.ui.register_button("canvas", 1300, 48, "repentrybutton")
         self.ui.register_button("canvas", 1300, 98, "textentrybutton")
+        self.ui.register_button("canvas", 1272, 138, "savepathbutton")
+        self.ui.register_button("canvas", 1350, 138, "loadpathbutton")
         self.ui.register_function("closebutton", self.ui.window.destroy)
+        self.ui.register_function("savepathbutton", self.ui.save_paths)
+        self.ui.register_function("loadpathbutton", self.ui.load_paths)
 
         self.ui.add_checkbox("deletedupes", "Delete Duplicates?", "white", "black", "canvas")
         self.ui.register_checkbox("canvas", 1260, 678, "deletedupes")
@@ -177,6 +184,26 @@ class onizGUI:
         self.canvases[canvasname].create_window(x, y, anchor=tk.NW, window=self.labels[name])
 
     # Function Declarations
+    def save_paths(self):
+        repentry = self.entries["replayfolderpathentry"].get()
+        txtentry = self.entries["textfolderpathentry"].get()
+
+        savepath = os.path.expanduser('~/documents/ONIZanalyzersettings.txt')
+        with open(savepath, 'w') as f:
+            f.write(f"{repentry}\n")
+            f.write(f"{txtentry}")
+        f.close()
+
+    def load_paths(self):
+        savepath = os.path.expanduser('~/documents/ONIZanalyzersettings.txt')
+        with open(savepath, 'r') as f:
+            repentry = f.readline().strip()
+            txtentry = f.readline().strip()
+        f.close()
+
+        self.entries["replayfolderpathentry"].insert(0, repentry)
+        self.entries["textfolderpathentry"].insert(0, txtentry)
+
     def press_start(self):
         print("Button pressed!")
         repentry = self.entries["replayfolderpathentry"].get()
@@ -212,3 +239,5 @@ class onizGUI:
                                delcheck, self.scrolltexts["outputscroll"])
 
 # https://hhj6212.github.io/programming/python/2021/04/18/python-multi.html
+# https://web.archive.org/web/20201111190045id_/https://effbot.org/tkinterbook/entry.htm
+

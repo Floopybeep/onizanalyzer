@@ -13,6 +13,7 @@ class replayclass:
         self.isprivate = False
         self.averagerank = 0
         self.advantage = None
+        self.isbeforepatch = False
 
     def setplayeropt(self, opt):
         if opt['m_name'].decode('utf-8') in bankplayerdict:
@@ -68,7 +69,7 @@ class marineinfo(playerinfo):
         self.captures = 0                   # done
         self.saves = 0
         self.diverts = 0
-        self.alphakills = [[0, 0] for _ in range(6)]        # done
+        self.alphakills = [[0, 0] for _ in range(8)]        # done
         self.cocoonkills = 0                # done
         self.zstructurekills = [0, 0, 0, 0, 0]      # done
         self.explorationdroidsmade = 0      # done
@@ -132,7 +133,7 @@ class zombieinfo(playerinfo):
     def __init__(self, name, pid, handle, role, victory):
         super().__init__(name, pid, handle, role, victory)
         self.majorroomcaptures = [False for _ in range(5)]              # Power, Fuel, Containment, Security, Gates
-        self.alphasbuilt = [[0, 0] for _ in range(6)]                   # (Abom, Gene, Anub, Legion, Predator)(num)
+        self.alphasbuilt = [[0, 0] for _ in range(8)]                   # (Abom, Gene, Anub, Legion, Predator)(num)
         self.strainpurchases = [[0, 0, 0] for _ in range(4)]            # (Speed, Health, Damage, Volatile)(num)
         self.upgradepurchases = [0 for _ in range(5)]                   # (Speed, Regen, Constructive, Virulent, Pods)lv
         self.advancedinfestations = [False for _ in range(5)]           # Power, Fuel, Contain, Sec, Gates

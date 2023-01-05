@@ -89,20 +89,25 @@ def calculate_game_id(humandict, zplayer):
 
 
 def calculate_isprivate(replay, humandict, zplayer):
-    # if replay.attributes[16]['Premade Game'] == 'Yes':
-    #     set_info_to_private(humandict, zplayer)
-    #     return True
-    if zplayer.bankinfo.load_bankinfo['Difficulty'] != '5' or zplayer.bankinfo.load_bankinfo['Host_Chooses_Zombie'] == '1' \
-            or zplayer.bankinfo.load_bankinfo['Experimental_Mode'] == '1':
-        set_info_to_private(humandict, zplayer)
-        return True
+    if replay.map_name == "Oh No It's Zombies Arctic Updated":
+        if replay.is_private:
+            set_info_to_private(humandict, zplayer, isbeforepatch=True)
+            return True
+    else:
+        if zplayer.bankinfo.load_bankinfo['Difficulty'] != '5':
+            set_info_to_private(humandict, zplayer)
+            return True
     return False
 
 
-def set_info_to_private(humandict, zplayer):
+def set_info_to_private(humandict, zplayer, isbeforepatch=False):
     for key in humandict:
         humandict[key].bankinfo.isprivate = True
+        if isbeforepatch:
+            humandict[key].bankinfo.isbeforepatch = True
     zplayer.bankinfo.isprivate = True
+    if isbeforepatch:
+        zplayer.bankinfo.isbeforepatch = True
 
 
 def calculate_game_advantage(humandict, zplayer):
@@ -263,7 +268,7 @@ def UnitBornEventCheck(event, humandict, zombieplayer):                 # for dr
 
     if name == 'ZergDropPod':
         zombieplayer.droppodsused += 1
-    elif name == 'MassiveCocoon':
+    elif name == 'MassiveCocoon' or name == 'RoyalCocoon':
         zombieplayer.cocoonsmade += 1
         if event.unit.killed_by is not None and event.unit.killed_by.pid is not None and event.unit.killed_by.pid != zombieplayer.pid:
             humandict[event.unit.killed_by.pid].cocoonkills += 1
@@ -280,6 +285,12 @@ def UnitBornEventCheck(event, humandict, zombieplayer):                 # for dr
     elif name == 'InfestedCocoon' and event.frame > 0:
         zombieplayer.marinecaptures += 1
         humandict[event.control_pid].captures += 1
+    elif name == 'QueenCoop':
+        zombieplayer.t2alpha_create(name)
+        if event.unit.killed_by is not None and event.unit.killed_by.pid is not None and event.unit.killed_by.pid != zombieplayer.pid:
+            humandict[event.unit.killed_by.pid].alphakills[t2alphadict[name]][1] += 1
+        elif event.unit.killing_unit is not None and event.unit.killing_unit.name == 'AutoTurret':
+            humandict[event.unit.killing_unit.owner.pid].alphakills[t2alphadict[name]][1] += 1
 
 
 def UnitInitEventCheck(event, humandict, zombieplayer):                         # for z structures

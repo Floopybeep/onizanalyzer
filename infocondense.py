@@ -247,7 +247,7 @@ def hstructmodf(structlist):
 
 def halphakillf(akilllist):
     result = ''
-    for i in range(6):
+    for i in range(8):
         if akilllist[i][0]:
             if len(result) > 0:
                 result = result + ', '
@@ -331,7 +331,7 @@ def zalphasbuiltf(alist):
     alist_copy = alist.copy()
     for alpha in alist_copy:
         alpha[0] -= alpha[1]
-    for i in range(6):
+    for i in range(8):
         if alist_copy[i][0] > 0:
             if len(result) > 0:
                 result = result + ', '

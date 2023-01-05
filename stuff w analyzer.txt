@@ -37,3 +37,9 @@ Data to be Added
 - pub/private check
 - lobby advantage
 
+
+
+226 - 5.6 ~ 6.5 sec
+16 - 2.1 seconds
+142 - 4.1 seconds
+120~ takes roughly 2 seconds, so maybe 60 per second? Initial time of 2 seconds?

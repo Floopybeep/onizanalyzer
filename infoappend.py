@@ -75,6 +75,9 @@ def append_humaninfo(replay, humandict):
         data['Predators Killed'] = human.alphakills[4][1]
         data['Underseers Killed'] = human.alphakills[5][0]
         data['Saboteurs Killed'] = human.alphakills[5][1]
+        data['Overseers Killed'] = human.alphakills[6][0]
+        data['Parasitic Hosts Killed'] = human.alphakills[6][1]
+        data['Hive Queen Killed'] = human.alphakills[7][1]
         data['Cocoons Killed'] = human.cocoonkills
         data['Structures Killed'] = sum(human.zstructurekills)
         data['Sunkens Killed'] = human.zstructurekills[0]
@@ -189,6 +192,8 @@ def append_zombieinfo(replay, zplayer):
     data['Predators Built'] = zplayer.alphasbuilt[4][1]
     data['Underseers Built'] = zplayer.alphasbuilt[5][0]
     data['Saboteurs Built'] = zplayer.alphasbuilt[5][1]
+    data['Overseers Built'] = zplayer.alphasbuilt[6][0]
+    data['Parasitic Hosts Built'] = zplayer.alphasbuilt[6][1]
     data['No. of Alphas Built'] = sum(sum(alist) for alist in zplayer.alphasbuilt)
     data['T1 Speed Purchased'] = zplayer.strainpurchases[0][0]
     data['T2 Speed Purchased'] = zplayer.strainpurchases[0][1]

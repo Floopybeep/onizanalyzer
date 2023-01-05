@@ -80,14 +80,15 @@ ultimateinfestationdict = {'SpawnHiveQueen': 'Hive Queen', 'CriticalMass': 'Crit
 
 # UnitTypeChangeEvent dicts
 t2alphadict = {'Abomination': 0, 'GenesplicerUprooted': 1, 'Anubalight': 2, 'LegionnaireZombie': 3,
-               'Predator2': 4, 'Saboteur': 5}
+               'Predator2': 4, 'Saboteur': 5, 'QueenClassic': 6, 'QueenCoop': 7}
 
 # UnitBornEvent dicts
 t1alphadict = {'InfestedAbomination': 0, 'PrimalTownHallUprooted': 1, 'Anubalisk': 2, 'Lurker': 3,
-               'Hunter': 4, 'Underseer': 5}
+               'Hunter': 4, 'Underseer': 5, 'Overseer': 6}
 
 t1alphatonamedict = {'InfestedAbomination': 'Abberation', 'PrimalTownHallUprooted': 'Geneweaver',
-                     'Anubalisk': 'Anubalisk', 'Lurker': 'Legion', 'Hunter': 'Hunter', 'Underseer': 'Underseer'}
+                     'Anubalisk': 'Anubalisk', 'Lurker': 'Legion', 'Hunter': 'Hunter', 'Underseer': 'Underseer',
+                     'Overseer': 'Overseer'}
 
 # UnitInitEvent dicts
 zstructuredict = {'PrimalSunkenColony': 0, 'LocustNest': 1, 'NydusCanalCreeper': 2, 'LesserNydusWorm': 3,
@@ -123,16 +124,16 @@ rstructuremodlist = [[None, 'Heavy', 'SpecOps', 'Flame'], [None, 'SpecOps', 'Ene
 
 rstructuremodshortdict = {0: '(T)', 1: '(HD)', 2: '(P)'}
 
-ralphakillsdict = {0: 'Abberation', 1: 'Gene', 2: 'Anubalisk', 3: 'Legion', 4: 'Hunter', 5: 'Underseer'}
+ralphakillsdict = {0: 'Abberation', 1: 'Gene', 2: 'Anubalisk', 3: 'Legion', 4: 'Hunter', 5: 'Underseer', 6: 'Overseer', 7: ''}
 
 rzstructurekillsdict = {0: 'Sunken', 1: 'SwarmNest', 2: 'Creep Tower', 3: 'Lesser Nydus', 4: 'Extractor'}
 
 ############################################# Zombie Dict (reverse order) #############################################
 rmajorroomdict = {0: 'Power', 1: 'FDC', 2: 'Containment', 3: 'Security', 4: 'Gates Control'}
 
-rt1alphasdict = {0: 'Abberation', 1: 'Geneweaver', 2: 'Anubalisk', 3: 'Legion', 4: 'Hunter', 5: 'Underseer'}
+rt1alphasdict = {0: 'Abberation', 1: 'Geneweaver', 2: 'Anubalisk', 3: 'Legion', 4: 'Hunter', 5: 'Underseer', 6: 'Overseer', 7: ''}
 
-rt2alphasdict = {0: 'Abomination', 1: 'Genesplicer', 2: 'Anubalight', 3: 'Legionnaire', 4: 'Predator', 5: 'Saboteur'}
+rt2alphasdict = {0: 'Abomination', 1: 'Genesplicer', 2: 'Anubalight', 3: 'Legionnaire', 4: 'Predator', 5: 'Saboteur', 6: 'Parasitic Host', 7: 'Hive Queen'}
 
 rstrainsdict = {0: 'Speed Strain', 1: 'Health Strain', 2: 'Damage Strain', 3: 'Volatile Strain'}
 
@@ -161,8 +162,8 @@ fixedrankplayerhandleset = {'1-S2-1-8018306', '1-S2-1-10692208', '1-S2-1-8433335
                             '2-S2-1-8671970', '2-S2-1-2135688'}
 
 ############################################## csv dict & sets ########################################################
-total_df_human_column_list = ['Game ID', 'Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Game Length', 'Result',
-                              'Private/Public', 'Game Advantage', 'Avg Human Rank',
+total_df_human_column_list = ['Game ID', 'Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Avg Human Rank',
+                              'Game Length', 'Result', 'Private/Public', 'Game Advantage',
                               'Weapon', 'Weapon Mod #1', 'Weapon Mod #2', 'Weapon Mod #3', 'Grenade',
                               'Scout Droid Upgrade', 'Mining Droid Upgrade', 'Nuke Upgrade', 'Sensor Upgrade',
                               'Accessory', 'Suits', 'Misc Shield Purchase', 'Misc Backpack Purchase',
@@ -171,15 +172,17 @@ total_df_human_column_list = ['Game ID', 'Replay Date', 'Player Name', 'Player H
                               'Experimental', 'Kills', 'Deaths', 'Aberrations Killed', 'Abominations Killed',
                               'Geneweavers Killed', 'Genesplicers Killed', 'Anubalisks Killed', 'Anubalights Killed',
                               'Legions Killed', 'Legionnaires Killed', 'Hunters Killed', 'Predators Killed',
-                              'Underseers Killed', 'Saboteurs Killed', 'Cocoons Killed', 'Structures Killed',
+                              'Underseers Killed', 'Saboteurs Killed', 'Overseers Killed', 'Parasitic Hosts Killed',
+                              'Hive Queen Killed','Cocoons Killed', 'Structures Killed',
                               'Sunkens Killed', 'Swarmling Nests Killed', 'Creep Towers Killed', 'Lesser Nydus Killed',
-                              'Extractors Killed']      # deleted 'Replay #'
+                              'Extractors Killed']
 
-total_df_zombie_column_list = ['Game ID', 'Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Game Length', 'Result',
-                               'Private/Public', 'Game Advantage', 'Avg Human Rank',
+total_df_zombie_column_list = ['Game ID', 'Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Avg Human Rank',
+                               'Game Length', 'Result', 'Private/Public', 'Game Advantage',
                                'First Alpha', 'Abberations Built', 'Abominations Built', 'Geneweavers Built',
                                'Genesplicers Built', 'Anubalisks Built', 'Anubalights Built', 'Legions Built',
                                'Legionnaires Built', 'Hunters Built', 'Predators Built', 'Underseers Built',
+                               'Overseers Built', 'Parasitic Hosts Built',
                                'Saboteurs Built', 'No. of Alphas Built', 'T1 Speed Purchased', 'T2 Speed Purchased',
                                'T3 Speed Purchased', 'T1 Health Purchased', 'T2 Health Purchased', 'T3 Health Purchased',
                                'T1 Damage Purchased', 'T2 Damage Purchased', 'T3 Damage Purchased',

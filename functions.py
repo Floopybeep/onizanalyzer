@@ -226,6 +226,8 @@ def replay_duplicate_check(repl_list, textoutpath, num_of_proc, deldupes, scroll
     scrolltext.insert(index="1.0", chars="Duplicate check started!\n")
     open(f"{textoutpath}/#DuplicateReplays.txt", 'w').close()
 
+    # ts = time.time()
+
     pool = multiprocessing.Pool(processes=num_of_proc)
     output = pool.imap(extract_signatures, repl_list)                             # outputs tuple of (signature, path)
 
@@ -245,6 +247,8 @@ def replay_duplicate_check(repl_list, textoutpath, num_of_proc, deldupes, scroll
             scrolltext.insert(index="1.0", chars=f"Duplicate replays exported to \n{textoutpath}/#DuplicateReplays.txt!\n")
     else:
         scrolltext.insert(index="1.0", chars="No duplicates found!\n")
+
+    # scrolltext.insert(index='1.0', chars=f"{time.time()-ts} seconds!\n")
 
 
 def extract_signatures(reppath):
