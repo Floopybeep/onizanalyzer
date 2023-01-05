@@ -8,6 +8,6 @@
 - 1.0.6: Checkbox for deleting duplicate replays
 - 1.0.7: progress bar, est. time remaining, and textbox will actually work
 - 1.0.7.1: critical bugfix
-- 1.0.7.2: added private/public lobby tag + advantage calculation
-- 1.0.8: (coming soon)drag and drop box for single replays, progress bar for duplicate check
-- 1.0.9: (coming slightly soon) player bank data in excel file
+- 1.0.8: added private/public lobby tag + advantage calculation, plus bugfixes
+- 1.0.9: (coming soon)drag and drop box for single replays, progress bar for duplicate check
+- 1.0.10: (coming slightly soon) player bank data in excel file

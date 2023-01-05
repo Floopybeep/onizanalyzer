@@ -2,16 +2,26 @@ import datetime
 from infodict import *
 from prettytable import *
 
+
 def log(text, logger_file):
     with open(logger_file, 'a') as f:
         f.write(text)
         f.close()
+
 
 def bool_to_victory(booleandata):
     if booleandata:
         return "Win"
     else:
         return "Loss"
+
+
+def bool_to_privpubs(booleandata):
+    if booleandata:
+        return "Private"
+    else:
+        return "Public"
+
 
 def set_replay_name(replay, humanlist, zplayer):
     date = replay.date
@@ -27,9 +37,12 @@ def set_replay_name(replay, humanlist, zplayer):
     number_of_gm = f"{numgm}GM"
 
     playernames = ', '.join([zplayer.playername+'(Z)', ', '.join([player.playername for player in humanlist])])
-    textfilename = ' - '.join([replaytime, whowins, number_of_gm, playernames, '.txt'])
+    textfilename = ' - '.join([replaytime, whowins, number_of_gm, playernames])
+
+    textfilename = textfilename + f" - {bool_to_privpubs(zplayer.bankinfo.isprivate)} Lobby.txt"
 
     return textfilename
+
 
 def condense_eventinfo(replay, txtpath, humandict, zplayer):
     # pd.set_option('display.max_colwidth', None)
@@ -44,7 +57,11 @@ def condense_eventinfo(replay, txtpath, humandict, zplayer):
     with open(txtpath, 'w', encoding="utf-8") as f:
         f.write(f"Date: {replay.date}\n")
         f.write(f"Game Length: {replay.game_length.mins}.{replay.game_length.secs}\n")
+        f.write(f"Game ID: {zplayer.gameid}\n")
         f.write(f"Replay File Path: {replay.filename}\n\n")
+
+        f.write(f"{bool_to_privpubs(zplayer.bankinfo.isprivate)} Lobby\n")
+        f.write(f"Game Advantage: {zplayer.bankinfo.advantage}\n\n")
 
         f.write("Players\n")
         f.write('Player Name\tRole\t\tRank\tVictory\n')

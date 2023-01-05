@@ -11,6 +11,8 @@ class replayclass:
         self.load_bankinfo = bankloaddict.copy()
 
         self.isprivate = False
+        self.averagerank = 0
+        self.advantage = None
 
     def setplayeropt(self, opt):
         if opt['m_name'].decode('utf-8') in bankplayerdict:
@@ -22,7 +24,7 @@ class replayclass:
 
 
 class playerinfo():
-    def __init__(self, name=None, pid=None, handle=None, role=None, victory=None, rank=0, gamelength=None):
+    def __init__(self, name=None, pid=None, handle=None, role=None, victory=None, rank=0):
         self.playername = name
         self.pid = pid
         self.handle = handle
@@ -30,7 +32,7 @@ class playerinfo():
         self.victory = victory
         self.rank = rank
         self.bankinfo = replayclass()
-        self.gamelength = gamelength
+        self.gameid = None
 
     def setrank(self):
         if self.playerrole == 'Human':

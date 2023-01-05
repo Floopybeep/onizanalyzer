@@ -1,10 +1,15 @@
 # print(format(211, 'x').upper())
-[{'header': 'a'}, {'header': 'b'}]
+import hashlib
+import time
+from fnvhash import fnv1a_32
 
-from infodict import total_df_human_column_list, total_df_zombie_column_list
+ts = time.time()
+print(hash('hahahaha'))
+print(time.time()-ts)
 
-result = ""
-for item in total_df_zombie_column_list:
-    result = ', '.join([result, ''.join(["{'header': ", f"'{item}'", "}"])])
+print(hashlib.sha1('hahahaha'.encode('utf-8')).hexdigest())
+print(time.time()-ts)
 
-print(result)
+print(fnv1a_32('hahahaha'.encode('utf-8')))
+print(time.time()-ts)
+

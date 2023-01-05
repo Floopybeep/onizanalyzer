@@ -1,8 +1,8 @@
 import sc2reader
 from infodict import ultimateinfestationdict, t2alphadict
 
-# path = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/wonky replays/Oh_No_Its_Zombies_Arctic_Map_874.SC2Replay"
-path = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/Oh No It's Zombies Arctic Map (247).SC2Replay"
+path = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/wonky replays/Oh_No_Its_Zombies_Arctic_Map_874.SC2Replay"
+# path = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/Oh No It's Zombies Arctic Map (247) - 복사본.SC2Replay"
 # path = "C:/Users/wooil/Documents/StarCraft II/Accounts/12861615/1-S2-1-5777751/Replays/Multiplayer/Oh No It's Zombies/Oh No It's Zombies Arctic Map (11).SC2Replay"
 
 replay = sc2reader.load_replay(path, load_level=3)
@@ -10,6 +10,7 @@ replay = sc2reader.load_replay(path, load_level=3)
 eventlist = []
 namedict = {}
 eventset = set()
+eventset2 = set()
 alphalist = []
 namelist = []
 
@@ -18,33 +19,42 @@ eventlist3 = []
 eventlist4 = []
 eventlist5 = []
 
+# for human in replay.humans:
+#     if human.play_race == 'Zerg':
+#         for unit in human.units:
+#             if unit.name is not None:
+#                 eventlist.append(unit)
+#                 eventset.add(unit.name)
+
 for event in replay.events:
-    if event.name == 'UnitDoneEvent' and event.unit.owner.pid == 5:
-        if event.unit.name not in {'AutoTurret', 'SensorTower'} and event.unit.killed_by is None:
-            eventlist.append(event)
+    # if event.name == 'UnitDoneEvent' and event.unit.owner.pid == 5:
+    #     if event.unit.name not in {'AutoTurret', 'SensorTower'} and event.unit.killed_by is None:
+    #         eventlist.append(event)
     # if event.name == 'UnitInitEvent'and event.unit_type_name == 'PsiIndoctrinator':
     #     eventlist.append(event)
     #     namelist.append(event.unit_type_name)
     # elif event.name == 'UnitOwnerChangeEvent' and event.unit.title == 'AutoTurret' and event.unit.type == 54:
     #     eventlist2.append(event)
-    # if event.name == 'UnitTypeChangeEvent':
-    #     if event.unit_type_name not in {'SpiderMine', 'SpiderMineBurrowed', 'Dehaka',
-    #                                     'SentryGun', 'SpecOpsSentryGun', 'SentryGunUnderground', 'SpecOpsSentryGun2',
-    #                                     'LabTurretUp', 'AutoTurret2',
-    #                                     'InfestedTerranCampaignBurrowed', 'ToxicNestBurrowed',
-    #                                     'InfestedExploder', 'Baneling', 'BanelingBurrowed', 'Kaboomer',
-    #                                     'InfestedCivilian', 'InfestedCivilianBurrowed',
-    #                                     'LocustMP', 'FlyingZombie', 'FlyingZombie2',
-    #                                     'RoachCorpser', 'RoachCorpserBurrowed', 'RoachVile', 'DefilerMP',
-    #                                     'InfestorTerran', 'DehakaMirrorImage', 'DehakaMirrorImageBurrowed',
-    #                                     'Zergling', 'HotSRaptor', 'Hunterling'}:
-    #         eventlist.append(event)
-    #         eventset.add(event.unit_type_name)
+    if event.name == 'UnitTypeChangeEvent':
+        if event.unit_type_name not in {'SpiderMine', 'SpiderMineBurrowed', 'Dehaka',
+                                        'SentryGun', 'SpecOpsSentryGun', 'SentryGunUnderground', 'SpecOpsSentryGun2',
+                                        'LabTurretUp', 'AutoTurret2',
+                                        'InfestedTerranCampaignBurrowed', 'ToxicNestBurrowed',
+                                        'InfestedExploder', 'Baneling', 'BanelingBurrowed', 'Kaboomer',
+                                        'InfestedCivilian', 'InfestedCivilianBurrowed',
+                                        'LocustMP', 'FlyingZombie', 'FlyingZombie2',
+                                        'RoachCorpser', 'RoachCorpserBurrowed', 'RoachVile', 'DefilerMP',
+                                        'InfestorTerran', 'DehakaMirrorImage', 'DehakaMirrorImageBurrowed',
+                                        'Zergling', 'HotSRaptor', 'Hunterling', 'InfestedExploderBurrowed',
+                                        'InfestorTerranBurrowed', 'Devastator', 'Devourer3', 'Mutalisk'}:
+            eventlist.append(event)
+            eventset.add(event.unit_type_name)
     # if event.name == 'UpgradeCompleteEvent':
-    #     eventlist2.append(event)
+    #     eventlist.append(event)
     #     eventset.add(event.upgrade_type_name)
-    #     if event.upgrade_type_name == 'DropshipsFueled':
-    #         eventlist.append(event)
+    #     if event.pid > 7:
+    #         eventlist2.append(event)
+    #         eventset2.add(event.upgrade_type_name)
     # if event.name == 'UnitBornEvent':
     #     if event.unit_type_name not in {'DigesterCreepSprayTargetUnit', 'DigesterCreepSprayUnit', 'NovaAcidPuddle2',
     #                                     'InfestedCivilian', 'LocustMP3',

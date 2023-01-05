@@ -14,18 +14,29 @@ def bool_to_victory(booleandata):
         return "Loss"
 
 
+def bool_to_privpubs(booleandata):
+    if booleandata:
+        return "Private"
+    else:
+        return "Public"
+
+
 def append_humaninfo(replay, humandict):
     outlist = []
     for key in humandict:
         human, data = humandict[key], {}
         data = {}
 
+        data['Game ID'] = human.gameid
         data['Replay Date'] = str(replay.date)
         data['Player Name'] = human.playername
         data['Player Handle'] = human.handle
         data['Rank'] = human.rank
         data['Result'] = bool_to_victory(human.victory)
         data['Game Length'] = f"{replay.game_length.mins}.{replay.game_length.secs}"
+        data['Private/Public'] = bool_to_privpubs(human.bankinfo.isprivate)
+        data['Game Advantage'] = human.bankinfo.advantage
+        data['Avg Human Rank'] = int(human.bankinfo.averagerank / 2 + 0.5)
         data['Weapon'] = hweaponfa(human.weapons)
         data['Weapon Mod #1'] = wmod(1, human.weapons)
         data['Weapon Mod #2'] = wmod(2, human.weapons)
@@ -155,12 +166,16 @@ def smod(mn, slist):
 def append_zombieinfo(replay, zplayer):
     data = {}
 
+    data['Game ID'] = zplayer.gameid
     data['Replay Date'] = str(replay.date)
     data['Player Name'] = zplayer.playername
     data['Player Handle'] = zplayer.handle
     data['Rank'] = zplayer.rank
     data['Result'] = bool_to_victory(zplayer.victory)
     data['Game Length'] = f"{replay.game_length.mins}.{replay.game_length.secs}"
+    data['Private/Public'] = bool_to_privpubs(zplayer.bankinfo.isprivate)
+    data['Game Advantage'] = zplayer.bankinfo.advantage
+    data['Avg Human Rank'] = int(zplayer.bankinfo.averagerank / 2 + 0.5)
     data['First Alpha'] = zplayer.startingalpha
     data['Abberations Built'] = zplayer.alphasbuilt[0][0]
     data['Abominations Built'] = zplayer.alphasbuilt[0][1]

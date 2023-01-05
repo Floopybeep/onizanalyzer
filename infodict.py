@@ -151,12 +151,17 @@ bankplayerdict = {'4:3AspectRatioSettings': 0, 'FuelDiverted': 0, 'GamesPlayedAs
 bankloaddict = {'Chosen_Zombie': 0, 'Color': 0, 'Difficulty': 0,
                 'Experimental_Mode': 0, 'Host_Chooses_Zombie': 0, 'Opt_In': 0}
 
+advantagedict = {4: 'Extreme Human Advantage', 3: 'Major Human Advantage', 2: 'Normal Human Advantage',
+                 1: 'Minor Human Advantage', 0: 'No Advantage', -1: 'Minor Zombie Advantage',
+                 -2: 'Normal Zombie Advantage', -3: 'Major Zombie Advantage', -4: 'Extreme Zombie Advantage'}
+
 ############################################## csv dict & sets ########################################################
-total_df_human_column_list = ['Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Game Length', 'Result', 'Weapon',
-                              'Weapon Mod #1', 'Weapon Mod #2', 'Weapon Mod #3', 'Grenade', 'Scout Droid Upgrade',
-                              'Mining Droid Upgrade', 'Nuke Upgrade', 'Sensor Upgrade', 'Accessory', 'Suits',
-                              'Misc Shield Purchase', 'Misc Backpack Purchase', 'Misc Visor Purchase',
-                              'Turret Bought', 'Heal Droid Bought', 'Psi Bought', 'Turret Mod',
+total_df_human_column_list = ['Game ID', 'Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Game Length', 'Result',
+                              'Private/Public', 'Game Advantage', 'Avg Human Rank',
+                              'Weapon', 'Weapon Mod #1', 'Weapon Mod #2', 'Weapon Mod #3', 'Grenade',
+                              'Scout Droid Upgrade', 'Mining Droid Upgrade', 'Nuke Upgrade', 'Sensor Upgrade',
+                              'Accessory', 'Suits', 'Misc Shield Purchase', 'Misc Backpack Purchase',
+                              'Misc Visor Purchase', 'Turret Bought', 'Heal Droid Bought', 'Psi Bought', 'Turret Mod',
                               'Heal Droid Mod', 'Psi Mod', 'Turrets Built', 'Heal Droids Built', 'Psis Built',
                               'Experimental', 'Kills', 'Deaths', 'Aberrations Killed', 'Abominations Killed',
                               'Geneweavers Killed', 'Genesplicers Killed', 'Anubalisks Killed', 'Anubalights Killed',
@@ -165,7 +170,8 @@ total_df_human_column_list = ['Replay Date', 'Player Name', 'Player Handle', 'Ra
                               'Sunkens Killed', 'Swarmling Nests Killed', 'Creep Towers Killed', 'Lesser Nydus Killed',
                               'Extractors Killed']      # deleted 'Replay #'
 
-total_df_zombie_column_list = ['Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Game Length', 'Result',
+total_df_zombie_column_list = ['Game ID', 'Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Game Length', 'Result',
+                               'Private/Public', 'Game Advantage', 'Avg Human Rank',
                                'First Alpha', 'Abberations Built', 'Abominations Built', 'Geneweavers Built',
                                'Genesplicers Built', 'Anubalisks Built', 'Anubalights Built', 'Legions Built',
                                'Legionnaires Built', 'Hunters Built', 'Predators Built', 'Underseers Built',

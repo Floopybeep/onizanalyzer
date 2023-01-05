@@ -4,6 +4,8 @@ To-Do for NEXT update
 - pub/priv
 
 
+Advantage Formula:
+((AverageMarineRank - ZombieRank) / 7 + (AverageMarineRank + ZombieRank) - 31) / 31
 
 
 Things to do

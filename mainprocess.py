@@ -48,8 +48,8 @@ def mainprocess(inputqueue, messagequeue, outputqueue):                  # take 
 
 
 # if __name__ == "__main__":
-#     # replaypath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/wonky replays/Oh_No_Its_Zombies_Arctic_Map_880.SC2Replay"
-#     replaypath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/Oh No It's Zombies Arctic Map (245).SC2Replay"
+#     # replaypath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/wonky replays/Oh_No_Its_Zombies_Arctic_Map_874.SC2Replay"
+#     replaypath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/Oh No It's Zombies Arctic Map (270).SC2Replay"
 #     outputpath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/text file output"
 #
 #     replay = sc2reader.load_replay(replaypath, load_level=3)

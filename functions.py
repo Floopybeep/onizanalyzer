@@ -139,6 +139,7 @@ class replay_analysis_replaypool:
 
         # Compile and send output data for analysis
         self.analyze_data(self.outputlist)
+        self.scrolltext.insert(index="1.0", chars="Excel File Created!\n")
         self.scrolltext.insert(index="1.0", chars="Analysis Finished!\n")
         print("Task Finished!")
 
@@ -222,6 +223,7 @@ def replay_duplicate_check(repl_list, textoutpath, num_of_proc, deldupes, scroll
     signatureset, duplicate_list = set(), []
     deldupes = numtobool(deldupes)
     repl_list.reverse()
+    scrolltext.insert(index="1.0", chars="Duplicate check started!\n")
     open(f"{textoutpath}/#DuplicateReplays.txt", 'w').close()
 
     pool = multiprocessing.Pool(processes=num_of_proc)
