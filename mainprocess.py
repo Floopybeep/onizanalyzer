@@ -21,28 +21,27 @@ def mainprocess(inputqueue, messagequeue, outputqueue):                  # take 
             replay = sc2reader.load_replay(replaypath, load_level=3)
             humandict, zombieplayer = extract_playerinfo(replay)
 
+            if len(humandict) < 6 or zombieplayer is None:
+                print("Incomplete/Leaver Lobby Detected!")
+                messagequeue.put(f"Incomplete/Leaver Lobby Detected!\n{os.path.basename(replaypath)}\n")
+                outputqueue.put(-1)
+                continue
+
+            else:
+                extract_playerbanks(replay, humandict, zombieplayer)
+
+                extract_eventinfo(replay, humandict, zombieplayer)
+                condense_eventinfo(replay, textoutputpath, humandict, zombieplayer)
+                humandata, zombiedata = append_replayinfo(replay, humandict, zombieplayer)
+                print("textfile successfully created!")
+                messagequeue.put(f"Replay analyzed!\n{os.path.basename(replaypath)}\n")
+            outputqueue.put((humandata, zombiedata))
+
         except Exception as errormessage:
             messagequeue.put(f"Error in loading {replaypath}\n")
             outputqueue.put(-1)
             print("Error in loading replay!")
             print(errormessage)
-            continue
-
-        if len(humandict) < 6 or zombieplayer is None:
-            print("Incomplete/Leaver Lobby Detected!")
-            messagequeue.put(f"Incomplete/Leaver Lobby Detected!\n{os.path.basename(replaypath)}\n")
-            outputqueue.put(-1)
-            continue
-
-        else:
-            extract_playerbanks(replay, humandict, zombieplayer)
-
-            extract_eventinfo(replay, humandict, zombieplayer)
-            condense_eventinfo(replay, textoutputpath, humandict, zombieplayer)
-            humandata, zombiedata = append_replayinfo(replay, humandict, zombieplayer)
-            print("textfile successfully created!")
-            messagequeue.put(f"Replay analyzed!\n{os.path.basename(replaypath)}\n")
-            outputqueue.put((humandata, zombiedata))
 
 
 

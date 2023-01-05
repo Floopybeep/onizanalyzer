@@ -43,3 +43,19 @@ Data to be Added
 16 - 2.1 seconds
 142 - 4.1 seconds
 120~ takes roughly 2 seconds, so maybe 60 per second? Initial time of 2 seconds?
+
+
+Bank data analysis
+- Goal: outline the most recent bank data
+- How to: match username and handle to find latest data
+- Requisites:
+    1. If bank reset has been detected, then keep last data and add on any future data to it
+        possibly detect final data and add in any 'resets' that have happened? (1) - reset - (2) -> (1) + (2)
+        What if bank has been recovered? If significant gap is detected, then add the data right before this to it?
+    2. handle should be the main go-to for player identification (how to obtain this though?)
+    3. data structure should be totaldict: {handle - playerdict}, playerdict: {key - values} (kv in playerdict should be the data from bank)
+- Procedure:
+    1. mine data from replay
+    2. match mined data with previous data
+        1) if previous data exists, then add onto previous data
+        2) if new data, then create data
