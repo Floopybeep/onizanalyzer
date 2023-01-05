@@ -201,7 +201,9 @@ class onizGUI:
             txtentry = f.readline().strip()
         f.close()
 
+        self.entries["replayfolderpathentry"].delete(0, 'end')
         self.entries["replayfolderpathentry"].insert(0, repentry)
+        self.entries["textfolderpathentry"].delete(0, 'end')
         self.entries["textfolderpathentry"].insert(0, txtentry)
 
     def press_start(self):
@@ -236,7 +238,8 @@ class onizGUI:
         delcheck = self.variables["deletedupes"].get()
         replist, _ = replay_file_parser(repentry)
         replay_duplicate_check(replist, txtentry, mainclass_copy.numberofprocesses,
-                               delcheck, self.scrolltexts["outputscroll"])
+                               delcheck, self.scrolltexts["outputscroll"], self.progressbars["replayprogressbar"],
+                               self.labels["remainingtimelabel"])
 
 # https://hhj6212.github.io/programming/python/2021/04/18/python-multi.html
 # https://web.archive.org/web/20201111190045id_/https://effbot.org/tkinterbook/entry.htm

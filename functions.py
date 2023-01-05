@@ -219,12 +219,15 @@ class replay_analysis_replaypool:
 #         not_mp_button.config(state = "normal")
 #     return
 
-def replay_duplicate_check(repl_list, textoutpath, num_of_proc, deldupes, scrolltext):
+def replay_duplicate_check(repl_list, textoutpath, num_of_proc, deldupes, scrolltext, pbar, remainingtimelabel):
     signatureset, duplicate_list = set(), []
+    counter = len(duplicate_list)
+    pbar.configure(maximum=len(repl_list))
     deldupes = numtobool(deldupes)
     repl_list.reverse()
     scrolltext.insert(index="1.0", chars="Duplicate check started!\n")
     open(f"{textoutpath}/#DuplicateReplays.txt", 'w').close()
+
 
     # ts = time.time()
 
@@ -233,6 +236,8 @@ def replay_duplicate_check(repl_list, textoutpath, num_of_proc, deldupes, scroll
 
     with open(f"{textoutpath}/#DuplicateReplays.txt", 'a') as f:
         for out in output:
+            pbar.step(1)
+            remainingtimelabel.config(text=f"{int(counter/60)} seconds")
             if dupcheck(out[0], out[1], signatureset, f):
                 if not deldupes:
                     duplicate_list.append(out[1])

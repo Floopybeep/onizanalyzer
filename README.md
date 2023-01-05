@@ -11,5 +11,6 @@
 - 1.0.8: added private/public lobby tag + advantage calculation, plus bugfixes
 - 1.0.8.1: added 'Rank Locked' players to rank 16 pool, also slight change to priv/pub check formula (Note: does NOT work for replays created before Subterranean map was added)
 - 1.0.8.2: added Hive Queen and Parasitic Host to alphas made/killed list, also priv/pub check for replays BEFORE sub map update, also save/load path button
-- 1.0.9: (coming soon)drag and drop box for single replays, progress bar for duplicate check
-- 1.0.10: (coming slightly soon) player bank data in excel file
+- 1.0.9: progress bar for duplicate check
+- 1.0.10: (coming soon) player bank data in excel file
+- 1.0.11: (coming later) drag and drop box for single replays
