@@ -155,6 +155,11 @@ advantagedict = {4: 'Extreme Human Advantage', 3: 'Major Human Advantage', 2: 'N
                  1: 'Minor Human Advantage', 0: 'No Advantage', -1: 'Minor Zombie Advantage',
                  -2: 'Normal Zombie Advantage', -3: 'Major Zombie Advantage', -4: 'Extreme Zombie Advantage'}
 
+fixedrankplayerhandleset = {'1-S2-1-8018306', '1-S2-1-10692208', '1-S2-1-8433335', '1-S2-1-20036596',
+                            '1-S2-1-12226597', '1-S2-1-6158195', '1-S2-1-3493884', '1-S2-1-7241177',
+                            '1-S2-1-6158195', '1-S2-1-7859842', '1-S2-1-4579652', '1-S2-1-880941', '1-S2-1-12284576',
+                            '2-S2-1-8671970', '2-S2-1-2135688'}
+
 ############################################## csv dict & sets ########################################################
 total_df_human_column_list = ['Game ID', 'Replay Date', 'Player Name', 'Player Handle', 'Rank', 'Game Length', 'Result',
                               'Private/Public', 'Game Advantage', 'Avg Human Rank',

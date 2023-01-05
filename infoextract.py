@@ -21,12 +21,124 @@ def round(x):
         return int(x-0.5)
 
 
+def extract_playerbanks(replay, humandict, zombieplayer):
+    reppath = replay.filename
+    game_events = extract_s2protocol_events(reppath)
+    extract_bank_events(game_events, humandict, zombieplayer)
+    set_player_ranks(humandict, zombieplayer)
+    set_bank_date(replay, humandict, zombieplayer)
+    extract_game_advantage_events(replay, humandict, zombieplayer)
+
+
+def extract_s2protocol_events(reppath):
+    archive = mpyq.MPQArchive(reppath)
+    protocol = versions.build(88500)
+    contents = archive.read_file('replay.game.events')
+    game_events = protocol.decode_replay_game_events(contents)
+
+    return game_events
+
+
+def extract_bank_events(game_events, humandict, zombieplayer):
+    for event in game_events:
+        if event['_gameloop'] > 0:
+            break
+        if event['_event'] == 'NNet.Game.SBankKeyEvent':
+            if (event['_userid']['m_userId'] + 1) == zombieplayer.pid:
+                zombieplayer.bankinfo.setplayeropt(event)
+                zombieplayer.bankinfo.setloadopt(event)
+            else:
+                humandict[event['_userid']['m_userId'] + 1].bankinfo.setplayeropt(event)
+                humandict[event['_userid']['m_userId'] + 1].bankinfo.setloadopt(event)
+        elif event['_event'] == 'NNet.Game.SBankSignatureEvent':
+            if (event['_userid']['m_userId'] + 1) == zombieplayer.pid:
+                zombieplayer.bankinfo.signature = calculate_signature(event['m_signature'])
+            else:
+                humandict[event['_userid']['m_userId'] + 1].bankinfo.signature = calculate_signature(event['m_signature'])
+
+
+def calculate_signature(list):
+    resultlist = []
+    for decimal in list:
+        resultlist.append(format(decimal, 'x').upper())
+    return ''.join(resultlist)
+
+
+def extract_game_advantage_events(replay, humandict, zplayer):
+    calculate_game_id(humandict, zplayer)
+    if calculate_isprivate(replay, humandict, zplayer) and zplayer.bankinfo.load_bankinfo['Difficulty'] != '5':
+        advantage = advantagedict[-1 * int(zplayer.bankinfo.load_bankinfo['Difficulty'])]
+        for key in humandict:
+            humandict[key].bankinfo.advantage = advantage
+        zplayer.bankinfo.advantage = advantage
+    # else:
+    #     calculate_game_advantage(humandict, zplayer)
+
+
+def calculate_game_id(humandict, zplayer):
+    signaturelist = []
+    for key in humandict:
+        signaturelist.append(humandict[key].bankinfo.signature)
+
+    signature = ''.join([sig for sig in signaturelist])
+    gameid = fnv1a_32(signature.encode('utf-8'))
+
+    for key in humandict:
+        humandict[key].gameid = gameid
+    zplayer.gameid = gameid
+
+
+def calculate_isprivate(replay, humandict, zplayer):
+    # if replay.attributes[16]['Premade Game'] == 'Yes':
+    #     set_info_to_private(humandict, zplayer)
+    #     return True
+    if zplayer.bankinfo.load_bankinfo['Difficulty'] != '5' or zplayer.bankinfo.load_bankinfo['Host_Chooses_Zombie'] == '1' \
+            or zplayer.bankinfo.load_bankinfo['Experimental_Mode'] == '1':
+        set_info_to_private(humandict, zplayer)
+        return True
+    return False
+
+
+def set_info_to_private(humandict, zplayer):
+    for key in humandict:
+        humandict[key].bankinfo.isprivate = True
+    zplayer.bankinfo.isprivate = True
+
+
+def calculate_game_advantage(humandict, zplayer):
+    totalmarinerank = 0
+    for key in humandict:
+        totalmarinerank += float(humandict[key].bankinfo.player_bankinfo['HumanRank'])
+    averagemarinerank = totalmarinerank / 6
+    zombierank = float(zplayer.bankinfo.player_bankinfo['ZombieRank'])
+
+    advantage = ((averagemarinerank - zombierank) / 7 + (averagemarinerank + zombierank - 31)) / 31
+
+    for key in humandict:
+        humandict[key].bankinfo.averagerank = averagemarinerank
+        humandict[key].bankinfo.advantage = advantagedict[round(advantage)]
+    zplayer.bankinfo.advantage = advantagedict[round(advantage)]
+    zplayer.bankinfo.averagerank = averagemarinerank
+
+    return advantagedict[round(advantage)]
+
+
+def set_player_ranks(humandict, zplayer):
+    for key in humandict:
+        humandict[key].setrank()
+    zplayer.setrank()
+
+
+def set_bank_date(replay, humandict, zplayer):
+    for key in humandict:
+        humandict[key].bankinfo.date = replay.date
+    zplayer.bankinfo.date = replay.date
+
+
 def extract_playerinfo(replay):                                         # input: replay / output: list of h/z objects
     humandict, zombieplayer = {}, None
 
     for human in replay.humans:
-        if human.pid > 8: pass
-
         victory = winloss_to_victory(human.result)
 
         if human.play_race == 'Terran':
@@ -80,121 +192,9 @@ def z_player_hangar_kill_check(units, zombieplayer):
             zombieplayer.hangarcaptures[2] = True
 
 
-def extract_playerbanks(replay, humandict, zombieplayer):
-    reppath = replay.filename
-    game_events = extract_s2protocol_events(reppath)
-    extract_bank_events(game_events, humandict, zombieplayer)
-    set_player_ranks(humandict, zombieplayer)
-    set_bank_date(replay, humandict, zombieplayer)
-    extract_game_advantage_events(replay, humandict, zombieplayer)
-
-
-def extract_s2protocol_events(reppath):
-    archive = mpyq.MPQArchive(reppath)
-    protocol = versions.build(88500)
-    contents = archive.read_file('replay.game.events')
-    game_events = protocol.decode_replay_game_events(contents)
-
-    return game_events
-
-
-def extract_bank_events(game_events, humandict, zombieplayer):
-    for event in game_events:
-        if event['_gameloop'] > 0:
-            break
-        if event['_event'] == 'NNet.Game.SBankKeyEvent':
-            if (event['_userid']['m_userId'] + 1) == zombieplayer.pid:
-                zombieplayer.bankinfo.setplayeropt(event)
-                zombieplayer.bankinfo.setloadopt(event)
-            else:
-                humandict[event['_userid']['m_userId'] + 1].bankinfo.setplayeropt(event)
-                humandict[event['_userid']['m_userId'] + 1].bankinfo.setloadopt(event)
-        elif event['_event'] == 'NNet.Game.SBankSignatureEvent':
-            if (event['_userid']['m_userId'] + 1) == zombieplayer.pid:
-                zombieplayer.bankinfo.signature = calculate_signature(event['m_signature'])
-            else:
-                humandict[event['_userid']['m_userId'] + 1].bankinfo.signature = calculate_signature(event['m_signature'])
-
-
-def calculate_signature(list):
-    resultlist = []
-    for decimal in list:
-        resultlist.append(format(decimal, 'x').upper())
-    return ''.join(resultlist)
-
-
-def extract_game_advantage_events(replay, humandict, zplayer):
-    calculate_game_id(humandict, zplayer)
-    if calculate_isprivate(replay, humandict, zplayer) and zplayer.bankinfo.load_bankinfo['Difficulty'] != '5':
-        advantage = advantagedict[-1 * int(zplayer.bankinfo.load_bankinfo['Difficulty'])]
-        for key in humandict:
-            humandict[key].bankinfo.advantage = advantage
-        zplayer.bankinfo.advantage = advantage
-    else:
-        calculate_game_advantage(humandict, zplayer)
-
-
-def calculate_game_id(humandict, zplayer):
-    signaturelist = []
-    for key in humandict:
-        signaturelist.append(humandict[key].bankinfo.signature)
-
-    signature = ''.join([sig for sig in signaturelist])
-    gameid = fnv1a_32(signature.encode('utf-8'))
-
-    for key in humandict:
-        humandict[key].gameid = gameid
-    zplayer.gameid = gameid
-
-
-def calculate_isprivate(replay, humandict, zplayer):
-    if replay.attributes[16]['Premade Game'] == 'Yes':
-        set_info_to_private(humandict, zplayer)
-        return True
-    if zplayer.bankinfo.load_bankinfo['Difficulty'] != '5' or zplayer.bankinfo.load_bankinfo['Host_Chooses_Zombie'] == '1' \
-            or zplayer.bankinfo.load_bankinfo['Experimental_Mode'] == '1':
-        set_info_to_private(humandict, zplayer)
-        return True
-    return False
-
-
-def set_info_to_private(humandict, zplayer):
-    for key in humandict:
-        humandict[key].bankinfo.isprivate = True
-    zplayer.bankinfo.isprivate = True
-
-
-def calculate_game_advantage(humandict, zplayer):
-    totalmarinerank = 0
-    for key in humandict:
-        totalmarinerank += float(humandict[key].bankinfo.player_bankinfo['HumanRank'])
-    averagemarinerank = totalmarinerank / 6
-    zombierank = float(zplayer.bankinfo.player_bankinfo['ZombieRank'])
-
-    advantage = ((averagemarinerank - zombierank) / 7 + (averagemarinerank + zombierank - 31)) / 31
-
-    for key in humandict:
-        humandict[key].bankinfo.averagerank = averagemarinerank
-        humandict[key].bankinfo.advantage = advantagedict[round(advantage)]
-    zplayer.bankinfo.advantage = advantagedict[round(advantage)]
-    zplayer.bankinfo.averagerank = averagemarinerank
-
-    return advantagedict[round(advantage)]
-
-
-def set_player_ranks(humandict, zplayer):
-    for key in humandict:
-        humandict[key].setrank()
-    zplayer.setrank()
-
-
-def set_bank_date(replay, humandict, zplayer):
-    for key in humandict:
-        humandict[key].bankinfo.date = replay.date
-    zplayer.bankinfo.date = replay.date
-
-
 def extract_eventinfo(replay, humandict, zombieplayer):
+    examine_fixedrankplayers(humandict, zombieplayer)
+
     humanlist = []
     for key in humandict:
         humanlist.append(humandict[key].pid)
@@ -213,6 +213,25 @@ def extract_eventinfo(replay, humandict, zombieplayer):
                 UnitInitEventCheck(event, humandict, zombieplayer)
             elif event.name == 'PlayerStatsEvent':
                 PlayerStatsEventCheck(event, zombieplayer, z_id)
+
+
+def examine_fixedrankplayers(humandict, zplayer):
+    check = False
+    for key in humandict:
+        if humandict[key].handle in fixedrankplayerhandleset:
+            set_fixedrankplayerrank(humandict[key])
+            check = True
+    if zplayer.handle in fixedrankplayerhandleset:
+        set_fixedrankplayerrank(zplayer)
+        check = True
+    if zplayer.bankinfo.advantage is None or check:
+        calculate_game_advantage(humandict, zplayer)
+
+
+def set_fixedrankplayerrank(player):
+    player.rank = 16
+    player.bankinfo.player_bankinfo['HumanRank'] = '31'
+    player.bankinfo.player_bankinfo['ZombieRank'] = '31'
 
 
 def UpgradeCompleteEventCheck(event, humandict, humanset, zombieplayer):
