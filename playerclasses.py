@@ -1,7 +1,7 @@
 from infodict import *
 
 
-class replayclass:
+class bankinfoclass:
     def __init__(self):
         self.filename = "onizstats"
         self.signature = ""
@@ -32,7 +32,7 @@ class playerinfo():
         self.playerrole = role
         self.victory = victory
         self.rank = rank
-        self.bankinfo = replayclass()
+        self.bankinfo = bankinfoclass()
         self.gameid = None
 
     def setrank(self):

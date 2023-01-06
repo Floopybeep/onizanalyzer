@@ -71,13 +71,6 @@ class S2Replay:
         self.features.tracker_present = bool(content)
         self.trackerevents = peekable(self.protocol.decode_replay_tracker_events(content) if content else None)
 
-        # self.syncevents = self.protocol.decode_replay_initdata(must_read_archive_contents('replay.sync.events'))
-        # self.synchistory = self.protocol.decode_replay_initdata(must_read_archive_contents('replay.sync.history'))
-        # self.battlelobby = self.protocol.decode_replay_initdata(must_read_archive_contents('replay.server.battlelobby'))
-        # self.smartcamevents = self.protocol.decode_replay_initdata(must_read_archive_contents('replay.smartcam.events'))
-        # self.resumableevents = self.protocol.decode_replay_initdata(must_read_archive_contents('replay.resumable.events'))
-        # self.loadinfo = self.protocol.decode_replay_initdata(must_read_archive_contents('replay.load.info'))
-
         # setup
         self.info = setup_info(self)
         self.participants = setup_participants(self)

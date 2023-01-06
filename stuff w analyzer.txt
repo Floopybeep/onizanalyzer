@@ -59,3 +59,35 @@ Bank data analysis
     2. match mined data with previous data
         1) if previous data exists, then add onto previous data
         2) if new data, then create data
+
+
+bankinfoprocess outputs player bank data as dict
+the functions process gathers the dict, and if there is a clash, overwrites the dict depending on dict date
+
+
+
+
+    def create_dataframes(self):
+        self.dataframe_human = pd.DataFrame.from_records(self.replays_data_human_list, columns=total_df_human_column_list)
+        self.dataframe_zombie = pd.DataFrame.from_records(self.replays_data_zombie_list, columns=total_df_zombie_column_list)
+
+    def create_excel_file(self, path):
+        h_writer = pd.ExcelWriter(f'{path}/#Humandata.xlsx', engine='xlsxwriter')
+        z_writer = pd.ExcelWriter(f'{path}/#Zombiedata.xlsx', engine='xlsxwriter')
+
+        self.adjust_excel_data(h_writer, self.dataframe_human)
+        self.adjust_excel_data(z_writer, self.dataframe_zombie)
+
+    def adjust_excel_data(self, writer, df):
+        df.to_excel(writer, sheet_name='Human Data', startrow=1, header=False, index=False)
+        worksheet = writer.sheets['Human Data']
+
+        (max_row, max_col) = df.shape
+        column_settings = [{'header': column} for column in df.columns]
+
+        worksheet.add_table(0, 0, max_row, max_col - 1, {'columns': column_settings})
+
+        for i, width in enumerate(get_col_widths(df)):
+            worksheet.set_column(i-1, i, width+2)
+
+        writer.close()

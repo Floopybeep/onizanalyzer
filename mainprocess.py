@@ -7,6 +7,12 @@ import sc2reader
 
 
 def mainprocess(inputqueue, messagequeue, outputqueue):                  # take a replay file, convert to txt format
+    """
+    :param inputqueue: provides replay/text path
+    :param messagequeue: used to display messages
+    :param outputqueue: outputs (humandata(list), zdata) for analysis
+    :return:
+    """
     print("Mainprocess Started!")
     while True:
         input = inputqueue.get()

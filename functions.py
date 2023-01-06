@@ -9,6 +9,7 @@ from os import walk
 from os.path import join, isfile
 from s2protocol import versions
 from mainprocess import mainprocess
+from bankinfoprocess import bankinfoprocess, append_bankinfo_data
 from infodict import total_df_human_column_list, total_df_zombie_column_list
 
 
@@ -81,15 +82,123 @@ def replay_file_parser(folderpath):
     return filepaths, count
 
 
-def separate_replays_analysis(repl_list, textoutputpath, total_replay_data):
-    for rep in repl_list:
-        mainprocess(rep, textoutputpath, total_replay_data)
+class replay_bank_analysis_class:
+    def __init__(self, repl_list, outpath, num_proc, pbar, scrolltext, remainingtimelabel):
+        self.replay_list = repl_list
+        self.outpath = outpath
+        self.num_process = num_proc
+        self.outputlist = []
+
+        self.pbar = pbar
+        self.scrolltext = scrolltext
+        self.remainingtimelabel = remainingtimelabel
+
+    def mainprocess(self):
+        self.scrolltext.insert(index="1.0", chars="Bankfile Accumulation Started!\n\n")
+        self.pbar.configure(maximum=len(self.replay_list))
+        self.num_process_update(self.num_process, len(self.replay_list))
+
+        manager = multiprocessing.Manager()
+        inputqueue, msgqueue, outputqueue = manager.Queue(), manager.Queue(), manager.Queue()
+
+        self.input_queue_fill(inputqueue, self.replay_list)
+
+        messagereader = threading.Thread(target=self.update_scrolltext, args=(msgqueue,))
+        pbarupdater = threading.Thread(target=self.update_pbar, args=(outputqueue,))
+        timeupdater = threading.Thread(target=self.update_remainingtime, args=(inputqueue,))
+
+        for _ in range(self.num_process):
+            p = multiprocessing.Process(target=bankinfoprocess, args=(inputqueue, msgqueue, outputqueue,))
+            p.start()
+
+        messagereader.start()
+        pbarupdater.start()
+        timeupdater.start()
+
+        messagereader.join()
+        pbarupdater.join()
+        timeupdater.join()
+
+        total_data = self.data_update(self.outputlist)
+        self.data_analysis(total_data)
+        self.scrolltext.insert(index="1.0", chars="Bank Accumulation Finished!\n")
+
+    def num_process_update(self, processor_number, replay_num):
+        if processor_number > replay_num:
+            self.num_process = replay_num
+
+    def input_queue_fill(self, inputqueue, replay_list):
+        for item in replay_list:
+            inputqueue.put(item)
+        for _ in range(self.num_process):
+            inputqueue.put(None)
+
+    def update_pbar(self, outputqueue):
+        counter = 0
+        while True:
+            output = outputqueue.get()
+            if output is None:
+                counter += 1
+                if counter == self.num_process:
+                    break
+            else:
+                if output != -1:
+                    self.outputlist.append(output)
+                self.pbar.step(1)
+
+    def update_scrolltext(self, msgqueue):
+        counter = 0
+        while True:
+            message = msgqueue.get()
+            if message is None:
+                counter += 1
+                if counter == self.num_process:
+                    break
+            else:
+                self.scrolltext.insert(index="1.0", chars=message)
+
+    def update_remainingtime(self, outputqueue):
+        while True:
+            remainingtime = outputqueue.qsize() * 4 / self.num_process
+            if outputqueue.qsize() == 0:
+                break
+            self.remainingtimelabel.config(text=f"{int(remainingtime)} seconds")
+            time.sleep(1)
+
+    def data_update(self, dictlist):
+        total_data = {}
+        for replay in dictlist:
+            for player in replay:
+                handle = next(iter(player))
+                if handle in total_data:
+                    prevvalue = total_data[handle].date
+                    currentvalue = player[handle].date
+                    if prevvalue < currentvalue:
+                        total_data[handle] = player[handle]
+                else:
+                    total_data.update(player)
+        return total_data
+
+    def data_analysis(self, datadict):
+        datalist = append_bankinfo_data(datadict)
+        dataframe_human = pd.DataFrame.from_records(datalist)
+        writer = pd.ExcelWriter(f'{self.outpath}/#Bankdata.xlsx', engine='xlsxwriter')
+        dataframe_human.to_excel(writer, sheet_name='Bank Data', startrow=1, header=False, index=False)
+        worksheet = writer.sheets['Bank Data']
+
+        (max_row, max_col) = dataframe_human.shape
+        column_settings = [{'header': column} for column in dataframe_human.columns]
+
+        worksheet.add_table(0, 0, max_row, max_col - 1, {'columns': column_settings})
+        for i, width in enumerate(get_col_widths(dataframe_human)):
+            worksheet.set_column(i-1, i, width+2)
+        writer.close()
 
 
 class replay_analysis_replaypool:
     def __init__(self, repl_list, textoutpath, num_proc, pbar, scrolltext, remainingtimelabel):
         self.replay_list = repl_list
-        self.textoutpath= textoutpath
+        self.textoutpath = textoutpath
         self.num_process = num_proc
         self.replaydataclass = totalreplaydataclass()
         self.inputlist = []
@@ -100,17 +209,17 @@ class replay_analysis_replaypool:
         self.remainingtimelabel = remainingtimelabel
 
     def replaypool_analysis(self):
-        self.scrolltext.insert(index="1.0", chars="Replay Analysis Started!")
+        self.scrolltext.insert(index="1.0", chars="Replay Analysis Started!\n\n")
         self.pbar.configure(maximum=len(self.replay_list))
         self.inputlist = rep_txt_wrapper(self.replay_list, self.textoutpath)
         self.num_process_update(self.num_process, len(self.inputlist))
 
         # Create queues
         manager = multiprocessing.Manager()
-        inputqueue = manager.Queue()
-        outputqueue = manager.Queue()
-        messagequeue = manager.Queue()
-        queuelist = [inputqueue, messagequeue, outputqueue]
+        inputqueue, messagequeue, outputqueue = manager.Queue(), manager.Queue(), manager.Queue()
+        # inputqueue = manager.Queue()
+        # outputqueue = manager.Queue()
+        # messagequeue = manager.Queue()
 
         # Input replays to Queue
         self.input_que_fill(inputqueue, self.inputlist)
@@ -317,8 +426,8 @@ class totalreplaydataclass:
         self.adjust_excel_data(z_writer, self.dataframe_zombie)
 
     def adjust_excel_data(self, writer, df):
-        df.to_excel(writer, sheet_name='Sheet1', startrow=1, header=False, index=False)
-        worksheet = writer.sheets['Sheet1']
+        df.to_excel(writer, sheet_name='Human Data', startrow=1, header=False, index=False)
+        worksheet = writer.sheets['Human Data']
 
         (max_row, max_col) = df.shape
         column_settings = [{'header': column} for column in df.columns]

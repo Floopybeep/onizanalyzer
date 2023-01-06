@@ -2,15 +2,19 @@ import s2protocol
 import mpyq
 from s2protocol import versions
 
-reppath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/wonky replays/Oh_No_Its_Zombies_Arctic_Map_874.SC2Replay"
+reppath = "C:/Users/USER/PycharmProjects/onizanalyzer/replays/Oh_No_Its_Zombies_Arctic_Map_874.SC2Replay"
 
 archive = mpyq.MPQArchive(reppath)
 print(archive.files)
 
 protocol = versions.build(88500)
 
-contents = archive.read_file('replay.game.events')
-game_events = protocol.decode_replay_game_events(contents)
+# contents = archive.read_file('replay.game.events')
+# game_events = protocol.decode_replay_game_events(contents)
+
+contents = archive.read_file('replay.details')
+game_details = protocol.decode_replay_details(contents)
+
 eventlist = []
 eventnameset = set()
 
@@ -19,26 +23,26 @@ bankkeylist = []
 bankfilelist = []
 banksignaturelist = []
 
+for detail in game_details:
+    eventlist.append(detail)
 
-for event in game_events:
-    if event['_event'] not in eventnameset:
-        eventnameset.add(event['_event'])
-    if event['_event'] == 'NNet.Game.SBankSectionEvent':
-        banksectionlist.append(event)
-    elif event['_event'] == 'NNet.Game.SBankKeyEvent':
-        bankkeylist.append(event)
-    elif event['_event'] == 'NNet.Game.SBankFileEvent':
-        bankfilelist.append(event)
-    elif event['_event'] == 'NNet.Game.SBankSignatureEvent':
-        banksignaturelist.append(event)
 
-    # if event['_event'] in {'NNet.Game.SBankSectionEvent', 'NNet.Game.SBankKeyEvent',
-    #                        'NNet.Game.SBankFileEvent', 'NNet.Game.SBankSignatureEvent'}:
-    eventnameset.add(event['_event'])
-    eventlist.append(event)
-
-    # if event['_gameloop'] > 100:
-    #     break
+# for event in game_events:
+#     if event['_event'] not in eventnameset:
+#         eventnameset.add(event['_event'])
+#     if event['_event'] == 'NNet.Game.SBankSectionEvent':
+#         banksectionlist.append(event)
+#     elif event['_event'] == 'NNet.Game.SBankKeyEvent':
+#         bankkeylist.append(event)
+#     elif event['_event'] == 'NNet.Game.SBankFileEvent':
+#         bankfilelist.append(event)
+#     elif event['_event'] == 'NNet.Game.SBankSignatureEvent':
+#         banksignaturelist.append(event)
+#
+#     # if event['_event'] in {'NNet.Game.SBankSectionEvent', 'NNet.Game.SBankKeyEvent',
+#     #                        'NNet.Game.SBankFileEvent', 'NNet.Game.SBankSignatureEvent'}:
+#     eventnameset.add(event['_event'])
+#     eventlist.append(event)
 
 print(1)
 print(1)

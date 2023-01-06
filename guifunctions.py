@@ -8,7 +8,7 @@ from tkinter import scrolledtext
 from tkinter import filedialog
 from PIL import Image, ImageTk
 from pathlib import Path
-from functions import replay_file_parser, replay_analysis_replaypool, replay_duplicate_check
+from functions import replay_file_parser, replay_analysis_replaypool, replay_duplicate_check, replay_bank_analysis_class
 
 global mainclass_copy
 
@@ -31,9 +31,11 @@ class GUIstart:
         self.ui.add_button("textentrybutton", "canvas", 15, "Designate Path")
         self.ui.add_button("savepathbutton", "canvas", 8, "Save Path")
         self.ui.add_button("loadpathbutton", "canvas", 8, "Load Path")
+        self.ui.add_button("bankanalysisbutton", "canvas", 20, "Analyze Replay Banks")
         self.ui.register_button("canvas", 1260, 748, "startbutton")
         self.ui.register_button("canvas", 1344, 748, "closebutton")
-        self.ui.register_button("canvas", 1260, 708, "dupcheckbutton")
+        self.ui.register_button("canvas", 1260, 668, "dupcheckbutton")
+        self.ui.register_button("canvas", 1260, 708, "bankanalysisbutton")
         self.ui.register_button("canvas", 1300, 48, "repentrybutton")
         self.ui.register_button("canvas", 1300, 98, "textentrybutton")
         self.ui.register_button("canvas", 1272, 138, "savepathbutton")
@@ -41,9 +43,10 @@ class GUIstart:
         self.ui.register_function("closebutton", self.ui.window.destroy)
         self.ui.register_function("savepathbutton", self.ui.save_paths)
         self.ui.register_function("loadpathbutton", self.ui.load_paths)
+        self.ui.register_function("bankanalysisbutton", self.ui.press_bank_analysis)
 
         self.ui.add_checkbox("deletedupes", "Delete Duplicates?", "white", "black", "canvas")
-        self.ui.register_checkbox("canvas", 1260, 678, "deletedupes")
+        self.ui.register_checkbox("canvas", 1260, 638, "deletedupes")
 
         self.ui.add_progress_bar("replayprogressbar", 1200, 1200)
         self.ui.register_progress_bar("canvas", 30, 750, "replayprogressbar")
@@ -64,7 +67,7 @@ class GUIstart:
         self.ui.register_labels("canvas", 220, 724, "remainingtimelabel")
 
         self.ui.add_text_on_canvas("canvas", 800, 30, 300, "white", "ONIZ replay root folder path:")
-        self.ui.add_text_on_canvas("canvas", 800, 80, 300, "white", "ONIZ replay text file output folder path:")
+        self.ui.add_text_on_canvas("canvas", 800, 80, 300, "white", "ONIZ replay analysis output folder path:")
         self.ui.add_text_on_canvas("canvas", 30, 725, 500, "white", "Estimated time remaining: ")
         self.ui.add_text_on_canvas("canvas", 810, 130, 700, "white", "NOTE: You must change the font in Notepad to "
                                                                      "Consolas (otherwise unreadable!)")
@@ -211,8 +214,8 @@ class onizGUI:
         repentry = self.entries["replayfolderpathentry"].get()
         txtentry = self.entries["textfolderpathentry"].get()
         replist, repcount = replay_file_parser(repentry)
-        arg=[replist, txtentry, mainclass_copy.numberofprocesses,
-             self.progressbars["replayprogressbar"], self.scrolltexts["outputscroll"]]
+        # arg=[replist, txtentry, mainclass_copy.numberofprocesses,
+        #      self.progressbars["replayprogressbar"], self.scrolltexts["outputscroll"]]
 
         replay_analyzer_class = replay_analysis_replaypool(replist, txtentry, mainclass_copy.numberofprocesses,
                                                            self.progressbars["replayprogressbar"], self.scrolltexts["outputscroll"],
@@ -240,6 +243,21 @@ class onizGUI:
         replay_duplicate_check(replist, txtentry, mainclass_copy.numberofprocesses,
                                delcheck, self.scrolltexts["outputscroll"], self.progressbars["replayprogressbar"],
                                self.labels["remainingtimelabel"])
+
+    def press_bank_analysis(self):
+        print("Button pressed!")
+        repentry = self.entries["replayfolderpathentry"].get()
+        txtentry = self.entries["textfolderpathentry"].get()
+        replist, _ = replay_file_parser(repentry)
+
+        bank_analysis_class = replay_bank_analysis_class(replist, txtentry, mainclass_copy.numberofprocesses,
+                                                         self.progressbars["replayprogressbar"],
+                                                         self.scrolltexts["outputscroll"],
+                                                         self.labels["remainingtimelabel"])
+
+        p = threading.Thread(name="bank analysis", target=bank_analysis_class.mainprocess)
+        p.start()
+
 
 # https://hhj6212.github.io/programming/python/2021/04/18/python-multi.html
 # https://web.archive.org/web/20201111190045id_/https://effbot.org/tkinterbook/entry.htm
