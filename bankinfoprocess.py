@@ -104,7 +104,7 @@ def extract_replay_details(details, playerdict):
         if objname == 'Security' or obj['m_workingSetSlotId'] == 7: break
         player = next(iter(playerdict[counter].values()))
         player.date = timeconvert(details['m_timeUTC'], details['m_timeLocalOffset'])
-        objname = objname.split('</sp>')[-1]
+        objname = objname.split('<sp/>')[-1]
         player.username = objname
         counter += 1
 

@@ -30,6 +30,18 @@ def extract_playerbanks(replay, humandict, zombieplayer):
     extract_game_advantage_events(replay, humandict, zombieplayer)
 
 
+def set_player_ranks(humandict, zplayer):
+    for key in humandict:
+        humandict[key].setrank()
+    zplayer.setrank()
+
+
+def set_bank_date(replay, humandict, zplayer):
+    for key in humandict:
+        humandict[key].bankinfo.date = replay.date
+    zplayer.bankinfo.date = replay.date
+
+
 def extract_s2protocol_events(reppath):
     archive = mpyq.MPQArchive(reppath)
     protocol = versions.build(88500)
@@ -66,7 +78,8 @@ def calculate_signature(list):
 
 def extract_game_advantage_events(replay, humandict, zplayer):
     calculate_game_id(humandict, zplayer)
-    if calculate_isprivate(replay, humandict, zplayer) and zplayer.bankinfo.load_bankinfo['Difficulty'] != '5':
+    check = calculate_isprivate(replay, humandict, zplayer)
+    if check and zplayer.bankinfo.load_bankinfo['Difficulty'] != '5':
         advantage = advantagedict[-1 * int(zplayer.bankinfo.load_bankinfo['Difficulty'])]
         for key in humandict:
             humandict[key].bankinfo.advantage = advantage
@@ -108,36 +121,6 @@ def set_info_to_private(humandict, zplayer, isbeforepatch=False):
     zplayer.bankinfo.isprivate = True
     if isbeforepatch:
         zplayer.bankinfo.isbeforepatch = True
-
-
-def calculate_game_advantage(humandict, zplayer):
-    totalmarinerank = 0
-    for key in humandict:
-        totalmarinerank += float(humandict[key].bankinfo.player_bankinfo['HumanRank'])
-    averagemarinerank = totalmarinerank / 6
-    zombierank = float(zplayer.bankinfo.player_bankinfo['ZombieRank'])
-
-    advantage = ((averagemarinerank - zombierank) / 7 + (averagemarinerank + zombierank - 31)) / 31
-
-    for key in humandict:
-        humandict[key].bankinfo.averagerank = averagemarinerank
-        humandict[key].bankinfo.advantage = advantagedict[round(advantage)]
-    zplayer.bankinfo.advantage = advantagedict[round(advantage)]
-    zplayer.bankinfo.averagerank = averagemarinerank
-
-    return advantagedict[round(advantage)]
-
-
-def set_player_ranks(humandict, zplayer):
-    for key in humandict:
-        humandict[key].setrank()
-    zplayer.setrank()
-
-
-def set_bank_date(replay, humandict, zplayer):
-    for key in humandict:
-        humandict[key].bankinfo.date = replay.date
-    zplayer.bankinfo.date = replay.date
 
 
 def extract_playerinfo(replay):                                         # input: replay / output: list of h/z objects
@@ -221,16 +204,31 @@ def extract_eventinfo(replay, humandict, zombieplayer):
 
 
 def examine_fixedrankplayers(humandict, zplayer):
-    check = False
     for key in humandict:
         if humandict[key].handle in fixedrankplayerhandleset:
             set_fixedrankplayerrank(humandict[key])
-            check = True
     if zplayer.handle in fixedrankplayerhandleset:
         set_fixedrankplayerrank(zplayer)
-        check = True
-    if zplayer.bankinfo.advantage is None or check:
+    if zplayer.bankinfo.advantage is None:         # automatic advantage = calculate
         calculate_game_advantage(humandict, zplayer)
+
+
+def calculate_game_advantage(humandict, zplayer):
+    totalmarinerank = 0
+    for key in humandict:
+        totalmarinerank += float(humandict[key].bankinfo.player_bankinfo['HumanRank'])
+    averagemarinerank = totalmarinerank / 6
+    zombierank = float(zplayer.bankinfo.player_bankinfo['ZombieRank'])
+
+    advantage = ((averagemarinerank - zombierank) / 7 + (averagemarinerank + zombierank - 31)) / 31
+
+    for key in humandict:
+        humandict[key].bankinfo.averagerank = averagemarinerank
+        humandict[key].bankinfo.advantage = advantagedict[round(advantage)]
+    zplayer.bankinfo.advantage = advantagedict[round(advantage)]
+    zplayer.bankinfo.averagerank = averagemarinerank
+
+    return advantagedict[round(advantage)]
 
 
 def set_fixedrankplayerrank(player):
@@ -282,7 +280,7 @@ def UnitBornEventCheck(event, humandict, zombieplayer):                 # for dr
             humandict[event.unit.killed_by.pid].alphakills[t1alphadict[name]][0] += 1
         elif event.unit.killing_unit is not None and event.unit.killing_unit.name == 'AutoTurret':
             humandict[event.unit.killing_unit.owner.pid].alphakills[t1alphadict[name]][0] += 1
-    elif name == 'InfestedCocoon' and event.frame > 0:
+    elif name == 'InfestedCocoon' and event.frame > 0 and event.control_pid < 8:
         zombieplayer.marinecaptures += 1
         humandict[event.control_pid].captures += 1
     elif name == 'QueenCoop':
