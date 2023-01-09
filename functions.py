@@ -329,7 +329,7 @@ class replay_analysis_replaypool:
 #     return
 
 def replay_duplicate_check(repl_list, textoutpath, num_of_proc, deldupes, scrolltext, pbar, remainingtimelabel):
-    signatureset, duplicate_list = set(), []
+    signatureset, duplicate_list = {}, []
     counter = len(duplicate_list)
     pbar.configure(maximum=len(repl_list))
     deldupes = numtobool(deldupes)
@@ -343,6 +343,8 @@ def replay_duplicate_check(repl_list, textoutpath, num_of_proc, deldupes, scroll
     pool = multiprocessing.Pool(processes=num_of_proc)
     output = pool.imap(extract_signatures, repl_list)                             # outputs tuple of (signature, path)
 
+	dupflag = 0
+
     with open(f"{textoutpath}/#DuplicateReplays.txt", 'a') as f:
         for out in output:
             pbar.step(1)
@@ -350,15 +352,16 @@ def replay_duplicate_check(repl_list, textoutpath, num_of_proc, deldupes, scroll
             if dupcheck(out[0], out[1], signatureset, f):
                 if not deldupes:
                     duplicate_list.append(out[1])
+                    dupflag = 1
                 else:
                     os.remove(out[1])
+                    dupflag = 2
     f.close()
     print(duplicate_list)
-    if len(duplicate_list) > 0:
-        if deldupes:
-            scrolltext.insert(index="1.0", chars="Duplicate replays deleted!\n")
-        else:
-            scrolltext.insert(index="1.0", chars=f"Duplicate replays exported to \n{textoutpath}/#DuplicateReplays.txt!\n")
+    if dupflag == 2:
+        scrolltext.insert(index="1.0", chars="Duplicate replays deleted!\n")
+    elif dupflag == 1:
+        scrolltext.insert(index="1.0", chars=f"Duplicate replays exported to \n{textoutpath}/#DuplicateReplays.txt!\n")
     else:
         scrolltext.insert(index="1.0", chars="No duplicates found!\n")
 
@@ -392,12 +395,12 @@ def calculate_signature(list):
     return ''.join(resultlist)
 
 
-def dupcheck(signature, replaypath, signatureset, f):
-    if signature not in signatureset:
-        signatureset.add(signature)
+def dupcheck(signature, replaypath, signaturedict, f):
+    if signature not in signaturedict:
+        signaturedic[siganture] = replaypath
         return False
     else:
-        f.write(f"{replaypath}\n")
+        f.write(f"{replaypath} - Original: {signaturedict[signature]}\n")
         return True
 
 
