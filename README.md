@@ -14,3 +14,10 @@
 - 1.0.9: progress bar for duplicate check
 - 1.0.10: player bank data in excel file
 - 1.0.11: (coming later) drag and drop box for single replays
+- 1.1.0: (coming soon(TM)) subterranean map support
+
+# How To Use
+This is an analyzer for Starcraft 2's "Oh No It's Zombies Arctic Updated" user-created map.
+Simply download the ONIZanalyzer.exe to get it working!
+
+This project was started and finished to prove that some other dude sucks at programming, so it may not be updated frequently.
